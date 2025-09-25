@@ -1,8 +1,6 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import mdx from "@astrojs/mdx";
 
 const SERVER_PORT = 3000;
 // the url to access your blog during local development
@@ -25,7 +23,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [react(), sitemap(), mdx()],
+  integrations: [sitemap()],
   prefetch: {
     prefetchAll: true
   }
