@@ -45,18 +45,94 @@ if (Astro.site) {
   } else if (curseforgeId) {
     try {
       const apiKey = import.meta.env.CURSEFORGE_API_KEY;
+      let projectData: any = null;
+
       if (apiKey) {
-        const projectData = await fetch(
+        projectData = await fetch(
           `https://api.curseforge.com/v1/mods/${curseforgeId}`,
           {
             headers: {
               "x-api-key": apiKey,
             },
           }
-        ).then((res) => res.json());
+        ).then((res) => (res.ok ? res.json() : null));
+      }
 
-        version = projectData?.data?.latestFiles?.[0]?.displayName || version;
-        imagePath = projectData?.data?.attachments?.[0]?.thumbnailUrl || imagePath;
+      if (!projectData) {
+        projectData = await fetch(
+          `https://addons-ecs.forgesvc.net/api/v2/addon/${curseforgeId}`
+        ).then((res) => (res.ok ? res.json() : null));
+      }
+
+      if (projectData) {
+        const latestFile = (() => {
+          const files =
+            projectData?.data?.latestFiles || projectData?.latestFiles || [];
+
+          if (!Array.isArray(files) || files.length === 0) {
+            return null;
+          }
+
+          const normalizedFiles = files
+            .filter((file: any) => file != null)
+            .map((file: any) => ({
+              displayName: file.displayName || file.fileName || file.name,
+              gameVersions:
+                file.gameVersions ||
+                file.gameVersion ||
+                file?.sortableGameVersion?.map((entry: any) => entry.gameVersion),
+              fileDate: file.fileDate || file.releaseDate || file.timestamp,
+              releaseType: file.releaseType || file.fileStatus,
+            }));
+
+          if (normalizedFiles.length === 0) {
+            return null;
+          }
+
+          const releasePriority = (file: any) => {
+            if (file.releaseType === 1 || file.releaseType === "release") {
+              return 0;
+            }
+            if (file.releaseType === 2 || file.releaseType === "beta") {
+              return 1;
+            }
+            return 2;
+          };
+
+          const sortedFiles = normalizedFiles.sort((a: any, b: any) => {
+            const priorityDiff = releasePriority(a) - releasePriority(b);
+            if (priorityDiff !== 0) return priorityDiff;
+
+            const aTime = a.fileDate ? new Date(a.fileDate).getTime() : 0;
+            const bTime = b.fileDate ? new Date(b.fileDate).getTime() : 0;
+            return bTime - aTime;
+          });
+
+          return sortedFiles[0] || null;
+        })();
+
+        const attachment =
+          projectData?.data?.attachments?.find((att: any) => att.isDefault) ||
+          projectData?.attachments?.find((att: any) => att.isDefault) ||
+          projectData?.data?.attachments?.[0] ||
+          projectData?.attachments?.[0] ||
+          projectData?.logo ||
+          null;
+
+        if (latestFile) {
+          version = latestFile.displayName || version;
+          gameVersions = Array.isArray(latestFile.gameVersions)
+            ? latestFile.gameVersions.filter(Boolean)
+            : gameVersions;
+        }
+
+        if (attachment) {
+          imagePath =
+            attachment.thumbnailUrl ||
+            attachment.url ||
+            attachment.iconUrl ||
+            imagePath;
+        }
       }
     } catch (error) {
       console.error("Error fetching data from CurseForge API:", error);
