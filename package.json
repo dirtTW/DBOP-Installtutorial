@@ -14,7 +14,7 @@
     "@astrojs/mdx": "^4.3.5",
     "@astrojs/preact": "^4.1.1",
     "@astrojs/react": "^4.3.1",
-    "@astrojs/sitemap": "^3.5.1",
+    "@astrojs/sitemap": "^3.6.0",
     "@headlessui/react": "^2.2.8",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.13",
