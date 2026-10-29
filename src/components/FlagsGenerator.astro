@@ -26,8 +26,8 @@ const t = getMessages(locale);
     data-downloaded-template={t.flags.downloaded("__filename__")}
   >
     <PageIntro eyebrow={t.flags.eyebrow} title={t.flags.title} description={t.flags.description} />
-    <section class="mx-auto max-w-4xl">
-      <div class="mx-5 grid gap-6 rounded-2xl border border-brand-100 bg-white p-5 shadow-sm sm:mx-8 sm:p-7 md:grid-cols-2 lg:mx-0 dark:border-brand-900 dark:bg-[#0b293d]">
+    <section class="mx-auto max-w-4xl px-5 sm:px-8 lg:px-0">
+      <div class="grid gap-5 rounded-[1.75rem] border border-brand-100 bg-white p-4 shadow-sm sm:gap-6 sm:p-6 md:grid-cols-2 dark:border-white/10 dark:bg-[#1c1f25]">
         <div>
           <label
             for="server-file"
@@ -43,7 +43,7 @@ const t = getMessages(locale);
             autocomplete="off"
             spellcheck="false"
             aria-describedby="filename-help"
-            class="block w-full rounded-lg border border-brand-200 bg-brand-50/50 p-2.5 text-sm text-zinc-900 focus:border-brand-600 focus:ring-brand-600 dark:border-brand-800 dark:bg-[#071d2d] dark:text-white"
+            class="block min-h-12 w-full rounded-xl border border-brand-200 bg-brand-50/50 px-4 py-3 text-sm text-zinc-900 focus:border-brand-600 focus:ring-brand-600 dark:border-brand-800 dark:bg-[#111318] dark:text-white"
           />
           <p id="filename-help" class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
             {t.flags.filenameHelp}
@@ -69,7 +69,7 @@ const t = getMessages(locale);
                 type="button"
                 aria-label={t.flags.advancedMemory}
                 aria-haspopup="dialog"
-                class="rounded p-1 text-zinc-500 hover:bg-brand-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand-600 dark:text-zinc-300 dark:hover:bg-brand-900 dark:hover:text-white"
+                class="flex h-10 w-10 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-brand-100 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 dark:text-zinc-300 dark:hover:bg-[#30343b] dark:hover:text-white"
               >
                 <svg
                   aria-hidden="true"
@@ -115,7 +115,7 @@ const t = getMessages(locale);
               )) }
               <span
                 id="memory-slider-thumb"
-                class="absolute left-[9.6774%] top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-600 ring-2 ring-white dark:ring-[#0b293d]"
+                class="absolute left-[9.6774%] top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-600 ring-2 ring-white dark:ring-[#1c1f25]"
               ></span>
             </div>
           </div>
@@ -137,11 +137,11 @@ const t = getMessages(locale);
           </p>
         </div>
 
-        <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-brand-100 p-4 dark:border-brand-900">
+        <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-brand-100 bg-brand-50/40 p-4 transition-colors hover:bg-brand-50 dark:border-white/10 dark:bg-[#111318]/60 dark:hover:bg-[#111318]">
           <input
             id="enable-gui"
             type="checkbox"
-            class="mt-0.5 h-4 w-4 rounded border-brand-300 text-brand-700 focus:ring-brand-600"
+            class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-brand-300 text-brand-700 focus:ring-brand-600"
           />
           <span>
             <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.enableGui}</span>
@@ -151,11 +151,11 @@ const t = getMessages(locale);
           </span>
         </label>
 
-        <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-brand-100 p-4 dark:border-brand-900">
+        <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-brand-100 bg-brand-50/40 p-4 transition-colors hover:bg-brand-50 dark:border-white/10 dark:bg-[#111318]/60 dark:hover:bg-[#111318]">
           <input
             id="auto-restart"
             type="checkbox"
-            class="mt-0.5 h-4 w-4 rounded border-brand-300 text-brand-700 focus:ring-brand-600"
+            class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-brand-300 text-brand-700 focus:ring-brand-600"
           />
           <span>
             <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.autoRestart}</span>
@@ -166,16 +166,16 @@ const t = getMessages(locale);
         </label>
       </div>
 
-      <section class="mt-8 overflow-hidden rounded-xl border border-brand-100 bg-white shadow-sm dark:border-brand-900 dark:bg-[#0b293d]">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-brand-100 p-4 dark:border-brand-900">
+      <section class="mt-6 overflow-hidden rounded-[1.75rem] border border-brand-100 bg-white shadow-sm sm:mt-8 dark:border-white/10 dark:bg-[#1c1f25]">
+        <div class="flex flex-col gap-3 border-b border-brand-100 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4 dark:border-white/10">
           <div
-            class="flex flex-wrap gap-2"
+            class="grid grid-cols-3 gap-1 rounded-full bg-brand-50 p-1 dark:bg-[#111318]"
             role="tablist"
             aria-label={t.flags.outputFormat}
           >
             <button
               type="button"
-              class="platform-tab rounded-lg bg-brand-700 px-3 py-2 text-sm font-medium text-white dark:bg-brand-400 dark:text-[#071d2d]"
+              class="platform-tab flex min-h-11 items-center justify-center rounded-full bg-brand-700 px-2 py-2 text-center text-xs font-medium text-white shadow-sm transition-colors dark:bg-[#d4e3ff] dark:text-[#102f54] sm:px-3 sm:text-sm"
               role="tab"
               aria-selected="true"
               data-platform="unix"
@@ -184,7 +184,7 @@ const t = getMessages(locale);
             </button>
             <button
               type="button"
-              class="platform-tab rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-brand-50 dark:text-zinc-300 dark:hover:bg-brand-900"
+              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-zinc-600 transition-colors hover:bg-white dark:text-zinc-300 dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
               role="tab"
               aria-selected="false"
               data-platform="windows"
@@ -193,7 +193,7 @@ const t = getMessages(locale);
             </button>
             <button
               type="button"
-              class="platform-tab rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-brand-50 dark:text-zinc-300 dark:hover:bg-brand-900"
+              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-zinc-600 transition-colors hover:bg-white dark:text-zinc-300 dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
               role="tab"
               aria-selected="false"
               data-platform="java"
@@ -201,24 +201,24 @@ const t = getMessages(locale);
               {t.flags.javaCommand}
             </button>
           </div>
-          <div class="flex gap-2">
+          <div class="flex gap-2 sm:shrink-0">
             <button
               id="copy-script"
               type="button"
-              class="rounded-lg border border-brand-200 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-brand-50 dark:border-brand-800 dark:text-zinc-200 dark:hover:bg-brand-900"
+              class="min-h-11 flex-1 rounded-full border border-brand-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-brand-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 sm:flex-none dark:border-white/10 dark:text-zinc-200 dark:hover:bg-[#30343b]"
             >
               {t.flags.copy}
             </button>
             <button
               id="download-script"
               type="button"
-              class="rounded-lg bg-brand-700 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-brand-400 dark:text-[#071d2d] dark:hover:bg-brand-300"
+              class="min-h-11 flex-1 rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 sm:flex-none dark:bg-[#d4e3ff] dark:text-[#102f54] dark:hover:bg-[#b6cefa]"
             >
               {t.flags.download}
             </button>
           </div>
         </div>
-        <pre class="min-h-48 overflow-x-auto bg-zinc-950 p-5 text-sm leading-6 text-zinc-100"><code id="script-output"></code></pre>
+        <pre class="min-h-48 overflow-x-auto bg-zinc-950 p-4 text-xs leading-6 text-zinc-100 sm:p-5 sm:text-sm"><code id="script-output"></code></pre>
         <p
           id="generator-status"
           class="min-h-10 px-4 py-2 text-sm text-zinc-600 dark:text-zinc-300"
@@ -247,13 +247,13 @@ const t = getMessages(locale);
     <dialog
       id="custom-memory-dialog"
       aria-labelledby="custom-memory-title"
-      class="fixed inset-0 m-auto w-[min(28rem,calc(100%-2rem))] rounded-lg border border-brand-800 bg-[#0b293d] p-0 text-white shadow-xl backdrop:bg-black/60"
+      class="fixed inset-0 m-auto w-[min(28rem,calc(100%-2rem))] rounded-[1.75rem] border border-brand-200 bg-[#f7f9ff] p-0 text-zinc-900 shadow-xl backdrop:bg-black/60 dark:border-white/10 dark:bg-[#1c1f25] dark:text-white"
     >
-      <form id="custom-memory-form" class="p-6">
+      <form id="custom-memory-form" class="p-5 sm:p-6">
         <h2 id="custom-memory-title" class="mb-5 text-lg font-semibold">
           {t.flags.advancedOptions}
         </h2>
-        <label for="custom-memory" class="mb-2 block text-sm text-zinc-300">
+        <label for="custom-memory" class="mb-2 block text-sm text-zinc-700 dark:text-zinc-300">
           {t.flags.customMemory}
         </label>
         <input
@@ -265,7 +265,7 @@ const t = getMessages(locale);
           value="4.00"
           required
           inputmode="decimal"
-          class="block w-full rounded-md border border-brand-700 bg-[#071d2d] px-3 py-2 text-sm text-white focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-400"
+          class="block w-full rounded-xl border border-brand-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-brand-600 focus:outline-none focus:ring-1 focus:ring-brand-600 dark:border-white/10 dark:bg-[#111318] dark:text-white dark:focus:border-brand-400 dark:focus:ring-brand-400"
         />
         <p class="mt-2 text-xs text-zinc-400">
           {t.flags.customMemoryHelp}
@@ -274,13 +274,13 @@ const t = getMessages(locale);
           <button
             id="custom-memory-cancel"
             type="button"
-            class="rounded-md border border-brand-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-brand-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            class="min-h-11 rounded-full border border-brand-200 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-brand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:border-white/10 dark:text-zinc-200 dark:hover:bg-[#30343b]"
           >
             {t.flags.cancel}
           </button>
           <button
             type="submit"
-            class="rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-300"
+            class="min-h-11 rounded-full bg-brand-700 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 dark:bg-[#d4e3ff] dark:text-[#102f54] dark:hover:bg-[#b6cefa]"
           >
             {t.flags.apply}
           </button>
@@ -357,7 +357,7 @@ const t = getMessages(locale);
         const tickValue = Number(tick.dataset.memoryTick);
         tick.classList.toggle("invisible", tickValue === Number(memoryInput.value));
         tick.classList.toggle("bg-brand-200", tickValue < Number(memoryInput.value));
-        tick.classList.toggle("dark:bg-brand-800", tickValue < Number(memoryInput.value));
+        tick.classList.toggle("dark:bg-brand-400", tickValue < Number(memoryInput.value));
       });
     }
     const script = getGeneratedScript();
@@ -379,13 +379,13 @@ const t = getMessages(locale);
         const selected = item === tab;
         item.setAttribute("aria-selected", String(selected));
         item.classList.toggle("bg-brand-700", selected);
-        item.classList.toggle("dark:bg-brand-400", selected);
+        item.classList.toggle("dark:bg-[#d4e3ff]", selected);
         item.classList.toggle("text-white", selected);
         item.classList.toggle("text-zinc-600", !selected);
         item.classList.toggle("dark:text-zinc-300", !selected);
         item.classList.toggle("hover:bg-brand-50", !selected);
         item.classList.toggle("dark:hover:bg-brand-900", !selected);
-        item.classList.toggle("dark:text-[#071d2d]", selected);
+        item.classList.toggle("dark:text-[#102f54]", selected);
       });
       renderScript();
     });

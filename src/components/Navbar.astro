@@ -21,18 +21,18 @@ const links = [
 ];
 ---
 
-<nav class="fixed top-0 z-50 w-full border-b border-brand-100 bg-white/95 px-4 backdrop-blur dark:border-brand-900 dark:bg-[#0b293d]/95">
-  <div class="relative mx-auto flex min-h-16 max-w-screen-xl items-center justify-between gap-3">
+<nav class="fixed top-0 z-50 w-full border-b border-brand-100/80 bg-[#f7f9ff]/95 px-4 backdrop-blur-xl dark:border-white/10 dark:bg-[#111318]/95">
+  <div class="relative mx-auto flex min-h-[4.5rem] max-w-screen-xl items-center justify-between gap-3">
     <a
       href={localizedPath(locale, "")}
-      class="flex min-w-0 items-center gap-3"
+      class="flex min-w-0 items-center gap-3 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
     >
       <img
         src={logo.src}
-        class="h-8 w-8"
+        class="h-9 w-9 rounded-full"
         alt=""
       />
-      <span class="truncate text-base font-semibold text-zinc-900 dark:text-white sm:text-xl">
+      <span class="truncate text-base font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-lg">
         dirtTW 土靈
       </span>
     </a>
@@ -45,7 +45,7 @@ const links = [
         data-light-label={t.lightTheme}
         data-dark-label={t.darkTheme}
         aria-pressed="false"
-        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-zinc-300 dark:hover:bg-brand-900"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-600 transition-colors hover:bg-brand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-zinc-300 dark:hover:bg-white/10"
       >
         <svg
           class="h-5 w-5 dark:hidden"
@@ -78,7 +78,7 @@ const links = [
       <details class="relative">
         <summary
           aria-label={t.language}
-          class="flex h-10 cursor-pointer list-none items-center gap-2 rounded-lg px-3 text-sm font-medium text-zinc-700 hover:bg-brand-50 dark:text-zinc-200 dark:hover:bg-brand-900"
+          class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-full px-4 text-sm font-medium text-zinc-700 transition-colors hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-zinc-200 dark:hover:bg-white/10 dark:focus-visible:outline-[#d4e3ff]"
         >
           <span>{t.languageName}</span>
           <svg
@@ -94,13 +94,18 @@ const links = [
             ></path>
           </svg>
         </summary>
-        <div class="absolute right-0 z-10 mt-2 min-w-40 rounded-lg border border-brand-100 bg-white p-1 shadow-lg dark:border-brand-900 dark:bg-[#12344c]">
+        <div class="absolute right-0 z-30 mt-2 min-w-40 rounded-2xl border border-brand-100 bg-[#f7f9ff] p-1 shadow-lg dark:border-white/10 dark:bg-[#252a31]">
           {locales.map((supportedLocale) => (
             <a
               href={localizedPath(supportedLocale, route)}
               lang={supportedLocale}
               aria-current={supportedLocale === locale ? "true" : undefined}
-              class="block rounded px-3 py-2 text-sm text-zinc-700 hover:bg-brand-50 dark:text-zinc-200 dark:hover:bg-brand-900"
+              class:list={[
+                "block min-h-11 rounded-full px-4 py-3 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:focus-visible:outline-[#d4e3ff]",
+                supportedLocale === locale
+                  ? "bg-brand-100 font-semibold text-brand-800 dark:bg-[#33445f] dark:text-[#d4e3ff]"
+                  : "text-zinc-700 hover:bg-brand-100 dark:text-zinc-200 dark:hover:bg-white/10",
+              ]}
             >
               {getMessages(supportedLocale).languageName}
             </a>
@@ -114,7 +119,7 @@ const links = [
         aria-controls="navbar-menu"
         aria-expanded="false"
         aria-label={t.toggleNavigation}
-        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-brand-600 xl:hidden dark:text-zinc-300 dark:hover:bg-brand-900"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-600 transition-colors hover:bg-brand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 xl:hidden dark:text-zinc-300 dark:hover:bg-white/10"
       >
         <svg
           class="h-5 w-5"
@@ -135,7 +140,7 @@ const links = [
     </div>
     <div
       id="navbar-menu"
-      class="absolute right-0 top-full mt-3 hidden w-[min(21rem,calc(100vw-2rem))] rounded-2xl border border-brand-100/80 bg-white/95 p-2.5 shadow-xl shadow-brand-950/10 backdrop-blur-xl xl:order-1 xl:static xl:mt-0 xl:block xl:w-auto xl:shrink-0 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none xl:backdrop-blur-none dark:border-brand-800 dark:bg-[#0b293d]/95 xl:dark:bg-transparent"
+      class="absolute right-0 top-full z-20 mt-3 hidden w-[min(21rem,calc(100vw-2rem))] rounded-[1.75rem] border border-brand-100 bg-[#f7f9ff] p-2.5 shadow-xl shadow-black/10 xl:order-1 xl:static xl:mt-0 xl:block xl:w-auto xl:shrink-0 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none dark:border-white/10 dark:bg-[#1c1f25] xl:dark:bg-transparent"
     >
       <ul class="flex flex-col gap-1.5 font-medium xl:flex-row xl:items-center xl:gap-0.5">
       {links.map(({ href, label }) => (
@@ -144,17 +149,17 @@ const links = [
             href={localizedPath(locale, href)}
             aria-current={href === route ? "page" : undefined}
             class:list={[
-              "group flex min-h-11 items-center justify-between rounded-xl px-3.5 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 xl:min-h-0 xl:rounded-lg xl:px-2 xl:py-2 xl:text-xs 2xl:px-3 2xl:text-sm",
+              "group flex min-h-11 items-center justify-between rounded-full px-4 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 xl:min-h-11 xl:px-3 xl:py-2 xl:text-xs 2xl:px-3.5 2xl:text-sm",
               href === route
-                ? "bg-brand-50 text-brand-800 dark:bg-brand-900/70 dark:text-brand-200"
-                : "text-zinc-700 hover:bg-brand-50 hover:text-brand-800 dark:text-zinc-200 dark:hover:bg-brand-900 dark:hover:text-brand-200",
+                ? "bg-brand-100 text-brand-800 dark:bg-[#33445f] dark:text-[#d4e3ff]"
+                : "text-zinc-700 hover:bg-brand-50 hover:text-brand-800 dark:text-zinc-200 dark:hover:bg-white/10 dark:hover:text-white",
             ]}
           >
             {label}
             <span
               aria-hidden="true"
               class:list={[
-                "ml-3 h-1.5 w-1.5 rounded-full bg-brand-500 transition-opacity xl:hidden",
+                "ml-3 h-1.5 w-1.5 rounded-full bg-brand-700 transition-opacity xl:hidden dark:bg-[#d4e3ff]",
                 href === route ? "opacity-100" : "opacity-0 group-hover:opacity-60",
               ]}
             ></span>
