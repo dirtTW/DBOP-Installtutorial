@@ -1,0 +1,17 @@
+# Useful websites
+
+- [Massgrave (Active Windows)](https://massgrave.dev/)
+- [Ninite (Download Software all in one installer)](https://ninite.com/)
+- [Cobalt Tools (Video Download)](https://cobalt.tools/)
+- [ytdlp (Download Youtube Video/Music)](https://ytdlp.online/)
+- [Spotidownloader (Download Spotify Music)](https://spotidownloader.com/)
+- [GenP Wiki (Active Adobe)](https://wiki.dbzer0.com/genp-guides/)
+- [TinyPNG (Compress Image files)](https://tinypng.com/)
+- [GOG games to (Download Free GOG games)](https://gog-games.to/)
+- [Yasir252 (Software Cracks Download)](https://www.yasir252.com/)
+- [Ventoy (Create Bootable USB)](https://www.ventoy.net/en/index.html)
+- [7-Zip (File Compression Tool)](https://www.7-zip.org/)
+- [VirusTotal (File Scan)](https://www.virustotal.com/gui/home/upload)
+- [WizTree Disk Analyzer (Analyze Disk Space Usage)](https://diskanalyzer.com/)
+- [freemediaheckyeah The largest collection of free stuff on the internet!](https://fmhy.net/)
+- [PL's PSU Tier List](https://psutierlist.org/)

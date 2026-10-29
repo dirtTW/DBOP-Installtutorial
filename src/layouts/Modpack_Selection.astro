@@ -2,7 +2,7 @@
 import Card from "../components/Card.astro";
 import PageIntro from "../components/PageIntro.astro";
 import { getLocale, getMessages } from "../i18n";
-import recommendedModpacksMarkdown from "../../recommended-modpacks.md?raw";
+import recommendedModpacksMarkdown from "../../lists/recommended-modpacks.md?raw";
 
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
 const t = getMessages(locale);
@@ -125,7 +125,7 @@ const markdownLines = recommendedModpacksMarkdown
   });
 const linkSectionStart = markdownLines.findIndex((line) => /^link:\s*$/i.test(line.trim()));
 if (linkSectionStart < 0) {
-  throw new Error("recommended-modpacks.md must contain a `link:` section.");
+  throw new Error("lists/recommended-modpacks.md must contain a `link:` section.");
 }
 
 const recommendationLinks: { url: string; imageUrl?: string }[] = [];
@@ -145,7 +145,7 @@ for (const line of markdownLines.slice(linkSectionStart + 1)) {
     try {
       imageUrl = new URL(imageMatch[1]);
     } catch {
-      throw new Error(`Invalid image URL in recommended-modpacks.md: ${imageMatch[1]}`);
+      throw new Error(`Invalid image URL in lists/recommended-modpacks.md: ${imageMatch[1]}`);
     }
     if (imageUrl.protocol !== "https:") {
       throw new Error("Image URLs in recommended-modpacks.md must use HTTPS.");
@@ -160,7 +160,7 @@ for (const line of markdownLines.slice(linkSectionStart + 1)) {
   try {
     url = new URL(link);
   } catch {
-    throw new Error(`Invalid modpack URL in recommended-modpacks.md: ${link}`);
+    throw new Error(`Invalid modpack URL in lists/recommended-modpacks.md: ${link}`);
   }
 
   const isModrinth =
@@ -171,7 +171,7 @@ for (const line of markdownLines.slice(linkSectionStart + 1)) {
     /^\/minecraft\/modpacks\/[^/]+\/?$/.test(url.pathname);
   if (url.protocol !== "https:" || (!isModrinth && !isCurseForge)) {
     throw new Error(
-      `Unsupported modpack URL in recommended-modpacks.md: ${link}`,
+      `Unsupported modpack URL in lists/recommended-modpacks.md: ${link}`,
     );
   }
   if (!recommendationLinks.some((recommendation) => recommendation.url === url.href)) {

@@ -2,9 +2,12 @@
 import SmallCard from "../components/Small-Card.astro";
 import PageIntro from "../components/PageIntro.astro";
 import { getLocale, getMessages } from "../i18n";
+import usefulWebsitesMarkdown from "../../lists/useful-websites.md?raw";
+import { parseWebsiteLinks } from "../lib/website-links";
 
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
 const t = getMessages(locale);
+const websites = parseWebsiteLinks(usefulWebsitesMarkdown);
 ---
 
 <main>
@@ -38,66 +41,7 @@ const t = getMessages(locale);
       </div>
       </div>
       <div id="useful-website-list" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <SmallCard
-            link="https://massgrave.dev/"
-            altText="Massgrave (Active Windows)"
-          />
-          <SmallCard
-            link="https://ninite.com/"
-            altText="Ninite (Download Software all in one installer)"
-          />
-          <SmallCard
-            link="https://cobalt.tools/"
-            altText="Cobalt Tools (Video Download)"
-          />
-          <SmallCard
-            link="https://ytdlp.online/"
-            altText="ytdlp (Download Youtube Video/Music)"
-          />
-          <SmallCard
-            link="https://spotidownloader.com/"
-            altText="Spotidownloader (Download Spotify Music)"
-          />
-          <SmallCard
-            link="https://wiki.dbzer0.com/genp-guides/"
-            altText="GenP Wiki (Active Adobe)"
-          />
-          <SmallCard
-            link="https://tinypng.com/"
-            altText="TinyPNG (Compress Image files)"
-          />
-          <SmallCard
-            link="https://gog-games.to/"
-            altText="GOG games to (Download Free GOG games)"
-          />
-          <SmallCard
-            link="https://www.yasir252.com/"
-            altText="Yasir252 (Software Cracks Download)"
-          />
-          <SmallCard
-            link="https://www.ventoy.net/en/index.html"
-            altText="Ventoy (Create Bootable USB)"
-          />
-          <SmallCard
-            link="https://www.7-zip.org/"
-            altText="7-Zip (File Compression Tool)"
-          />
-          <SmallCard
-            link="https://www.virustotal.com/gui/home/upload"
-            altText="VirusTotal (File Scan)"
-          />
-          <SmallCard
-            link="https://diskanalyzer.com/"
-            altText="WizTree Disk Analyzer (Analyze Disk Space Usage)"
-          />
-          <SmallCard
-            link="https://fmhy.net/"
-            altText="freemediaheckyeah The largest collection of free stuff on the internet!"
-          />
-          <SmallCard
-            link="https://psutierlist.org/"
-            altText="PL's PSU Tier List"
-          />
+        {websites.map((website) => <SmallCard locale={locale} {...website} />)}
       </div>
   </section>
 </main>
