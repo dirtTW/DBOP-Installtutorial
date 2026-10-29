@@ -81,6 +81,8 @@ const messages = {
     atm: "結合熱門模組的大型模組包，並包含挑戰任務。",
     atm9Sky: "All the Mods 9 的空島版本。",
     craftoria: "All of Fabric 系列第八作，使用 NeoForge。",
+    unknownRecommendedName: "推薦模組包",
+    recommendedDescription: "推薦模組包，請前往下載頁面查看詳細資訊。",
   },
   search: {
     modpacksLabel: "搜尋推薦模組包",
