@@ -1,5 +1,6 @@
 ---
 import { getLocale, getMessages } from "../i18n";
+import fallbackImage from "../img/logo.webp";
 
 interface Props {
   modrinthId: string;
@@ -155,9 +156,9 @@ const isCurseforgeLinkValid = !!curseforgelink;
   <img
     class="m-3 object-cover rounded-lg h-40 md:rounded max-sm:w-40 max-sm:h-40 drop-shadow-lg"
     src={imagePath}
+    data-fallback-src={fallbackImage.src}
     alt={altText || `${name} ${locale === "en" ? "image" : "圖片"}`}
     loading="lazy"
-    onerror="this.onerror=null;this.src='/placeholder-image.jpg';"
   />
   <div class="flex flex-col justify-between p-4 leading-normal w-full">
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
@@ -191,4 +192,20 @@ const isCurseforgeLinkValid = !!curseforgelink;
       </a>
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll<HTMLImageElement>("[data-fallback-src]").forEach((image) => {
+      image.addEventListener(
+        "error",
+        () => {
+          const fallback = image.dataset.fallbackSrc;
+          if (fallback) {
+            delete image.dataset.fallbackSrc;
+            image.src = fallback;
+          }
+        },
+        { once: true },
+      );
+    });
+  </script>
 </div>
