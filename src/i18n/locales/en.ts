@@ -156,6 +156,8 @@ const messages = {
     unknownVersion: "Unknown",
     downloadModrinth: "Download from Modrinth",
     downloadCurseforge: "Download from CurseForge",
+    downloadModrinthShort: "Get on Modrinth",
+    downloadCurseforgeShort: "Get on CurseForge",
   },
   tutorial: {
     title: "DBOP Modpack Installation Guide",

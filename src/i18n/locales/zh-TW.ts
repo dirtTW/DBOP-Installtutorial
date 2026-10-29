@@ -156,6 +156,8 @@ const messages = {
     unknownVersion: "未知",
     downloadModrinth: "Modrinth 下載",
     downloadCurseforge: "CurseForge 下載",
+    downloadModrinthShort: "Modrinth",
+    downloadCurseforgeShort: "CurseForge",
   },
   tutorial: {
     title: "DBOP 模組包安裝教學",
