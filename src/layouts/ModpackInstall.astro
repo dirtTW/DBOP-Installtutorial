@@ -1,155 +1,123 @@
 ---
+import PageIntro from "../components/PageIntro.astro";
 import { getLocale, getMessages } from "../i18n";
+import logo from "../img/logo.webp";
 
-const t = getMessages(getLocale(Astro.props.locale ?? Astro.currentLocale));
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
+const launchers = [
+  {
+    id: "Prism",
+    name: t.tutorial.prism,
+    href: "https://prismlauncher.org/download/",
+    steps: t.tutorial.prismSteps,
+  },
+  {
+    id: "Curseforge",
+    name: t.tutorial.curseforge,
+    href: "https://www.curseforge.com/download/app#download-options",
+    steps: t.tutorial.curseforgeSteps,
+  },
+  {
+    id: "Modrinth",
+    name: t.tutorial.modrinth,
+    href: "https://modrinth.com/app",
+    steps: t.tutorial.modrinthSteps,
+  },
+];
 ---
 
 <main>
-  <div class="p-4 lg:ml-64">
-    <div class="p-4 border-2 border-zinc-200 rounded-lg dark:border-zinc-700 mt-14">
-      <img
-        fetchpriority="high"
-        src="https://github.com/dirttw/DBOP/blob/main/banner.png?raw=true"
-        alt="DBOP Banner"
-        width="1100"
-        class="shadow rounded mx-auto"
-      />
-      <div class="py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-        <div class="max-w-screen-md mb-8 lg:mb-16">
-          <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-zinc-900 dark:text-white">
-            {t.tutorial.packName}
-          </h2>
+  <PageIntro
+    eyebrow={t.pages.installEyebrow}
+    title={t.tutorial.title}
+    description={t.pages.installDescription}
+  />
+  <div class="mx-auto max-w-screen-xl px-5 pb-20 sm:px-8 lg:px-10">
+    <section class="relative overflow-hidden rounded-3xl bg-zinc-950 p-6 text-white shadow-xl shadow-zinc-950/10 sm:p-9">
+      <div aria-hidden="true" class="absolute -right-20 -top-32 h-80 w-80 rounded-full bg-brand-500/20 blur-3xl"></div>
+      <div class="relative flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
+        <div class="flex items-center gap-5">
+          <img src={logo.src} alt="" width="96" height="96" class="h-20 w-20 shrink-0 rounded-2xl object-cover shadow-lg sm:h-24 sm:w-24" />
+          <div>
+            <p class="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-brand-300">{t.home.packLabel}</p>
+            <h2 class="max-w-xl text-xl font-bold leading-tight sm:text-2xl">{t.tutorial.packName}</h2>
+          </div>
         </div>
-        <div class="flex flex-auto">
+        <div class="flex flex-col gap-3 md:flex-row">
           <a
-            class="text-sm text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
             href="https://modrinth.com/modpack/dbop"
             target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
           >
-            <span>
-              <i class="md-logo w-4 h-4 me-2 ms-1" aria-hidden="true"></i>
-            </span>{" "}
+            <i class="md-logo" aria-hidden="true"></i>
             {t.cards.downloadModrinth}
           </a>
           <a
-            class="text-sm text-center focus:outline-none text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-600 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900"
             href="https://www.curseforge.com/minecraft/modpacks/dbop"
             target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
           >
-            <span>
-              <i class="cf-logo w-4 h-4 me-2 ms-1" aria-hidden="true"></i>
-            </span>{" "}
+            <i class="cf-logo" aria-hidden="true"></i>
             {t.cards.downloadCurseforge}
           </a>
         </div>
-
-        <h2
-          class="m-6 text-xl font-extrabold text-zinc-900 dark:text-white"
-          id="installtutorial"
-        >
-          <br />
-          {t.tutorial.install}
-        </h2>
-        <div class="">
-          <ul class="space-y-2 text-zinc-500 list-disc list-inside dark:text-zinc-400">
-            <li>
-              <a
-                id="Prism"
-                class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-xl"
-                href="https://prismlauncher.org/download/"
-              >
-                {t.tutorial.prism}
-              </a>
-              <span>
-                <a
-                  class="hover:underline text-xl"
-                  href="#Prism"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  #
-                </a>
-              </span>
-              <ol class="ps-5 mt-2 space-y-1 list-decimal list-inside">
-                <p>
-                  {t.tutorial.needJava("8", "1.8+")}{" "}
-                  <a
-                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    href="https://adoptium.net/temurin/releases/?version=8&package=jre&arch=x64"
-                  >
-                    Java 8
-                  </a>{" "}
-                </p>
-                <p>
-                  {t.tutorial.needJava("17", "1.16+")}{" "}
-                  <a
-                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    href="https://adoptium.net/temurin/releases/?version=17&package=jre&arch=x64"
-                  >
-                    Java 17
-                  </a>{" "}
-                </p>
-                <p>
-                  {t.tutorial.needJava("21", "1.20.5+")}{" "}
-                  <a
-                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    href="https://adoptium.net/temurin/releases/?version=21&package=jre&arch=x64"
-                  >
-                    Java 21
-                  </a>{" "}
-                </p>
-                {t.tutorial.prismSteps.map((step) => <li>{step}</li>)}
-              </ol>
-            </li>
-            <br />
-            <li>
-              <a
-                id="Curseforge"
-                class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-xl"
-                href="https://www.curseforge.com/download/app#download-options"
-              >
-                {t.tutorial.curseforge}
-              </a>
-              <span>
-                <a
-                  class="hover:underline text-xl"
-                  href="#Curseforge"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  #
-                </a>
-              </span>
-              <ul class="ps-5 mt-2 space-y-1 list-decimal list-inside">
-                {t.tutorial.curseforgeSteps.map((step) => <li>{step}</li>)}
-              </ul>
-            </li>
-            <br />
-            <li>
-              <a
-                id="Modrinth"
-                class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-xl"
-                href="https://modrinth.com/app"
-              >
-                {t.tutorial.modrinth}
-              </a>
-              <span>
-                <a
-                  class="hover:underline text-xl"
-                  href="#Modrinth"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  #
-                </a>
-              </span>
-              <ul class="ps-5 mt-2 space-y-1 list-decimal list-inside">
-                {t.tutorial.modrinthSteps.map((step) => <li>{step}</li>)}
-              </ul>
-            </li>
-          </ul>
-        </div>
       </div>
+    </section>
+
+    <nav aria-label={t.tutorial.install} class="mt-8 flex flex-wrap gap-2">
+      {launchers.map(({ id, name }) => (
+        <a href={`#${id}`} class="rounded-full border border-brand-100 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-900 focus:outline-none focus:ring-2 focus:ring-brand-600 dark:border-brand-900 dark:bg-[#0b293d] dark:text-zinc-200 dark:hover:border-brand-700 dark:hover:bg-brand-900 dark:hover:text-brand-200">
+          {name}
+        </a>
+      ))}
+    </nav>
+
+    <section class="mt-10 rounded-2xl border border-brand-200 bg-brand-50/70 p-5 dark:border-brand-900 dark:bg-[#0b293d] sm:p-6">
+      <h2 class="text-lg font-bold text-zinc-900 dark:text-white">{t.tutorial.javaHeading}</h2>
+      <p class="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{t.tutorial.javaDescription}</p>
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        {[
+          { minecraft: "1.8+", java: "8", version: "8" },
+          { minecraft: "1.16+", java: "17", version: "17" },
+          { minecraft: "1.20.5+", java: "21", version: "21" },
+        ].map(({ minecraft, java, version }) => (
+          <a
+            class="rounded-xl border border-brand-100 bg-white px-4 py-3 transition hover:border-brand-400 dark:border-brand-900 dark:bg-[#071d2d] dark:hover:border-brand-700"
+            href={`https://adoptium.net/temurin/releases/?version=${version}&package=jre&arch=x64`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="block text-xs font-semibold text-zinc-500 dark:text-zinc-400">Minecraft {minecraft}</span>
+            <span class="mt-1 block font-bold text-brand-700 dark:text-brand-300">Java {java} <span aria-hidden="true">↗</span></span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-3">
+      {launchers.map(({ id, name, href, steps }, index) => (
+        <section id={id} class="scroll-mt-24 rounded-2xl border border-brand-100 bg-white p-5 shadow-sm dark:border-brand-900 dark:bg-[#0b293d] sm:p-6">
+          <div class="mb-5 flex items-center gap-3">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-800 dark:bg-brand-900 dark:text-brand-200">{index + 1}</span>
+            <h2 class="text-lg font-bold text-zinc-900 dark:text-white">{name}</h2>
+          </div>
+          <a href={href} target="_blank" rel="noopener noreferrer" class="mb-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
+            {t.tutorial.downloadLauncher}
+            <span aria-hidden="true">↗</span>
+          </a>
+          <ol class="space-y-3">
+            {steps.map((step) => (
+              <li class="flex gap-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                <span aria-hidden="true" class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[10px] font-bold text-brand-700 dark:bg-brand-900 dark:text-brand-200">✓</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
     </div>
   </div>
 </main>

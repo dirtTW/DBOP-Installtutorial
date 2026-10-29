@@ -12,7 +12,7 @@ const messages = {
     tutorial: "DBOP installation guide",
     modpacks: "Recommended modpacks",
     minecraftSites: "Minecraft resources",
-    usefulSites: "Useful software",
+    usefulSites: "Useful websites",
     flags: "Server launch flags",
   },
   footer: {
@@ -47,6 +47,20 @@ const messages = {
     spark: "Use Spark to find the cause of lag.",
     more: "And many more mods!",
     tryIt: "Why not install it and see for yourself?",
+  },
+  pages: {
+    installEyebrow: "Start playing",
+    installDescription:
+      "Pick your launcher and follow the steps below. The guide covers Prism, CurseForge, and Modrinth.",
+    modpacksEyebrow: "Find your next world",
+    modpacksDescription:
+      "Browse community favorites, compare pack versions, and jump straight to the launcher you use.",
+    minecraftEyebrow: "Tools for your next build",
+    minecraftDescription:
+      "A curated collection of launchers, mod platforms, server tools, and Minecraft resources.",
+    softwareEyebrow: "Useful websites, all in one place",
+    softwareDescription:
+      "A hand-picked collection of useful websites, online tools, references, and resources for everyday tasks.",
   },
   modpacks: {
     dbopName: "DBOP (DirtTW's Basement Optimize Pack)",
@@ -142,11 +156,16 @@ const messages = {
     unknownVersion: "Unknown",
     downloadModrinth: "Download from Modrinth",
     downloadCurseforge: "Download from CurseForge",
+    downloadModrinthShort: "Get on Modrinth",
+    downloadCurseforgeShort: "Get on CurseForge",
   },
   tutorial: {
     title: "DBOP Modpack Installation Guide",
     packName: "DBOP (DirtTW's Basement Optimize Pack)",
     install: "Installation guide:",
+    javaHeading: "Make sure Java is ready",
+    javaDescription: "Minecraft needs a matching Java version. Install the version that matches the game version you plan to play.",
+    downloadLauncher: "Get this launcher",
     prism: "Prism Launcher",
     curseforge: "CurseForge App",
     modrinth: "Modrinth App",

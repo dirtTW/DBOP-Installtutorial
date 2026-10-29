@@ -1,5 +1,6 @@
 ---
 import { getLocale, getMessages, locales, localizedPath } from "../i18n";
+import logo from "../img/logo.webp";
 
 const locale = getLocale(Astro.props.locale);
 const t = getMessages(locale);
@@ -20,23 +21,23 @@ const links = [
 ];
 ---
 
-<nav class="fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/95 px-4 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
-  <div class="mx-auto flex h-16 max-w-screen-xl items-center justify-between gap-4">
+<nav class="fixed top-0 z-50 w-full border-b border-brand-100 bg-white/95 px-4 backdrop-blur dark:border-brand-900 dark:bg-[#0b293d]/95">
+  <div class="relative mx-auto flex min-h-16 max-w-screen-xl items-center justify-between gap-3">
     <a
       href={localizedPath(locale, "")}
       class="flex min-w-0 items-center gap-3"
     >
       <img
-        src="https://raw.githubusercontent.com/yichifauzi/DBOP-Installtutorial/5c9ecdb2a4f8024edd2860527e92ffd13a49413a/public/favicon.svg"
+        src={logo.src}
         class="h-8 w-8"
-        alt="DBOP Logo"
+        alt=""
       />
       <span class="truncate text-base font-semibold text-zinc-900 dark:text-white sm:text-xl">
         dirtTW 土靈
       </span>
     </a>
 
-    <div class="flex shrink-0 items-center gap-1">
+    <div class="flex shrink-0 items-center gap-1 xl:order-2">
       <button
         type="button"
         data-theme-toggle
@@ -44,7 +45,7 @@ const links = [
         data-light-label={t.lightTheme}
         data-dark-label={t.darkTheme}
         aria-pressed="false"
-        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-zinc-300 dark:hover:bg-zinc-700"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-zinc-300 dark:hover:bg-brand-900"
       >
         <svg
           class="h-5 w-5"
@@ -65,7 +66,7 @@ const links = [
       <details class="relative">
         <summary
           aria-label={t.language}
-          class="flex h-10 cursor-pointer list-none items-center gap-2 rounded-lg px-3 text-sm font-medium text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-700"
+          class="flex h-10 cursor-pointer list-none items-center gap-2 rounded-lg px-3 text-sm font-medium text-zinc-700 hover:bg-brand-50 dark:text-zinc-200 dark:hover:bg-brand-900"
         >
           <span>{t.languageName}</span>
           <svg
@@ -81,13 +82,13 @@ const links = [
             ></path>
           </svg>
         </summary>
-        <div class="absolute right-0 z-10 mt-2 min-w-40 rounded-lg border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-800">
+        <div class="absolute right-0 z-10 mt-2 min-w-40 rounded-lg border border-brand-100 bg-white p-1 shadow-lg dark:border-brand-900 dark:bg-[#12344c]">
           {locales.map((supportedLocale) => (
             <a
               href={localizedPath(supportedLocale, route)}
               lang={supportedLocale}
               aria-current={supportedLocale === locale ? "true" : undefined}
-              class="block rounded px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-700"
+              class="block rounded px-3 py-2 text-sm text-zinc-700 hover:bg-brand-50 dark:text-zinc-200 dark:hover:bg-brand-900"
             >
               {getMessages(supportedLocale).languageName}
             </a>
@@ -101,7 +102,7 @@ const links = [
         aria-controls="navbar-menu"
         aria-expanded="false"
         aria-label={t.toggleNavigation}
-        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-zinc-300 dark:hover:bg-zinc-700"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-brand-600 xl:hidden dark:text-zinc-300 dark:hover:bg-brand-900"
       >
         <svg
           class="h-5 w-5"
@@ -120,23 +121,22 @@ const links = [
         </svg>
       </button>
     </div>
-  </div>
-
-  <div
-    id="navbar-menu"
-    class="absolute right-4 top-full hidden w-[min(20rem,calc(100vw-2rem))] rounded-b-xl border border-t-0 border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
-  >
-    <ul class="flex flex-col gap-1 font-medium">
+    <div
+      id="navbar-menu"
+      class="absolute right-0 top-full hidden w-[min(20rem,calc(100vw-2rem))] rounded-b-xl border border-t-0 border-brand-100 bg-white p-2 shadow-lg xl:order-1 xl:static xl:block xl:w-auto xl:shrink-0 xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none dark:border-brand-900 dark:bg-[#0b293d] xl:dark:bg-transparent"
+    >
+      <ul class="flex flex-col gap-1 font-medium xl:flex-row xl:items-center xl:gap-0.5">
       {links.map(({ href, label }) => (
         <li>
           <a
             href={localizedPath(locale, href)}
-            class="block rounded-lg px-4 py-3 text-zinc-800 hover:bg-zinc-100 hover:text-blue-700 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-blue-400"
+            class="block rounded-lg px-3 py-2 text-sm text-zinc-700 transition hover:bg-brand-50 hover:text-brand-800 xl:px-2 xl:text-xs 2xl:px-3 2xl:text-sm dark:text-zinc-200 dark:hover:bg-brand-900 dark:hover:text-brand-200"
           >
             {label}
           </a>
         </li>
       ))}
-    </ul>
+      </ul>
+    </div>
   </div>
 </nav>

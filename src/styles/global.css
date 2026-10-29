@@ -2,9 +2,31 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-brand-50: #edf7fc;
+  --color-brand-100: #d7edf8;
+  --color-brand-200: #b7def1;
+  --color-brand-300: #83c6e5;
+  --color-brand-400: #4aa9d2;
+  --color-brand-500: #278bb8;
+  --color-brand-600: #1d7199;
+  --color-brand-700: #1b5b79;
+  --color-brand-800: #194b63;
+  --color-brand-900: #173f53;
+  --color-brand-950: #0a2638;
+}
+
 html {
   height: 100%;
   scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f3f8fb;
+}
+
+html.dark body {
+  background-color: #071d2d;
 }
 
 .cf-logo {
