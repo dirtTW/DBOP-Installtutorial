@@ -30,10 +30,10 @@ if (Astro.site) {
   if (modrinthId) {
     try {
       const projectData = await fetch(
-        `https://api.modrinth.com/v2/project/${modrinthId}`
+        `https://api.modrinth.com/v2/project/${modrinthId}`,
       ).then((res) => res.json());
       const versionData = await fetch(
-        `https://api.modrinth.com/v2/project/${modrinthId}/version`
+        `https://api.modrinth.com/v2/project/${modrinthId}/version`,
       ).then((res) => res.json());
 
       version = versionData?.[0]?.version_number || version;
@@ -54,13 +54,13 @@ if (Astro.site) {
             headers: {
               "x-api-key": apiKey,
             },
-          }
+          },
         ).then((res) => (res.ok ? res.json() : null));
       }
 
       if (!projectData) {
         projectData = await fetch(
-          `https://addons-ecs.forgesvc.net/api/v2/addon/${curseforgeId}`
+          `https://addons-ecs.forgesvc.net/api/v2/addon/${curseforgeId}`,
         ).then((res) => (res.ok ? res.json() : null));
       }
 
@@ -80,7 +80,9 @@ if (Astro.site) {
               gameVersions:
                 file.gameVersions ||
                 file.gameVersion ||
-                file?.sortableGameVersion?.map((entry: any) => entry.gameVersion),
+                file?.sortableGameVersion?.map(
+                  (entry: any) => entry.gameVersion,
+                ),
               fileDate: file.fileDate || file.releaseDate || file.timestamp,
               releaseType: file.releaseType || file.fileStatus,
             }));
@@ -161,27 +163,23 @@ const isCurseforgeLinkValid = !!curseforgelink;
       版本 : {version}
       {gameVersions.length > 0 ? ` (適用於: ${gameVersions.join(", ")})` : ""}
     </p>
-    <div class="flex flex-auto gap-2">
+    <div class="flex flex-wrap gap-2">
       <a
-        class={`text-sm text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ${!isModrinthLinkValid ? "opacity-50 pointer-events-none cursor-not-allowed" : ""}`}
+        class={`inline-flex items-center justify-center whitespace-nowrap text-sm text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ${!isModrinthLinkValid ? "opacity-50 pointer-events-none cursor-not-allowed" : ""}`}
         href={isModrinthLinkValid ? modrinthlink : undefined}
         aria-disabled={!isModrinthLinkValid}
         tabindex={isModrinthLinkValid ? 0 : -1}
       >
-        <span>
-          <i class="md-logo w-4 h-4 me-2 ms-1" aria-hidden="true" />
-        </span>
+        <i class="md-logo me-2" aria-hidden="true" />
         Modrinth 下載
       </a>
       <a
-        class={`text-sm text-center focus:outline-none text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-600 font-medium rounded-lg px-5 py-2.5 mb-2 dark:focus:ring-yellow-900 ${!isCurseforgeLinkValid ? "opacity-50 pointer-events-none cursor-not-allowed" : ""}`}
+        class={`inline-flex items-center justify-center whitespace-nowrap text-sm text-center focus:outline-none text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-600 font-medium rounded-lg px-5 py-2.5 mb-2 dark:focus:ring-yellow-900 ${!isCurseforgeLinkValid ? "opacity-50 pointer-events-none cursor-not-allowed" : ""}`}
         href={isCurseforgeLinkValid ? curseforgelink : undefined}
         aria-disabled={!isCurseforgeLinkValid}
         tabindex={isCurseforgeLinkValid ? 0 : -1}
       >
-        <span>
-          <i class="cf-logo w-4 h-4 me-2 ms-1" aria-hidden="true" />
-        </span>
+        <i class="cf-logo me-2" aria-hidden="true" />
         Curseforge 下載
       </a>
     </div>

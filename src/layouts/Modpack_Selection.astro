@@ -4,11 +4,26 @@ import Card from "../components/Card.astro";
 
 <main>
   <div class="p-4">
-    <div
-      class="p-4 border-2 border-zinc-200 rounded-lg dark:border-zinc-700 mt-14"
-    >
+    <div class="p-4 border-2 border-zinc-200 rounded-lg dark:border-zinc-700 mt-14">
+      <div class="mb-4">
+        <label for="modpack-search" class="sr-only">
+          搜尋推薦模組包
+        </label>
+        <input
+          id="modpack-search"
+          type="search"
+          placeholder="搜尋模組包名稱、描述或版本..."
+          class="block w-full rounded-lg border border-zinc-300 bg-white p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-zinc-400"
+        />
+        <p
+          id="modpack-search-status"
+          class="mt-2 text-sm text-zinc-600 dark:text-zinc-400"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </div>
       <div class="flex">
-        <div class="mb-13 grow">
+        <div id="modpack-list" class="mb-13 grow">
           <Card
             modrinthId="olssWAmw"
             name="DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)"
@@ -116,3 +131,37 @@ import Card from "../components/Card.astro";
     </div>
   </div>
 </main>
+
+<script>
+  const searchInput =
+    document.querySelector<HTMLInputElement>("#modpack-search");
+  const resultStatus = document.querySelector<HTMLElement>(
+    "#modpack-search-status",
+  );
+  const cards = Array.from(
+    document.querySelectorAll<HTMLElement>("#modpack-list > div"),
+  );
+
+  if (searchInput && resultStatus) {
+    const filterCards = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      for (const card of cards) {
+        const isMatch =
+          card.textContent?.toLowerCase().includes(query) ?? false;
+        card.style.display = isMatch ? "" : "none";
+        if (isMatch) visibleCount++;
+      }
+
+      resultStatus.textContent = query
+        ? visibleCount > 0
+          ? `找到 ${visibleCount} 個模組包`
+          : `找不到符合「${searchInput.value.trim()}」的模組包`
+        : `共 ${visibleCount} 個模組包`;
+    };
+
+    searchInput.addEventListener("input", filterCards);
+    filterCards();
+  }
+</script>
