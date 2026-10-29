@@ -4,7 +4,9 @@ import SmallCard from "../components/Small-Card.astro";
 
 <main>
   <div class="p-4">
-    <div class="p-4 border-2 border-zinc-200 rounded-lg dark:border-zinc-700 mt-14">
+    <div
+      class="p-4 border-2 border-zinc-200 rounded-lg dark:border-zinc-700 mt-14"
+    >
       <div class="mb-4">
         <label for="useful-website-search" class="sr-only">
           搜尋實用網站
@@ -20,13 +22,18 @@ import SmallCard from "../components/Small-Card.astro";
           class="mt-2 text-sm text-zinc-600 dark:text-zinc-400"
           role="status"
           aria-live="polite"
-        ></p>
+        >
+        </p>
       </div>
       <div class="flex">
         <div id="useful-website-list" class="mb-13 grow">
           <SmallCard
             link="https://massgrave.dev/"
             altText="Massgrave (Active Windows)"
+          />
+          <SmallCard
+            link="https://ninite.com/"
+            altText="Ninite (Download Software all in one installer)"
           />
           <SmallCard
             link="https://cobalt.tools/"
@@ -71,6 +78,14 @@ import SmallCard from "../components/Small-Card.astro";
           <SmallCard
             link="https://diskanalyzer.com/"
             altText="WizTree Disk Analyzer (Analyze Disk Space Usage)"
+          />
+          <SmallCard
+            link="https://fmhy.net/"
+            altText="freemediaheckyeah The largest collection of free stuff on the internet!"
+          />
+          <SmallCard
+            link="https://psutierlist.org/"
+            altText="PL's PSU Tier List"
           />
         </div>
       </div>
