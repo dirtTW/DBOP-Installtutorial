@@ -7,15 +7,15 @@ const t = getMessages(locale);
 
 <aside
   id="logo-sidebar"
-  class="fixed top-0 left-0 z-40 h-dvh w-64 -translate-x-full border-r border-brand-100 bg-white pt-20 transition-transform lg:translate-x-0 dark:border-brand-900 dark:bg-[#0b293d]"
+  class="fixed top-0 left-0 z-40 h-dvh w-64 -translate-x-full border-r border-brand-100 bg-white pt-20 transition-transform lg:translate-x-0 dark:border-white/10 dark:bg-[#1c1f25]"
   aria-label="Sidebar"
 >
-  <div class="h-full overflow-y-auto px-3 pb-4 dark:bg-[#0b293d]">
+  <div class="h-full overflow-y-auto px-3 pb-4 dark:bg-[#1c1f25]">
     <ul class="space-y-2 font-medium">
       <li>
         <a
           href={localizedPath(locale, "")}
-          class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-brand-50 dark:hover:bg-brand-900 group"
+          class="flex min-h-11 items-center rounded-full px-4 text-zinc-900 transition-colors hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-white dark:hover:bg-white/10 dark:focus-visible:outline-[#d4e3ff] group"
         >
           <span class="ms-3">{t.tutorial.packName}</span>
         </a>
@@ -23,7 +23,7 @@ const t = getMessages(locale);
       <li>
         <a
           href="#Prism"
-          class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-brand-50 dark:hover:bg-brand-900 group"
+          class="flex min-h-11 items-center rounded-full px-4 text-zinc-900 transition-colors hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-white dark:hover:bg-white/10 dark:focus-visible:outline-[#d4e3ff] group"
         >
           <span class="flex-1 ms-3 whitespace-nowrap">{t.tutorial.prism}</span>
         </a>
@@ -31,7 +31,7 @@ const t = getMessages(locale);
       <li>
         <a
           href="#Curseforge"
-          class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-brand-50 dark:hover:bg-brand-900 group"
+          class="flex min-h-11 items-center rounded-full px-4 text-zinc-900 transition-colors hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-white dark:hover:bg-white/10 dark:focus-visible:outline-[#d4e3ff] group"
         >
           <span class="flex-1 ms-3 whitespace-nowrap">{t.tutorial.curseforge}</span>
         </a>
@@ -39,7 +39,7 @@ const t = getMessages(locale);
       <li>
         <a
           href="#Modrinth"
-          class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-brand-50 dark:hover:bg-brand-900 group"
+          class="flex min-h-11 items-center rounded-full px-4 text-zinc-900 transition-colors hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-white dark:hover:bg-white/10 dark:focus-visible:outline-[#d4e3ff] group"
         >
           <span class="flex-1 ms-3 whitespace-nowrap">{t.tutorial.modrinth}</span>
         </a>

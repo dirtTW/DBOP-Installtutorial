@@ -60,12 +60,12 @@ const isModrinthLinkValid = !!modrinthlink;
 const isCurseforgeLinkValid = !!curseforgelink;
 const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid);
 const downloadButtonClass =
-  "inline-flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 text-center text-[11px] font-semibold leading-tight text-white shadow-sm transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 sm:min-h-10 sm:flex-row sm:gap-0 sm:whitespace-nowrap sm:px-3.5 sm:text-xs sm:leading-normal dark:focus-visible:ring-offset-[#0b293d]";
+  "inline-flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-full px-3 py-2 text-center text-[11px] font-semibold leading-tight shadow-sm transition hover:shadow-md active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:min-h-10 sm:flex-row sm:gap-0 sm:whitespace-nowrap sm:px-3.5 sm:text-xs sm:leading-normal dark:focus-visible:ring-offset-[#1c1f25]";
 ---
 
-<article class="grid grid-cols-[3.5rem_minmax(0,1fr)] items-start gap-x-3 gap-y-3 rounded-2xl border border-brand-100 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-950/5 sm:p-4 lg:grid-cols-[6rem_minmax(0,1fr)_auto] lg:items-center lg:gap-5 dark:border-brand-900 dark:bg-[#0b293d] dark:hover:border-brand-700">
+<article class="grid grid-cols-[3.5rem_minmax(0,1fr)] items-start gap-x-3 gap-y-3 rounded-2xl border border-brand-100 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-950/5 sm:p-4 lg:grid-cols-[6rem_minmax(0,1fr)_auto] lg:items-center lg:gap-5 dark:border-brand-900 dark:bg-[#1c1f25] dark:hover:border-brand-700">
   <img
-    class="row-span-1 h-14 w-14 rounded-xl border border-brand-100 bg-brand-50/60 object-cover shadow-sm lg:row-span-3 lg:h-24 lg:w-24 dark:border-brand-800 dark:bg-[#071d2d]"
+    class="row-span-1 h-14 w-14 rounded-xl border border-brand-100 bg-brand-50/60 object-cover shadow-sm lg:row-span-3 lg:h-24 lg:w-24 dark:border-brand-800 dark:bg-[#111318]"
     src={imagePath}
     data-fallback-src={fallbackImage.src}
     alt={`${displayName} ${locale === "en" ? "image" : "圖片"}`}
@@ -91,7 +91,7 @@ const downloadButtonClass =
   ]}>
     {isModrinthLinkValid && (
       <a
-        class={`${downloadButtonClass} bg-brand-600 hover:bg-brand-500 dark:bg-brand-400 dark:text-brand-950 dark:hover:bg-brand-300`}
+        class={`${downloadButtonClass} bg-[#1bd96a] text-[#102217] hover:bg-[#16c45d] focus-visible:ring-[#12833f] dark:bg-[#1bd96a] dark:text-[#102217] dark:hover:bg-[#16c45d] dark:focus-visible:ring-[#1bd96a]`}
         href={modrinthlink}
       >
         <i class="md-logo sm:me-2" aria-hidden="true" />
@@ -100,7 +100,7 @@ const downloadButtonClass =
     )}
     {isCurseforgeLinkValid && (
       <a
-        class={`${downloadButtonClass} border border-brand-800 bg-brand-950 hover:bg-brand-900 dark:border-brand-700 dark:bg-brand-800 dark:hover:bg-brand-700`}
+        class={`${downloadButtonClass} border border-[#d94d24] bg-[#f16436] text-white hover:bg-[#db5128] focus-visible:ring-[#d94d24] dark:border-[#d94d24] dark:bg-[#f16436] dark:text-white dark:hover:bg-[#db5128] dark:focus-visible:ring-[#ff8a65]`}
         href={curseforgelink}
       >
         <i class="cf-logo sm:me-2" aria-hidden="true" />
