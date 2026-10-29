@@ -135,16 +135,29 @@ const links = [
     </div>
     <div
       id="navbar-menu"
-      class="absolute right-0 top-full hidden w-[min(20rem,calc(100vw-2rem))] rounded-b-xl border border-t-0 border-brand-100 bg-white p-2 shadow-lg xl:order-1 xl:static xl:block xl:w-auto xl:shrink-0 xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none dark:border-brand-900 dark:bg-[#0b293d] xl:dark:bg-transparent"
+      class="absolute right-0 top-full mt-3 hidden w-[min(21rem,calc(100vw-2rem))] rounded-2xl border border-brand-100/80 bg-white/95 p-2.5 shadow-xl shadow-brand-950/10 backdrop-blur-xl xl:order-1 xl:static xl:mt-0 xl:block xl:w-auto xl:shrink-0 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none xl:backdrop-blur-none dark:border-brand-800 dark:bg-[#0b293d]/95 xl:dark:bg-transparent"
     >
-      <ul class="flex flex-col gap-1 font-medium xl:flex-row xl:items-center xl:gap-0.5">
+      <ul class="flex flex-col gap-1.5 font-medium xl:flex-row xl:items-center xl:gap-0.5">
       {links.map(({ href, label }) => (
         <li>
           <a
             href={localizedPath(locale, href)}
-            class="block rounded-lg px-3 py-2 text-sm text-zinc-700 transition hover:bg-brand-50 hover:text-brand-800 xl:px-2 xl:text-xs 2xl:px-3 2xl:text-sm dark:text-zinc-200 dark:hover:bg-brand-900 dark:hover:text-brand-200"
+            aria-current={href === route ? "page" : undefined}
+            class:list={[
+              "group flex min-h-11 items-center justify-between rounded-xl px-3.5 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 xl:min-h-0 xl:rounded-lg xl:px-2 xl:py-2 xl:text-xs 2xl:px-3 2xl:text-sm",
+              href === route
+                ? "bg-brand-50 text-brand-800 dark:bg-brand-900/70 dark:text-brand-200"
+                : "text-zinc-700 hover:bg-brand-50 hover:text-brand-800 dark:text-zinc-200 dark:hover:bg-brand-900 dark:hover:text-brand-200",
+            ]}
           >
             {label}
+            <span
+              aria-hidden="true"
+              class:list={[
+                "ml-3 h-1.5 w-1.5 rounded-full bg-brand-500 transition-opacity xl:hidden",
+                href === route ? "opacity-100" : "opacity-0 group-hover:opacity-60",
+              ]}
+            ></span>
           </a>
         </li>
       ))}
