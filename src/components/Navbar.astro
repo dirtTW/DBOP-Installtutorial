@@ -1,5 +1,6 @@
 ---
 import { getLocale, getMessages, locales, localizedPath } from "../i18n";
+import { Image } from "astro:assets";
 import logo from "../img/logo.webp";
 
 const locale = getLocale(Astro.props.locale);
@@ -19,6 +20,7 @@ const links = [
   { href: "useful-website", label: t.nav.usefulSites },
   { href: "flags-generator", label: t.nav.flags },
 ];
+const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"]);
 ---
 
 <nav class="fixed top-0 z-50 w-full border-b border-brand-100/80 bg-[#f7f9ff]/95 px-4 backdrop-blur-xl dark:border-white/10 dark:bg-[#111318]/95">
@@ -27,10 +29,14 @@ const links = [
       href={localizedPath(locale, "")}
       class="flex min-w-0 items-center gap-3 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
     >
-      <img
-        src={logo.src}
-        class="h-9 w-9 rounded-full"
+      <Image
+        src={logo}
         alt=""
+        width={36}
+        height={36}
+        format="webp"
+        loading="eager"
+        class="h-9 w-9 rounded-full"
       />
       <span class="truncate text-base font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-lg">
         dirtTW 土靈
@@ -147,6 +153,7 @@ const links = [
         <li>
           <a
             href={localizedPath(locale, href)}
+            data-astro-prefetch={prefetchLinks.has(href) ? "hover" : undefined}
             aria-current={href === route ? "page" : undefined}
             class:list={[
               "group flex min-h-11 items-center justify-between rounded-full px-4 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 xl:min-h-11 xl:px-3 xl:py-2 xl:text-xs 2xl:px-3.5 2xl:text-sm",

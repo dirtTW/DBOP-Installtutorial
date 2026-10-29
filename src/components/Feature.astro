@@ -1,5 +1,6 @@
 ---
 import { getLocale, getMessages, localizedPath } from "../i18n";
+import { Image } from "astro:assets";
 import mcLogo from "../img/mclogo.webp";
 import dbopLogo from "../img/logo.webp";
 
@@ -74,7 +75,11 @@ const features = [
       {features.map((feature) => (
         <article class="group relative rounded-[1.75rem] bg-[#eef2f9] p-5 transition duration-200 hover:-translate-y-0.5 hover:bg-brand-100 hover:shadow-md hover:shadow-black/5 dark:bg-[#1c1f25] dark:hover:bg-[#252a31] sm:p-6">
           <div class="mb-5 flex items-center justify-between">
-            <img class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width="48" height="48" loading="lazy" />
+            {typeof feature.image === "string" ? (
+              <img class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width="48" height="48" loading="lazy" />
+            ) : (
+              <Image class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width={48} height={48} format="webp" />
+            )}
             <span class="rounded-full bg-[#dce6f5] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand-800 dark:bg-[#30343b] dark:text-[#d4e3ff]">{feature.category}</span>
           </div>
           <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">
