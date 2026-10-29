@@ -4,19 +4,20 @@ import { getLocale, getMessages } from "../i18n";
 const t = getMessages(getLocale(Astro.props.locale));
 ---
 
-<footer class="relative bottom-0 left-0 z-40 w-full p-4 bg-white border-t border-zinc-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-zinc-800 dark:border-zinc-600">
-  <span class="text-sm text-zinc-500 sm:text-center dark:text-zinc-400">
+<footer class="mt-auto border-t border-zinc-200 bg-zinc-50/80 px-5 py-7 dark:border-zinc-800 dark:bg-zinc-900/70 sm:px-8">
+  <div class="mx-auto flex max-w-screen-xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+  <span class="text-sm text-zinc-500 dark:text-zinc-400">
     © 2026{" "}
     <a href="https://github.com/yichifauzi" class="hover:underline">
       dirtTW
     </a>
     . {t.footer.rights}
   </span>
-  <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-zinc-500 dark:text-zinc-400 sm:mt-0">
+  <ul class="flex flex-wrap items-center gap-5 text-sm font-medium text-zinc-600 dark:text-zinc-400">
     <li>
       <a
         href="https://discord.gg/7upZWA82Zk"
-        class="hover:underline me-4 md:me-6"
+        class="transition hover:text-emerald-800 hover:underline dark:hover:text-emerald-300"
       >
         {t.footer.discord}
       </a>
@@ -24,10 +25,11 @@ const t = getMessages(getLocale(Astro.props.locale));
     <li>
       <a
         href="https://github.com/dirttw/DBOP-Installtutorial"
-        class="hover:underline me-4 md:me-6"
+        class="transition hover:text-emerald-800 hover:underline dark:hover:text-emerald-300"
       >
         {t.footer.source}
       </a>
     </li>
   </ul>
+  </div>
 </footer>

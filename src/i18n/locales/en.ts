@@ -48,6 +48,20 @@ const messages = {
     more: "And many more mods!",
     tryIt: "Why not install it and see for yourself?",
   },
+  pages: {
+    installEyebrow: "Start playing",
+    installDescription:
+      "Pick your launcher and follow the steps below. The guide covers Prism, CurseForge, and Modrinth.",
+    modpacksEyebrow: "Find your next world",
+    modpacksDescription:
+      "Browse community favorites, compare pack versions, and jump straight to the launcher you use.",
+    minecraftEyebrow: "Tools for your next build",
+    minecraftDescription:
+      "A curated collection of launchers, mod platforms, server tools, and Minecraft resources.",
+    softwareEyebrow: "Useful tools, in one place",
+    softwareDescription:
+      "A hand-picked directory of utilities for downloads, file management, media, and more.",
+  },
   modpacks: {
     dbopName: "DBOP (DirtTW's Basement Optimize Pack)",
     dbopDescription:
@@ -147,6 +161,9 @@ const messages = {
     title: "DBOP Modpack Installation Guide",
     packName: "DBOP (DirtTW's Basement Optimize Pack)",
     install: "Installation guide:",
+    javaHeading: "Make sure Java is ready",
+    javaDescription: "Minecraft needs a matching Java version. Install the version that matches the game version you plan to play.",
+    downloadLauncher: "Get this launcher",
     prism: "Prism Launcher",
     curseforge: "CurseForge App",
     modrinth: "Modrinth App",

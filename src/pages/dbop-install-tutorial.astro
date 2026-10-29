@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-import Sidebar from "../components/Sidebar.astro";
 import ModpackInstall from "../layouts/ModpackInstall.astro";
 import "../styles/global.css";
 import { getLocale, getMessages } from "../i18n";
@@ -12,7 +11,6 @@ const t = getMessages(locale);
 ---
 
 <Layout title={t.tutorial.title} locale={locale}>
-  <Sidebar locale={locale} />
   <Navbar locale={locale} />
   <ModpackInstall locale={locale} />
   <Footer locale={locale} />

@@ -9,7 +9,6 @@ import Feature from "../../components/Feature.astro";
 import FlagsGenerator from "../../components/FlagsGenerator.astro";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
-import Sidebar from "../../components/Sidebar.astro";
 import "../../styles/global.css";
 import { getMessages, locales } from "../../i18n";
 
@@ -58,7 +57,6 @@ const titles: Record<string, string> = {
     )}
     {page === "dbop-install-tutorial" && (
       <>
-        <Sidebar locale={locale} />
         <ModpackInstall locale={locale} />
       </>
     )}

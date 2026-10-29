@@ -50,6 +50,20 @@ const messages = {
     more: "以及更多模組！",
     tryIt: "何不安裝下來看看呢？",
   },
+  pages: {
+    installEyebrow: "開始遊玩",
+    installDescription:
+      "選擇你使用的啟動器，依照下方步驟安裝。內容涵蓋 Prism、CurseForge 與 Modrinth。",
+    modpacksEyebrow: "尋找下一場冒險",
+    modpacksDescription:
+      "瀏覽推薦模組包、比較版本資訊，並直接前往你慣用的啟動器下載。",
+    minecraftEyebrow: "打造世界的實用工具",
+    minecraftDescription:
+      "精選啟動器、模組平台、伺服器工具與 Minecraft 相關資源。",
+    softwareEyebrow: "實用工具，一次整理",
+    softwareDescription:
+      "精選下載、檔案管理、多媒體等日常工具與資源。",
+  },
   modpacks: {
     dbopName: "DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)",
     dbopDescription:
@@ -147,6 +161,9 @@ const messages = {
     title: "DBOP 模組包安裝教學",
     packName: "DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)",
     install: "安裝教學：",
+    javaHeading: "先確認 Java 版本",
+    javaDescription: "Minecraft 需要對應版本的 Java。請依照你要遊玩的遊戲版本，安裝合適的 Java。",
+    downloadLauncher: "前往下載啟動器",
     prism: "Prism 啟動器",
     curseforge: "CurseForge 啟動器",
     modrinth: "Modrinth 啟動器",

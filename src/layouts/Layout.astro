@@ -1,5 +1,6 @@
 ---
 import { getLocale, getMessages } from "../i18n";
+import favicon from "../favicon.svg";
 
 export interface Props {
   title: string;
@@ -20,18 +21,9 @@ const t = getMessages(locale);
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="sitemap" href="/sitemap-0.xml" />
-    <link
-      rel="icon"
-      type="image"
-      href="https://raw.githubusercontent.com/yichifauzi/DBOP-Installtutorial/master/public/img/logo.webp"
-    />
+    <link rel="icon" type="image/svg+xml" href={favicon.src} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <link
-      rel="preload"
-      as="image"
-      href="https://github.com/yichifauzi/DBOP/blob/main/banner.png?raw=true"
-    />
     <meta name="theme-color" content="#874c50" />
     <meta name="viewport" content="width=device-width" />
     <script is:inline>
@@ -43,12 +35,8 @@ const t = getMessages(locale);
       );
     </script>
   </head>
-  <body class="min-h-full bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white">
+  <body class="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-white">
     <slot />
-    <script
-      is:inline
-      src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"
-    ></script>
     <script>
       const navToggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
       const navMenu = document.querySelector<HTMLElement>("#navbar-menu");
