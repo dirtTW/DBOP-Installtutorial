@@ -1,8 +1,11 @@
 ---
+import { getLocale, getMessages } from "../i18n";
+
 interface Props {
   modrinthId: string;
   name: string;
   altText: string;
+  locale?: string;
   modrinthlink?: string;
   curseforgelink?: string;
   curseforgeId?: string;
@@ -20,8 +23,10 @@ const {
   imageUrl,
   fallbackVersion,
 } = Astro.props;
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
 
-let version = fallbackVersion || "Unknown";
+let version = fallbackVersion || t.cards.unknownVersion;
 let gameVersions: string[] = [];
 let imagePath = imageUrl || "/placeholder-image.jpg";
 
@@ -150,7 +155,7 @@ const isCurseforgeLinkValid = !!curseforgelink;
   <img
     class="m-3 object-cover rounded-lg h-40 md:rounded max-sm:w-40 max-sm:h-40 drop-shadow-lg"
     src={imagePath}
-    alt={altText || `${name} 圖片`}
+    alt={altText || `${name} ${locale === "en" ? "image" : "圖片"}`}
     loading="lazy"
     onerror="this.onerror=null;this.src='/placeholder-image.jpg';"
   />
@@ -160,8 +165,10 @@ const isCurseforgeLinkValid = !!curseforgelink;
     </h5>
     <p class="mb-3 font-normal text-zinc-700 dark:text-zinc-400">{altText}</p>
     <p class="mb-3 font-normal text-zinc-700 dark:text-zinc-400">
-      版本 : {version}
-      {gameVersions.length > 0 ? ` (適用於: ${gameVersions.join(", ")})` : ""}
+      {t.cards.version} {version}
+      {gameVersions.length > 0
+        ? ` (${t.cards.supportedVersions} ${gameVersions.join(", ")})`
+        : ""}
     </p>
     <div class="flex flex-wrap gap-2">
       <a
@@ -171,7 +178,7 @@ const isCurseforgeLinkValid = !!curseforgelink;
         tabindex={isModrinthLinkValid ? 0 : -1}
       >
         <i class="md-logo me-2" aria-hidden="true" />
-        Modrinth 下載
+        {t.cards.downloadModrinth}
       </a>
       <a
         class={`inline-flex items-center justify-center whitespace-nowrap text-sm text-center focus:outline-none text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-600 font-medium rounded-lg px-5 py-2.5 mb-2 dark:focus:ring-yellow-900 ${!isCurseforgeLinkValid ? "opacity-50 pointer-events-none cursor-not-allowed" : ""}`}
@@ -180,7 +187,7 @@ const isCurseforgeLinkValid = !!curseforgelink;
         tabindex={isCurseforgeLinkValid ? 0 : -1}
       >
         <i class="cf-logo me-2" aria-hidden="true" />
-        Curseforge 下載
+        {t.cards.downloadCurseforge}
       </a>
     </div>
   </div>

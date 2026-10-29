@@ -1,5 +1,9 @@
 ---
 import Card from "../components/Card.astro";
+import { getLocale, getMessages } from "../i18n";
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
 ---
 
 <main>
@@ -7,12 +11,12 @@ import Card from "../components/Card.astro";
     <div class="p-4 border-2 border-zinc-200 rounded-lg dark:border-zinc-700 mt-14">
       <div class="mb-4">
         <label for="modpack-search" class="sr-only">
-          搜尋推薦模組包
+          {t.search.modpacksLabel}
         </label>
         <input
           id="modpack-search"
           type="search"
-          placeholder="搜尋模組包名稱、描述或版本..."
+          placeholder={t.search.modpacksPlaceholder}
           class="block w-full rounded-lg border border-zinc-300 bg-white p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-zinc-400"
         />
         <p
@@ -20,108 +24,123 @@ import Card from "../components/Card.astro";
           class="mt-2 text-sm text-zinc-600 dark:text-zinc-400"
           role="status"
           aria-live="polite"
+          data-found-template={t.search.foundModpacks}
+          data-not-found-template={t.search.noModpacks}
+          data-total-template={t.search.totalModpacks}
         ></p>
       </div>
       <div class="flex">
         <div id="modpack-list" class="grow">
           <Card
+            locale={locale}
             modrinthId="olssWAmw"
-            name="DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)"
-            altText="DBOP 是一個優化模組包 大部分模組都是用戶端並且能夠優化 Minecraft 麥塊效能。"
+            name={t.modpacks.dbopName}
+            altText={t.modpacks.dbopDescription}
             modrinthlink="https://modrinth.com/modpack/dbop"
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/dbop"
           />
           <Card
+            locale={locale}
             modrinthId="fT7MQtrV"
-            name="DUP (DirtTW's Utility Pack) (土靈的實用包)"
-            altText="DUP 是一個補助類的實用模組包裡面包含藍圖模組，小地圖模組以及整理背包模組等等的。"
+            name={t.modpacks.dupName}
+            altText={t.modpacks.dupDescription}
             modrinthlink="https://modrinth.com/modpack/dup"
             curseforgelink=""
           />
           <Card
+            locale={locale}
             modrinthId="1KVo5zza"
             name="Fabulously Optimized"
-            altText="使用這個簡單的模組包來提高您的圖形和效能。 1.21"
+            altText={t.modpacks.fabulouslyOptimized}
             modrinthlink="https://modrinth.com/modpack/fabulously-optimized"
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/fabulously-optimized"
           />
           <Card
+            locale={locale}
             modrinthId="Ohwb2cTF"
             name="TNVBP"
-            altText="Minecraft 效能優化模組包丨TechNoob's Vanilla Boost Pack"
+            altText={t.modpacks.tnvbp}
             modrinthlink="https://modrinth.com/modpack/tnvbp"
             curseforgelink=""
           />
           <Card
+            locale={locale}
             modrinthId="Er2bMzL7"
             name="TNVBP Lite"
-            altText="TNVBP 的輕量化版本丨Lite version of TNVBP"
+            altText={t.modpacks.tnvbpLite}
             modrinthlink="https://modrinth.com/modpack/tnvbp-lite"
             curseforgelink=""
           />
           <Card
+            locale={locale}
             modrinthId="BYfVnHa7"
             name="Simply Optimized"
-            altText="領先的、經過深入研究的優化模組包，專注於純粹的性能。"
+            altText={t.modpacks.simplyOptimized}
             modrinthlink="https://modrinth.com/modpack/sop"
             curseforgelink=""
           />
           <Card
+            locale={locale}
             modrinthId=""
             modrinthlink=""
             fallbackVersion="1.19.2"
             name="All of Fabric 6 - AOF6"
-            altText="All of Fabric 6 是 AOF 系列的第六作，保持了前作的許多特點, 有許多任務 以及新戰鬥系統 跟各種建築可以探索。"
+            altText={t.modpacks.aof6}
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-of-fabric-6"
             curseforgeId="695890"
             imageUrl="https://media.forgecdn.net/avatars/thumbnails/630/292/256/256/638029267991555056.png"
           />
           <Card
+            locale={locale}
             modrinthId=""
             modrinthlink=""
             fallbackVersion="1.20.1"
             name="All of Fabric 7 - AOF7"
-            altText="All of Fabric 7 是 AOF 系列的第七作，足跡與故事 探險開始!!!!"
+            altText={t.modpacks.aof7}
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-of-fabric-7"
             curseforgeId="899572"
             imageUrl="https://media.forgecdn.net/avatars/861/617/638269386500250203.png"
           />
           <Card
+            locale={locale}
             modrinthId=""
             modrinthlink=""
             fallbackVersion="1.20.1"
             name="All the Mods 9 - ATM9"
-            altText="ALL The Mods 9 - 把好玩又熱門模組何在一起的大型模組包 有挑戰任務 不錯玩！"
+            altText={t.modpacks.atm}
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-the-mods-9"
             curseforgeId="715572"
             imageUrl="https://media.forgecdn.net/avatars/902/338/638350403793040080.png"
           />
           <Card
+            locale={locale}
             modrinthId=""
             modrinthlink=""
             fallbackVersion="1.21.1"
             name="All the Mods 10 - ATM10"
-            altText="All the Mods 10 - ATM10 - 把好玩又熱門模組何在一起的大型模組包 有挑戰任務 不錯玩！"
+            altText={t.modpacks.atm}
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-the-mods-10"
             curseforgeId="925200"
             imageUrl="https://media.forgecdn.net/avatars/1182/438/638755918649288941.png"
           />
           <Card
+            locale={locale}
             modrinthId=""
             modrinthlink=""
             fallbackVersion="1.20.1"
             name="All the Mods 9 - To the Sky"
-            altText="All the Mods 9 - To the Sky - 最新 ATM 9 空島模組包 不錯玩！"
+            altText={t.modpacks.atm9Sky}
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-the-mods-9-to-the-sky"
             curseforgeId="967745"
             imageUrl="https://media.forgecdn.net/avatars/thumbnails/999/347/256/256/638518044265918139.png"
           />
           <Card
+            locale={locale}
             modrinthId=""
             modrinthlink=""
             fallbackVersion="1.21.1"
             name="Craftoria"
-            altText="Craftoria - 是 AOF 系列的第八作 使用 Neoforge ，全新試煉開始!!!!"
+            altText={t.modpacks.craftoria}
             curseforgelink="https://www.curseforge.com/minecraft/modpacks/craftoria"
             curseforgeId="1039252"
             imageUrl="https://media.forgecdn.net/avatars/thumbnails/1066/473/256/256/638600434802547442.png"
@@ -143,6 +162,8 @@ import Card from "../components/Card.astro";
   );
 
   if (searchInput && resultStatus) {
+    const format = (template: string | undefined, placeholder: string, value: string) =>
+      (template ?? "").replace(placeholder, value);
     const filterCards = () => {
       const query = searchInput.value.trim().toLowerCase();
       let visibleCount = 0;
@@ -156,9 +177,9 @@ import Card from "../components/Card.astro";
 
       resultStatus.textContent = query
         ? visibleCount > 0
-          ? `找到 ${visibleCount} 個模組包`
-          : `找不到符合「${searchInput.value.trim()}」的模組包`
-        : `共 ${visibleCount} 個模組包`;
+          ? format(resultStatus.dataset.foundTemplate, "{count}", String(visibleCount))
+          : format(resultStatus.dataset.notFoundTemplate, "{query}", searchInput.value.trim())
+        : format(resultStatus.dataset.totalTemplate, "{count}", String(visibleCount));
     };
 
     searchInput.addEventListener("input", filterCards);

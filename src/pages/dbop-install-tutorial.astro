@@ -5,11 +5,15 @@ import Footer from "../components/Footer.astro";
 import Sidebar from "../components/Sidebar.astro";
 import ModpackInstall from "../layouts/ModpackInstall.astro";
 import "../styles/global.css";
+import { getLocale, getMessages } from "../i18n";
+
+const locale = getLocale(Astro.currentLocale);
+const t = getMessages(locale);
 ---
 
-<Layout title="DBOP模組包安裝教學">
-  <Sidebar />
-  <Navbar />
-  <ModpackInstall />
-  <Footer />
+<Layout title={t.tutorial.title} locale={locale}>
+  <Sidebar locale={locale} />
+  <Navbar locale={locale} />
+  <ModpackInstall locale={locale} />
+  <Footer locale={locale} />
 </Layout>

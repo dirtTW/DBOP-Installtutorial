@@ -4,10 +4,14 @@ import SmallCardSel from "../layouts/MCusefullink.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import { getLocale, getMessages } from "../i18n";
+
+const locale = getLocale(Astro.currentLocale);
+const t = getMessages(locale);
 ---
 
-<Layout title="DBOP模組包">
-  <Navbar />
-  <SmallCardSel />
-  <Footer />
+<Layout title={t.nav.minecraftSites} locale={locale}>
+  <Navbar locale={locale} />
+  <SmallCardSel locale={locale} />
+  <Footer locale={locale} />
 </Layout>

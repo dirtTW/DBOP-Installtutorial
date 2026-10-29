@@ -4,10 +4,14 @@ import Modpack_Selection from "../layouts/Modpack_Selection.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import { getLocale, getMessages } from "../i18n";
+
+const locale = getLocale(Astro.currentLocale);
+const t = getMessages(locale);
 ---
 
-<Layout title="DBOP模組包">
-  <Navbar />
-  <Modpack_Selection />
-  <Footer />
+<Layout title={t.nav.modpacks} locale={locale}>
+  <Navbar locale={locale} />
+  <Modpack_Selection locale={locale} />
+  <Footer locale={locale} />
 </Layout>

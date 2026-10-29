@@ -1,5 +1,9 @@
 ---
 import SmallCard from "../components/Small-Card.astro";
+import { getLocale, getMessages } from "../i18n";
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
 ---
 
 <main>
@@ -9,12 +13,12 @@ import SmallCard from "../components/Small-Card.astro";
     >
       <div class="mb-4">
         <label for="useful-website-search" class="sr-only">
-          搜尋實用網站
+          {t.search.usefulSitesLabel}
         </label>
         <input
           id="useful-website-search"
           type="search"
-          placeholder="搜尋網站名稱或網址..."
+          placeholder={t.search.websitesPlaceholder}
           class="block w-full rounded-lg border border-zinc-300 bg-white p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white dark:placeholder-zinc-400"
         />
         <p
@@ -22,6 +26,9 @@ import SmallCard from "../components/Small-Card.astro";
           class="mt-2 text-sm text-zinc-600 dark:text-zinc-400"
           role="status"
           aria-live="polite"
+          data-found-template={t.search.foundWebsites}
+          data-not-found-template={t.search.noWebsites}
+          data-total-template={t.search.totalWebsites}
         >
         </p>
       </div>
@@ -105,6 +112,8 @@ import SmallCard from "../components/Small-Card.astro";
   );
 
   if (searchInput && resultStatus) {
+    const format = (template: string | undefined, placeholder: string, value: string) =>
+      (template ?? "").replace(placeholder, value);
     const filterCards = () => {
       const query = searchInput.value.trim().toLowerCase();
       let visibleCount = 0;
@@ -119,9 +128,9 @@ import SmallCard from "../components/Small-Card.astro";
 
       resultStatus.textContent = query
         ? visibleCount > 0
-          ? `找到 ${visibleCount} 個網站`
-          : `找不到符合「${searchInput.value.trim()}」的網站`
-        : `共 ${visibleCount} 個網站`;
+          ? format(resultStatus.dataset.foundTemplate, "{count}", String(visibleCount))
+          : format(resultStatus.dataset.notFoundTemplate, "{query}", searchInput.value.trim())
+        : format(resultStatus.dataset.totalTemplate, "{count}", String(visibleCount));
     };
 
     searchInput.addEventListener("input", filterCards);
