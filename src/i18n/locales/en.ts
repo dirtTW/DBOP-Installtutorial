@@ -12,7 +12,7 @@ const messages = {
     tutorial: "DBOP installation guide",
     modpacks: "Recommended modpacks",
     minecraftSites: "Minecraft resources",
-    usefulSites: "Useful software",
+    usefulSites: "Useful websites",
     flags: "Server launch flags",
   },
   footer: {
@@ -58,9 +58,9 @@ const messages = {
     minecraftEyebrow: "Tools for your next build",
     minecraftDescription:
       "A curated collection of launchers, mod platforms, server tools, and Minecraft resources.",
-    softwareEyebrow: "Useful tools, in one place",
+    softwareEyebrow: "Useful websites, all in one place",
     softwareDescription:
-      "A hand-picked directory of utilities for downloads, file management, media, and more.",
+      "A hand-picked collection of useful websites, online tools, references, and resources for everyday tasks.",
   },
   modpacks: {
     dbopName: "DBOP (DirtTW's Basement Optimize Pack)",

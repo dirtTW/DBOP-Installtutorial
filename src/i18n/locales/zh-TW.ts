@@ -14,7 +14,7 @@ const messages = {
     tutorial: "DBOP 模組包安裝教學",
     modpacks: "模組包推薦",
     minecraftSites: "Minecraft 實用網站",
-    usefulSites: "軟體實用網站",
+    usefulSites: "實用網站",
     flags: "伺服器啟動參數",
   },
   footer: {
@@ -60,9 +60,9 @@ const messages = {
     minecraftEyebrow: "打造世界的實用工具",
     minecraftDescription:
       "精選啟動器、模組平台、伺服器工具與 Minecraft 相關資源。",
-    softwareEyebrow: "實用工具，一次整理",
+    softwareEyebrow: "實用網站，一次整理",
     softwareDescription:
-      "精選下載、檔案管理、多媒體等日常工具與資源。",
+      "整理各類實用網站，包含線上工具、參考資料與日常資源，不限於軟體下載。",
   },
   modpacks: {
     dbopName: "DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)",
