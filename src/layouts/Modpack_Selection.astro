@@ -2,9 +2,200 @@
 import Card from "../components/Card.astro";
 import PageIntro from "../components/PageIntro.astro";
 import { getLocale, getMessages } from "../i18n";
+import recommendedModpacksMarkdown from "../../recommended-modpacks.md?raw";
 
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
 const t = getMessages(locale);
+const curatedModpacks = [
+  {
+    link: "https://modrinth.com/modpack/dbop",
+    modrinthId: "olssWAmw",
+    name: t.modpacks.dbopName,
+    altText: t.modpacks.dbopDescription,
+    modrinthlink: "https://modrinth.com/modpack/dbop",
+    curseforgelink: "https://www.curseforge.com/minecraft/modpacks/dbop",
+  },
+  {
+    link: "https://modrinth.com/modpack/dup",
+    modrinthId: "fT7MQtrV",
+    name: t.modpacks.dupName,
+    altText: t.modpacks.dupDescription,
+    modrinthlink: "https://modrinth.com/modpack/dup",
+  },
+  {
+    link: "https://modrinth.com/modpack/fabulously-optimized",
+    modrinthId: "1KVo5zza",
+    name: "Fabulously Optimized",
+    altText: t.modpacks.fabulouslyOptimized,
+    modrinthlink: "https://modrinth.com/modpack/fabulously-optimized",
+    curseforgelink:
+      "https://www.curseforge.com/minecraft/modpacks/fabulously-optimized",
+  },
+  {
+    link: "https://modrinth.com/modpack/tnvbp",
+    modrinthId: "Ohwb2cTF",
+    name: "TNVBP",
+    altText: t.modpacks.tnvbp,
+    modrinthlink: "https://modrinth.com/modpack/tnvbp",
+  },
+  {
+    link: "https://modrinth.com/modpack/tnvbp-lite",
+    modrinthId: "Er2bMzL7",
+    name: "TNVBP Lite",
+    altText: t.modpacks.tnvbpLite,
+    modrinthlink: "https://modrinth.com/modpack/tnvbp-lite",
+  },
+  {
+    link: "https://modrinth.com/modpack/sop",
+    modrinthId: "BYfVnHa7",
+    name: "Simply Optimized",
+    altText: t.modpacks.simplyOptimized,
+    modrinthlink: "https://modrinth.com/modpack/sop",
+  },
+  {
+    link: "https://www.curseforge.com/minecraft/modpacks/all-of-fabric-6",
+    name: "All of Fabric 6 - AOF6",
+    altText: t.modpacks.aof6,
+    fallbackVersion: "1.19.2",
+    curseforgelink:
+      "https://www.curseforge.com/minecraft/modpacks/all-of-fabric-6",
+    imageUrl:
+      "https://media.forgecdn.net/avatars/thumbnails/630/292/256/256/638029267991555056.png",
+  },
+  {
+    link: "https://www.curseforge.com/minecraft/modpacks/all-of-fabric-7",
+    name: "All of Fabric 7 - AOF7",
+    altText: t.modpacks.aof7,
+    fallbackVersion: "1.20.1",
+    curseforgelink:
+      "https://www.curseforge.com/minecraft/modpacks/all-of-fabric-7",
+    imageUrl:
+      "https://media.forgecdn.net/avatars/861/617/638269386500250203.png",
+  },
+  {
+    link: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9",
+    name: "All the Mods 9 - ATM9",
+    altText: t.modpacks.atm,
+    fallbackVersion: "1.20.1",
+    curseforgelink:
+      "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9",
+    imageUrl:
+      "https://media.forgecdn.net/avatars/902/338/638350403793040080.png",
+  },
+  {
+    link: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10",
+    name: "All the Mods 10 - ATM10",
+    altText: t.modpacks.atm,
+    fallbackVersion: "1.21.1",
+    curseforgelink:
+      "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10",
+    imageUrl:
+      "https://media.forgecdn.net/avatars/1182/438/638755918649288941.png",
+  },
+  {
+    link: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9-to-the-sky",
+    name: "All the Mods 9 - To the Sky",
+    altText: t.modpacks.atm9Sky,
+    fallbackVersion: "1.20.1",
+    curseforgelink:
+      "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9-to-the-sky",
+    imageUrl:
+      "https://media.forgecdn.net/avatars/thumbnails/999/347/256/256/638518044265918139.png",
+  },
+  {
+    link: "https://www.curseforge.com/minecraft/modpacks/craftoria",
+    name: "Craftoria",
+    altText: t.modpacks.craftoria,
+    fallbackVersion: "1.21.1",
+    curseforgelink: "https://www.curseforge.com/minecraft/modpacks/craftoria",
+    imageUrl:
+      "https://media.forgecdn.net/avatars/thumbnails/1066/473/256/256/638600434802547442.png",
+  },
+];
+
+let insideCodeFence = false;
+const markdownLines = recommendedModpacksMarkdown
+  .split(/\r?\n/)
+  .filter((line) => {
+    if (line.trim().startsWith("```")) {
+      insideCodeFence = !insideCodeFence;
+      return false;
+    }
+    return !insideCodeFence;
+  });
+const linkSectionStart = markdownLines.findIndex((line) => /^link:\s*$/i.test(line.trim()));
+if (linkSectionStart < 0) {
+  throw new Error("recommended-modpacks.md must contain a `link:` section.");
+}
+
+const recommendationLinks: { url: string; imageUrl?: string }[] = [];
+for (const line of markdownLines.slice(linkSectionStart + 1)) {
+  const entry = line.trim();
+  if (!entry) continue;
+
+  const imageMatch = entry.match(/^image:\s*(\S+)$/i);
+  if (imageMatch) {
+    const currentRecommendation =
+      recommendationLinks[recommendationLinks.length - 1];
+    if (!currentRecommendation) {
+      throw new Error("An `image:` entry must follow a modpack URL.");
+    }
+
+    let imageUrl: URL;
+    try {
+      imageUrl = new URL(imageMatch[1]);
+    } catch {
+      throw new Error(`Invalid image URL in recommended-modpacks.md: ${imageMatch[1]}`);
+    }
+    if (imageUrl.protocol !== "https:") {
+      throw new Error("Image URLs in recommended-modpacks.md must use HTTPS.");
+    }
+    currentRecommendation.imageUrl = imageUrl.href;
+    continue;
+  }
+
+  if (!entry.startsWith("-")) break;
+  const link = entry.slice(1).trim();
+  let url: URL;
+  try {
+    url = new URL(link);
+  } catch {
+    throw new Error(`Invalid modpack URL in recommended-modpacks.md: ${link}`);
+  }
+
+  const isModrinth =
+    ["modrinth.com", "www.modrinth.com"].includes(url.hostname) &&
+    /^\/modpack\/[^/]+\/?$/.test(url.pathname);
+  const isCurseForge =
+    ["curseforge.com", "www.curseforge.com"].includes(url.hostname) &&
+    /^\/minecraft\/modpacks\/[^/]+\/?$/.test(url.pathname);
+  if (url.protocol !== "https:" || (!isModrinth && !isCurseForge)) {
+    throw new Error(
+      `Unsupported modpack URL in recommended-modpacks.md: ${link}`,
+    );
+  }
+  if (!recommendationLinks.some((recommendation) => recommendation.url === url.href)) {
+    recommendationLinks.push({ url: url.href });
+  }
+}
+
+const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
+  const curated = curatedModpacks.find((modpack) => modpack.link === link);
+  if (curated) return { ...curated, ...(imageUrl ? { imageUrl } : {}) };
+
+  const url = new URL(link);
+  const slug = url.pathname.split("/").filter(Boolean).at(-1) ?? "";
+  const isModrinth = url.hostname.endsWith("modrinth.com");
+  return {
+    modrinthId: isModrinth ? slug : "",
+    name: slug.replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase()),
+    altText: t.modpacks.recommendedDescription,
+    modrinthlink: isModrinth ? link : "",
+    curseforgelink: isModrinth ? "" : link,
+    fetchMetadata: isModrinth,
+    ...(imageUrl ? { imageUrl } : {}),
+  };
+});
 ---
 
 <main>
@@ -36,114 +227,9 @@ const t = getMessages(locale);
         ></p>
       </div>
       <div id="modpack-list" class="mt-4 space-y-3">
-          <Card
-            locale={locale}
-            modrinthId="olssWAmw"
-            name={t.modpacks.dbopName}
-            altText={t.modpacks.dbopDescription}
-            modrinthlink="https://modrinth.com/modpack/dbop"
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/dbop"
-          />
-          <Card
-            locale={locale}
-            modrinthId="fT7MQtrV"
-            name={t.modpacks.dupName}
-            altText={t.modpacks.dupDescription}
-            modrinthlink="https://modrinth.com/modpack/dup"
-            curseforgelink=""
-          />
-          <Card
-            locale={locale}
-            modrinthId="1KVo5zza"
-            name="Fabulously Optimized"
-            altText={t.modpacks.fabulouslyOptimized}
-            modrinthlink="https://modrinth.com/modpack/fabulously-optimized"
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/fabulously-optimized"
-          />
-          <Card
-            locale={locale}
-            modrinthId="Ohwb2cTF"
-            name="TNVBP"
-            altText={t.modpacks.tnvbp}
-            modrinthlink="https://modrinth.com/modpack/tnvbp"
-            curseforgelink=""
-          />
-          <Card
-            locale={locale}
-            modrinthId="Er2bMzL7"
-            name="TNVBP Lite"
-            altText={t.modpacks.tnvbpLite}
-            modrinthlink="https://modrinth.com/modpack/tnvbp-lite"
-            curseforgelink=""
-          />
-          <Card
-            locale={locale}
-            modrinthId="BYfVnHa7"
-            name="Simply Optimized"
-            altText={t.modpacks.simplyOptimized}
-            modrinthlink="https://modrinth.com/modpack/sop"
-            curseforgelink=""
-          />
-          <Card
-            locale={locale}
-            modrinthId=""
-            modrinthlink=""
-            fallbackVersion="1.19.2"
-            name="All of Fabric 6 - AOF6"
-            altText={t.modpacks.aof6}
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-of-fabric-6"
-            imageUrl="https://media.forgecdn.net/avatars/thumbnails/630/292/256/256/638029267991555056.png"
-          />
-          <Card
-            locale={locale}
-            modrinthId=""
-            modrinthlink=""
-            fallbackVersion="1.20.1"
-            name="All of Fabric 7 - AOF7"
-            altText={t.modpacks.aof7}
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-of-fabric-7"
-            imageUrl="https://media.forgecdn.net/avatars/861/617/638269386500250203.png"
-          />
-          <Card
-            locale={locale}
-            modrinthId=""
-            modrinthlink=""
-            fallbackVersion="1.20.1"
-            name="All the Mods 9 - ATM9"
-            altText={t.modpacks.atm}
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-the-mods-9"
-            imageUrl="https://media.forgecdn.net/avatars/902/338/638350403793040080.png"
-          />
-          <Card
-            locale={locale}
-            modrinthId=""
-            modrinthlink=""
-            fallbackVersion="1.21.1"
-            name="All the Mods 10 - ATM10"
-            altText={t.modpacks.atm}
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-the-mods-10"
-            imageUrl="https://media.forgecdn.net/avatars/1182/438/638755918649288941.png"
-          />
-          <Card
-            locale={locale}
-            modrinthId=""
-            modrinthlink=""
-            fallbackVersion="1.20.1"
-            name="All the Mods 9 - To the Sky"
-            altText={t.modpacks.atm9Sky}
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/all-the-mods-9-to-the-sky"
-            imageUrl="https://media.forgecdn.net/avatars/thumbnails/999/347/256/256/638518044265918139.png"
-          />
-          <Card
-            locale={locale}
-            modrinthId=""
-            modrinthlink=""
-            fallbackVersion="1.21.1"
-            name="Craftoria"
-            altText={t.modpacks.craftoria}
-            curseforgelink="https://www.curseforge.com/minecraft/modpacks/craftoria"
-            imageUrl="https://media.forgecdn.net/avatars/thumbnails/1066/473/256/256/638600434802547442.png"
-          />
+        {recommendations.map((recommendation) => (
+          <Card locale={locale} {...recommendation} />
+        ))}
       </div>
     </div>
   </section>

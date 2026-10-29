@@ -3,14 +3,15 @@ import { getLocale, getMessages } from "../i18n";
 import fallbackImage from "../img/logo.webp";
 
 interface Props {
-  modrinthId: string;
-  name: string;
-  altText: string;
+  modrinthId?: string;
+  name?: string;
+  altText?: string;
   locale?: string;
   modrinthlink?: string;
   curseforgelink?: string;
   imageUrl?: string;
   fallbackVersion?: string;
+  fetchMetadata?: boolean;
 }
 
 const {
@@ -21,16 +22,18 @@ const {
   curseforgelink,
   imageUrl,
   fallbackVersion,
+  fetchMetadata = false,
 } = Astro.props;
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
 const t = getMessages(locale);
 
 let version = fallbackVersion || t.cards.unknownVersion;
 let gameVersions: string[] = [];
-let imagePath = imageUrl || "/placeholder-image.jpg";
+let imagePath = imageUrl || fallbackImage.src;
+let displayName = name || t.modpacks.unknownRecommendedName;
+let description = altText || t.modpacks.recommendedDescription;
 
 if (Astro.site) {
-  // Running at build time (static generation)
   if (modrinthId) {
     try {
       const projectData = await fetch(
@@ -43,6 +46,10 @@ if (Astro.site) {
       version = versionData?.[0]?.version_number || version;
       gameVersions = versionData?.[0]?.game_versions || [];
       imagePath = projectData?.icon_url || imagePath;
+      if (fetchMetadata) {
+        displayName = projectData?.title || displayName;
+        description = projectData?.description || description;
+      }
     } catch (error) {
       console.error("Error fetching data from Modrinth API:", error);
     }
@@ -51,6 +58,7 @@ if (Astro.site) {
 
 const isModrinthLinkValid = !!modrinthlink;
 const isCurseforgeLinkValid = !!curseforgelink;
+const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid);
 const downloadButtonClass =
   "inline-flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 text-center text-[11px] font-semibold leading-tight text-white shadow-sm transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 sm:min-h-10 sm:flex-row sm:gap-0 sm:whitespace-nowrap sm:px-3.5 sm:text-xs sm:leading-normal dark:focus-visible:ring-offset-[#0b293d]";
 ---
@@ -60,13 +68,13 @@ const downloadButtonClass =
     class="row-span-1 h-14 w-14 rounded-xl border border-brand-100 bg-brand-50/60 object-cover shadow-sm lg:row-span-3 lg:h-24 lg:w-24 dark:border-brand-800 dark:bg-[#071d2d]"
     src={imagePath}
     data-fallback-src={fallbackImage.src}
-    alt={altText || `${name} ${locale === "en" ? "image" : "圖片"}`}
+    alt={`${displayName} ${locale === "en" ? "image" : "圖片"}`}
     loading="lazy"
   />
   <h2 class="min-w-0 self-center py-1 text-sm font-bold leading-5 tracking-tight text-brand-950 sm:text-base lg:self-end lg:py-0 dark:text-white">
-    {name}
+    {displayName}
   </h2>
-  <p class="col-span-full text-sm leading-5 text-zinc-600 lg:col-span-1 lg:col-start-2 lg:row-start-2 lg:leading-6 dark:text-zinc-400">{altText}</p>
+  <p class="col-span-full text-sm leading-5 text-zinc-600 lg:col-span-1 lg:col-start-2 lg:row-start-2 lg:leading-6 dark:text-zinc-400">{description}</p>
   <div class="col-span-full flex flex-wrap items-center gap-1.5 lg:col-span-1 lg:col-start-2 lg:row-start-3">
     <span class="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-800 dark:border-brand-800 dark:bg-brand-950/60 dark:text-brand-200">
       {t.cards.version} <span class="ml-1 font-semibold text-brand-950 dark:text-brand-100">{version}</span>
@@ -77,25 +85,28 @@ const downloadButtonClass =
       </span>
     )}
   </div>
-  <div class="col-span-full grid grid-cols-2 gap-2 lg:col-span-1 lg:col-start-3 lg:row-span-3 lg:flex lg:flex-col lg:justify-center">
+  <div class:list={[
+    "col-span-full grid gap-2 lg:col-span-1 lg:col-start-3 lg:row-span-3 lg:flex lg:flex-col lg:justify-center",
+    downloadCount > 1 ? "grid-cols-2" : "grid-cols-1",
+  ]}>
+    {isModrinthLinkValid && (
       <a
-        class={`${downloadButtonClass} bg-brand-600 hover:bg-brand-500 dark:bg-brand-400 dark:text-brand-950 dark:hover:bg-brand-300 ${!isModrinthLinkValid ? "pointer-events-none cursor-not-allowed opacity-50" : ""}`}
-        href={isModrinthLinkValid ? modrinthlink : undefined}
-        aria-disabled={!isModrinthLinkValid}
-        tabindex={isModrinthLinkValid ? 0 : -1}
+        class={`${downloadButtonClass} bg-brand-600 hover:bg-brand-500 dark:bg-brand-400 dark:text-brand-950 dark:hover:bg-brand-300`}
+        href={modrinthlink}
       >
         <i class="md-logo sm:me-2" aria-hidden="true" />
         {t.cards.downloadModrinthShort}
       </a>
+    )}
+    {isCurseforgeLinkValid && (
       <a
-        class={`${downloadButtonClass} border border-brand-800 bg-brand-950 hover:bg-brand-900 dark:border-brand-700 dark:bg-brand-800 dark:hover:bg-brand-700 ${!isCurseforgeLinkValid ? "pointer-events-none cursor-not-allowed opacity-50" : ""}`}
-        href={isCurseforgeLinkValid ? curseforgelink : undefined}
-        aria-disabled={!isCurseforgeLinkValid}
-        tabindex={isCurseforgeLinkValid ? 0 : -1}
+        class={`${downloadButtonClass} border border-brand-800 bg-brand-950 hover:bg-brand-900 dark:border-brand-700 dark:bg-brand-800 dark:hover:bg-brand-700`}
+        href={curseforgelink}
       >
         <i class="cf-logo sm:me-2" aria-hidden="true" />
         {t.cards.downloadCurseforgeShort}
       </a>
+    )}
   </div>
 </article>
 

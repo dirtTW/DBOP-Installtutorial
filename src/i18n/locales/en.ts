@@ -81,6 +81,8 @@ const messages = {
     atm: "A large modpack combining popular mods with challenging quests.",
     atm9Sky: "The skyblock edition of All the Mods 9.",
     craftoria: "The eighth All of Fabric release, built on NeoForge.",
+    unknownRecommendedName: "Recommended modpack",
+    recommendedDescription: "A recommended modpack. Visit its download page for details.",
   },
   search: {
     modpacksLabel: "Search recommended modpacks",
