@@ -1,12 +1,17 @@
+---
+import { getLocale, getMessages } from "../i18n";
+
+const t = getMessages(getLocale(Astro.props.locale ?? Astro.currentLocale));
+---
+
 <section class="bg-white dark:bg-zinc-900" id="learnmore">
   <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
     <div class="max-w-screen-md mb-8 lg:mb-16">
       <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-zinc-900 dark:text-white">
-        DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)
+        DBOP (DirtTW's Basement Optimize Pack)
       </h2>
       <p class="text-zinc-500 sm:text-xl dark:text-zinc-400">
-        以下是 DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)
-        有的特點 :
+        {t.home.features}
       </p>
     </div>
     <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
@@ -20,7 +25,7 @@
           <a href="https://modrinth.com/mod/sodium">Sodium</a>
         </h3>
         <p class="text-zinc-500 dark:text-zinc-400 max-sm:text-center">
-          基於 Sodium 模組能夠帶來麥塊巨大優化
+          {t.home.sodium}
         </p>
       </div>
       <div>
@@ -33,7 +38,7 @@
           <a href="https://modrinth.com/mod/iris">Iris</a>
         </h3>
         <p class="text-zinc-500 dark:text-zinc-400 max-sm:text-center">
-          包含 Iris 光影模組 讓你的 Minecraft 擁有酷炫的光影
+          {t.home.iris}
         </p>
       </div>
       <div>
@@ -43,10 +48,10 @@
           alt="MC logo"
         />
         <h3 class="mb-2 text-xl font-bold dark:text-white max-sm:text-center">
-          原版
+          {t.home.vanillaTitle}
         </h3>
         <p class="text-zinc-500 dark:text-zinc-400 max-sm:text-center">
-          原汁原味 無任何修改原版機制
+          {t.home.vanilla}
         </p>
       </div>
       <div>
@@ -59,7 +64,7 @@
           <a href="https://modrinth.com/mod/modernfix">ModernFix</a>
         </h3>
         <p class="text-zinc-500 dark:text-zinc-400 max-sm:text-center">
-          使用 ModernFix 來讓 Minecraft 麥塊載入速度更快
+          {t.home.modernfix}
         </p>
       </div>
       <div>
@@ -72,7 +77,7 @@
           <a href="https://modrinth.com/mod/spark">Spark</a>
         </h3>
         <p class="text-zinc-500 dark:text-zinc-400 max-sm:text-center">
-          Spark 模組方便檢查什麼東西造成卡頓
+          {t.home.spark}
         </p>
       </div>
       <div>
@@ -82,10 +87,10 @@
           alt=""
         />
         <h3 class="mb-2 text-xl font-bold dark:text-white max-sm:text-center">
-          以及更多模組!!!
+          {t.home.more}
         </h3>
         <p class="text-zinc-500 dark:text-zinc-400 max-sm:text-center">
-          何不安裝下來看看呢?
+          {t.home.tryIt}
         </p>
       </div>
     </div>

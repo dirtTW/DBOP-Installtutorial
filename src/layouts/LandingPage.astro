@@ -1,3 +1,10 @@
+---
+import { getLocale, getMessages, localizedPath } from "../i18n";
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
+---
+
 <main>
   <section class="py-8 bg-white dark:bg-zinc-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
@@ -9,18 +16,17 @@
         width="225"
       />
       <h1 class="m-7 text-4xl font-extrabold tracking-tight leading-none text-zinc-900 md:text-5xl lg:text-6xl dark:text-white">
-        DBOP 模組包
+        {t.home.title}
       </h1>
       <p class="mb-8 text-lg font-normal text-zinc-500 lg:text-xl sm:px-16 lg:px-48 dark:text-zinc-400">
-        DBOP 是一個優化模組包，大部分模組皆為用戶端，能有效提升 Minecraft
-        麥塊的效能。
+        {t.home.description}
       </p>
       <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
         <a
-          href="../DBOP-Installtutorial/dbop-install-tutorial"
+          href={localizedPath(locale, "dbop-install-tutorial")}
           class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
         >
-          安裝教學
+          {t.home.install}
           <svg
             class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
             aria-hidden="true"
@@ -41,7 +47,7 @@
           href="#learnmore"
           class="py-3 px-5 sm:ms-4 text-sm font-medium text-zinc-900 focus:outline-none bg-white rounded-lg border border-zinc-200 hover:bg-zinc-200 hover:dark:bg-zinc-600 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-zinc-100 dark:focus:ring-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-70"
         >
-          了解更多
+          {t.home.learnMore}
         </a>
       </div>
     </div>

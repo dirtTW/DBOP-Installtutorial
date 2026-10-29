@@ -1,3 +1,10 @@
+---
+import { getLocale, getMessages, localizedPath } from "../i18n";
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
+---
+
 <aside
   id="logo-sidebar"
   class="fixed top-0 left-0 z-40 h-dvh w-64 -translate-x-full border-r border-zinc-200 bg-white pt-20 transition-transform lg:translate-x-0 dark:border-zinc-700 dark:bg-zinc-800"
@@ -7,10 +14,10 @@
     <ul class="space-y-2 font-medium">
       <li>
         <a
-          href="/DBOP-Installtutorial"
+          href={localizedPath(locale, "")}
           class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 group"
         >
-          <span class="ms-3">DBOP (土靈的地下室優化包)</span>
+          <span class="ms-3">{t.tutorial.packName}</span>
         </a>
       </li>
       <li>
@@ -18,7 +25,7 @@
           href="#Prism"
           class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 group"
         >
-          <span class="flex-1 ms-3 whitespace-nowrap">Prism 啟動器</span>
+          <span class="flex-1 ms-3 whitespace-nowrap">{t.tutorial.prism}</span>
         </a>
       </li>
       <li>
@@ -26,7 +33,7 @@
           href="#Curseforge"
           class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 group"
         >
-          <span class="flex-1 ms-3 whitespace-nowrap">Curseforge 啟動器</span>
+          <span class="flex-1 ms-3 whitespace-nowrap">{t.tutorial.curseforge}</span>
         </a>
       </li>
       <li>
@@ -34,7 +41,7 @@
           href="#Modrinth"
           class="flex items-center p-2 text-zinc-900 rounded-lg dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 group"
         >
-          <span class="flex-1 ms-3 whitespace-nowrap">Modrinth 啟動器</span>
+          <span class="flex-1 ms-3 whitespace-nowrap">{t.tutorial.modrinth}</span>
         </a>
       </li>
     </ul>

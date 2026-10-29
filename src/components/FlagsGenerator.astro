@@ -1,0 +1,487 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import { getLocale, getMessages } from "../i18n";
+
+interface Props {
+  locale?: string;
+}
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
+---
+
+<Layout title={t.flags.title} locale={locale}>
+  <Navbar locale={locale} />
+  <main
+    id="generator"
+    class="px-4 pb-12 pt-28"
+    data-filename-error={t.flags.filenameError}
+    data-restart-warning={t.flags.javaRestartWarning}
+    data-copied={t.flags.copied}
+    data-clipboard-error={t.flags.clipboardError}
+    data-downloaded-template={t.flags.downloaded("__filename__")}
+  >
+    <section class="mx-auto max-w-4xl">
+      <header class="mb-8">
+        <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+          {t.flags.eyebrow}
+        </p>
+        <h1 class="mb-3 text-3xl font-extrabold text-zinc-900 dark:text-white sm:text-4xl">
+          {t.flags.title}
+        </h1>
+        <p class="text-zinc-600 dark:text-zinc-300">
+          {t.flags.description}
+        </p>
+      </header>
+
+      <div class="grid gap-6 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 sm:p-7 md:grid-cols-2">
+        <div>
+          <label
+            for="server-file"
+            class="mb-2 block text-sm font-medium text-zinc-900 dark:text-white"
+          >
+            {t.flags.serverFile}
+          </label>
+          <input
+            id="server-file"
+            type="text"
+            value="server.jar"
+            pattern="[A-Za-z0-9][A-Za-z0-9._-]*\.jar"
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="filename-help"
+            class="block w-full rounded-lg border border-zinc-300 bg-zinc-50 p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white"
+          />
+          <p id="filename-help" class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+            {t.flags.filenameHelp}
+          </p>
+        </div>
+
+        <div>
+          <div class="mb-2 flex items-center justify-between">
+            <label
+              for="memory"
+              class="block text-sm font-medium text-zinc-900 dark:text-white"
+            >
+              {t.flags.memory}
+            </label>
+            <div class="flex items-center gap-2">
+              <output
+                id="memory-value"
+                for="memory"
+                class="text-sm font-semibold text-zinc-900 dark:text-white"
+              >4 GB</output>
+              <button
+                id="custom-memory-open"
+                type="button"
+                aria-label={t.flags.advancedMemory}
+                aria-haspopup="dialog"
+                class="rounded p-1 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-white"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4L14 12l-2-2 2.7-3.7Z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="relative h-8">
+            <input
+              id="memory"
+              type="range"
+              min="1"
+              max="32"
+              step="0.25"
+              value="4"
+              aria-valuetext="4 GB"
+              class="absolute inset-0 z-20 h-full w-full cursor-pointer opacity-0"
+            />
+            <div
+              class="memory-slider-track pointer-events-none absolute inset-x-2 top-1/2 h-2 -translate-y-1/2 rounded-full bg-zinc-200 dark:bg-zinc-700"
+              aria-hidden="true"
+            >
+              <span
+                id="memory-slider-fill"
+                class="absolute inset-y-0 left-0 rounded-full bg-blue-600"
+                style="width: 9.6774%"
+              ></span>
+              { [4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
+                <span
+                  data-memory-tick={size}
+                  class="memory-slider-tick absolute top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-zinc-500 dark:bg-zinc-300"
+                  style={`left: ${(size - 1) / 31 * 100}%`}
+                ></span>
+              )) }
+              <span
+                id="memory-slider-thumb"
+                class="absolute left-[9.6774%] top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600 ring-2 ring-zinc-900 dark:ring-zinc-800"
+              ></span>
+            </div>
+          </div>
+          <div class="relative mt-2 h-5">
+            { [4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
+              <button
+                type="button"
+                class="memory-preset absolute -translate-x-1/2 whitespace-nowrap text-xs text-zinc-500 hover:text-blue-600 focus:outline-none focus:underline dark:text-zinc-400 dark:hover:text-blue-400"
+                data-memory={size}
+                aria-label={t.flags.setMemory(size)}
+                style={`left: calc(8px + (100% - 16px) * ${(size - 1) / 31})`}
+              >
+                {size} GB
+              </button>
+            )) }
+          </div>
+          <p class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+            {t.flags.memoryHelp}
+          </p>
+        </div>
+
+        <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-zinc-200 p-4 dark:border-zinc-700">
+          <input
+            id="enable-gui"
+            type="checkbox"
+            class="mt-0.5 h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+          />
+          <span>
+            <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.enableGui}</span>
+            <span class="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">
+              {t.flags.guiHelp}
+            </span>
+          </span>
+        </label>
+
+        <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-zinc-200 p-4 dark:border-zinc-700">
+          <input
+            id="auto-restart"
+            type="checkbox"
+            class="mt-0.5 h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+          />
+          <span>
+            <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.autoRestart}</span>
+            <span class="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">
+              {t.flags.restartHelp}
+            </span>
+          </span>
+        </label>
+      </div>
+
+      <section class="mt-8 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 p-4 dark:border-zinc-700">
+          <div
+            class="flex flex-wrap gap-2"
+            role="tablist"
+            aria-label={t.flags.outputFormat}
+          >
+            <button
+              type="button"
+              class="platform-tab rounded-lg bg-blue-700 px-3 py-2 text-sm font-medium text-white"
+              role="tab"
+              aria-selected="true"
+              data-platform="unix"
+            >
+              Linux / macOS
+            </button>
+            <button
+              type="button"
+              class="platform-tab rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700"
+              role="tab"
+              aria-selected="false"
+              data-platform="windows"
+            >
+              Windows
+            </button>
+            <button
+              type="button"
+              class="platform-tab rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700"
+              role="tab"
+              aria-selected="false"
+              data-platform="java"
+            >
+              {t.flags.javaCommand}
+            </button>
+          </div>
+          <div class="flex gap-2">
+            <button
+              id="copy-script"
+              type="button"
+              class="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-700"
+            >
+              {t.flags.copy}
+            </button>
+            <button
+              id="download-script"
+              type="button"
+              class="rounded-lg bg-blue-700 px-3 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+            >
+              {t.flags.download}
+            </button>
+          </div>
+        </div>
+        <pre class="min-h-48 overflow-x-auto bg-zinc-950 p-5 text-sm leading-6 text-zinc-100"><code id="script-output"></code></pre>
+        <p
+          id="generator-status"
+          class="min-h-10 px-4 py-2 text-sm text-zinc-600 dark:text-zinc-300"
+          aria-live="polite"
+        ></p>
+      </section>
+
+      <p class="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
+        {t.flags.attributionStart}
+        <a
+          class="font-medium text-blue-600 hover:underline dark:text-blue-400"
+          href="https://flags.sh/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >flags.sh</a>
+        {t.flags.attributionBy}
+        <a
+          class="font-medium text-blue-600 hover:underline dark:text-blue-400"
+          href="https://github.com/YouHaveTrouble/flags.sh"
+          target="_blank"
+          rel="noopener noreferrer"
+        >YouHaveTrouble</a>
+        {t.flags.attributionEnd}
+      </p>
+    </section>
+    <dialog
+      id="custom-memory-dialog"
+      aria-labelledby="custom-memory-title"
+      class="fixed inset-0 m-auto w-[min(28rem,calc(100%-2rem))] rounded-lg border border-zinc-700 bg-zinc-900 p-0 text-white shadow-xl backdrop:bg-black/60"
+    >
+      <form id="custom-memory-form" class="p-6">
+        <h2 id="custom-memory-title" class="mb-5 text-lg font-semibold">
+          {t.flags.advancedOptions}
+        </h2>
+        <label for="custom-memory" class="mb-2 block text-sm text-zinc-300">
+          {t.flags.customMemory}
+        </label>
+        <input
+          id="custom-memory"
+          type="number"
+          min="1"
+          max="32"
+          step="0.25"
+          value="4.00"
+          required
+          inputmode="decimal"
+          class="block w-full rounded-md border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-white focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+        />
+        <p class="mt-2 text-xs text-zinc-400">
+          {t.flags.customMemoryHelp}
+        </p>
+        <div class="mt-6 flex justify-end gap-3">
+          <button
+            id="custom-memory-cancel"
+            type="button"
+            class="rounded-md border border-zinc-500 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-400"
+          >
+            {t.flags.cancel}
+          </button>
+          <button
+            type="submit"
+            class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+          >
+            {t.flags.apply}
+          </button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+  <Footer locale={locale} />
+</Layout>
+
+<script>
+  type Platform = "unix" | "windows" | "java";
+
+  const fileInput = document.querySelector<HTMLInputElement>("#server-file");
+  const memoryInput = document.querySelector<HTMLInputElement>("#memory");
+  const memoryValue = document.querySelector<HTMLOutputElement>("#memory-value");
+  const memoryTicks = document.querySelectorAll<HTMLElement>("[data-memory-tick]");
+  const memorySliderFill = document.querySelector<HTMLElement>("#memory-slider-fill");
+  const memorySliderThumb = document.querySelector<HTMLElement>("#memory-slider-thumb");
+  const memoryDialog = document.querySelector<HTMLDialogElement>("#custom-memory-dialog");
+  const memoryForm = document.querySelector<HTMLFormElement>("#custom-memory-form");
+  const customMemoryInput = document.querySelector<HTMLInputElement>("#custom-memory");
+  const openMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-open");
+  const cancelMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-cancel");
+  const guiCheckbox = document.querySelector<HTMLInputElement>("#enable-gui");
+  const restartCheckbox = document.querySelector<HTMLInputElement>("#auto-restart");
+  const output = document.querySelector<HTMLElement>("#script-output");
+  const status = document.querySelector<HTMLElement>("#generator-status");
+  const copyButton = document.querySelector<HTMLButtonElement>("#copy-script");
+  const downloadButton = document.querySelector<HTMLButtonElement>("#download-script");
+  const tabs = document.querySelectorAll<HTMLButtonElement>(".platform-tab");
+  const generator = document.querySelector<HTMLElement>("#generator");
+
+  let platform: Platform = "unix";
+
+  function getGeneratedScript(): string | null {
+    if (!fileInput || !memoryInput || !guiCheckbox || !restartCheckbox) return null;
+
+    const filename = fileInput.value.trim();
+    if (!/^[A-Za-z0-9][A-Za-z0-9._-]*\.jar$/i.test(filename)) {
+      if (status) {
+        status.textContent = generator?.dataset.filenameError ?? "";
+      }
+      return null;
+    }
+
+    const memory = Number(memoryInput.value) * 1024;
+    const serverOptions = guiCheckbox.checked ? "" : " --nogui";
+    const javaCommand = `java -Xms${memory}M -Xmx${memory}M -XX:+UseG1GC -jar "${filename}"${serverOptions}`;
+
+    if (platform === "windows") {
+      const command = `java -Xms${memory}M -Xmx${memory}M -XX:+UseG1GC -jar "${filename}"${guiCheckbox.checked ? "" : " --nogui"}`;
+      if (!restartCheckbox.checked) return `@echo off\r\ncd /d "%~dp0"\r\n${command}\r\n`;
+      return `@echo off\r\ncd /d "%~dp0"\r\n:run\r\n${command}\r\ntimeout /t 5 /nobreak >nul\r\ngoto run\r\n`;
+    }
+
+    if (platform === "java") return javaCommand;
+
+    if (!restartCheckbox.checked) {
+      return `#!/usr/bin/env bash\ncd -- "$(dirname -- "$0")"\n${javaCommand}\n`;
+    }
+    return `#!/usr/bin/env bash\ncd -- "$(dirname -- "$0")"\nwhile true; do\n  ${javaCommand}\n  sleep 5\ndone\n`;
+  }
+
+  function renderScript() {
+    if (!output) return;
+    if (memoryInput && memoryValue) {
+      memoryValue.value = `${memoryInput.value} GB`;
+      memoryInput.setAttribute("aria-valuetext", memoryValue.value);
+      const progress = ((Number(memoryInput.value) - 1) / 31) * 100;
+      if (memorySliderFill) memorySliderFill.style.width = `${progress}%`;
+      if (memorySliderThumb) memorySliderThumb.style.left = `${progress}%`;
+      memoryTicks.forEach((tick) => {
+        const tickValue = Number(tick.dataset.memoryTick);
+        tick.classList.toggle("invisible", tickValue === Number(memoryInput.value));
+        tick.classList.toggle("bg-blue-100", tickValue < Number(memoryInput.value));
+        tick.classList.toggle("dark:bg-blue-100", tickValue < Number(memoryInput.value));
+      });
+    }
+    const script = getGeneratedScript();
+    output.textContent = script ?? "";
+    if (script && status) {
+      status.textContent =
+        platform === "java" && restartCheckbox?.checked
+          ? generator?.dataset.restartWarning ?? ""
+          : "";
+    }
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const selectedPlatform = tab.dataset.platform;
+      if (selectedPlatform !== "unix" && selectedPlatform !== "windows" && selectedPlatform !== "java") return;
+      platform = selectedPlatform;
+      tabs.forEach((item) => {
+        const selected = item === tab;
+        item.setAttribute("aria-selected", String(selected));
+        item.classList.toggle("bg-blue-700", selected);
+        item.classList.toggle("text-white", selected);
+        item.classList.toggle("text-zinc-600", !selected);
+        item.classList.toggle("dark:text-zinc-300", !selected);
+        item.classList.toggle("hover:bg-zinc-100", !selected);
+        item.classList.toggle("dark:hover:bg-zinc-700", !selected);
+      });
+      renderScript();
+    });
+  });
+
+  [fileInput, memoryInput, guiCheckbox, restartCheckbox].forEach((input) => {
+    input?.addEventListener("input", renderScript);
+    input?.addEventListener("change", renderScript);
+  });
+
+  openMemoryDialogButton?.addEventListener("click", () => {
+    if (!memoryDialog || !memoryInput || !customMemoryInput) return;
+    customMemoryInput.value = Number(memoryInput.value).toFixed(2);
+    memoryDialog.showModal();
+    customMemoryInput.focus();
+    customMemoryInput.select();
+  });
+
+  cancelMemoryDialogButton?.addEventListener("click", () => {
+    memoryDialog?.close();
+  });
+
+  memoryForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!memoryDialog || !memoryInput || !customMemoryInput) return;
+    const memory = Number(customMemoryInput.value);
+    if (!Number.isFinite(memory) || memory < 1 || memory > 32) {
+      customMemoryInput.reportValidity();
+      return;
+    }
+    memoryInput.value = String(memory);
+    memoryDialog.close();
+    renderScript();
+  });
+
+  document.querySelectorAll<HTMLButtonElement>(".memory-preset").forEach((preset) => {
+    preset.addEventListener("click", () => {
+      if (!memoryInput) return;
+      const memory = preset.dataset.memory;
+      if (!memory) return;
+      memoryInput.value = memory;
+      renderScript();
+    });
+  });
+
+  copyButton?.addEventListener("click", async () => {
+    const script = getGeneratedScript();
+    if (!script) {
+      renderScript();
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(script);
+      if (status) status.textContent = generator?.dataset.copied ?? "";
+    } catch {
+      if (status) status.textContent = generator?.dataset.clipboardError ?? "";
+    }
+  });
+
+  downloadButton?.addEventListener("click", () => {
+    const script = getGeneratedScript();
+    if (!script) {
+      renderScript();
+      return;
+    }
+    const extension = platform === "windows" ? "bat" : platform === "unix" ? "sh" : "txt";
+    const blob = new Blob([script], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `start-server.${extension}`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    if (status) {
+      status.textContent =
+        generator?.dataset.downloadedTemplate?.replace(
+          "__filename__",
+          `start-server.${extension}`,
+        ) ?? "";
+    }
+  });
+
+  renderScript();
+</script>
+
+<style>
+  #memory:focus-visible + .memory-slider-track {
+    outline: 2px solid #60a5fa;
+    outline-offset: 4px;
+  }
+</style>

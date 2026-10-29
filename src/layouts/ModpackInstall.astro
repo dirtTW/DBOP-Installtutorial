@@ -1,3 +1,9 @@
+---
+import { getLocale, getMessages } from "../i18n";
+
+const t = getMessages(getLocale(Astro.props.locale ?? Astro.currentLocale));
+---
+
 <main>
   <div class="p-4 lg:ml-64">
     <div class="p-4 border-2 border-zinc-200 rounded-lg dark:border-zinc-700 mt-14">
@@ -11,7 +17,7 @@
       <div class="py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
         <div class="max-w-screen-md mb-8 lg:mb-16">
           <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-zinc-900 dark:text-white">
-            DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)
+            {t.tutorial.packName}
           </h2>
         </div>
         <div class="flex flex-auto">
@@ -23,7 +29,7 @@
             <span>
               <i class="md-logo w-4 h-4 me-2 ms-1" aria-hidden="true"></i>
             </span>{" "}
-            Modrinth 下載
+            {t.cards.downloadModrinth}
           </a>
           <a
             class="text-sm text-center focus:outline-none text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-600 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900"
@@ -33,7 +39,7 @@
             <span>
               <i class="cf-logo w-4 h-4 me-2 ms-1" aria-hidden="true"></i>
             </span>{" "}
-            Curseforge 下載
+            {t.cards.downloadCurseforge}
           </a>
         </div>
 
@@ -42,7 +48,7 @@
           id="installtutorial"
         >
           <br />
-          安裝教學 :
+          {t.tutorial.install}
         </h2>
         <div class="">
           <ul class="space-y-2 text-zinc-500 list-disc list-inside dark:text-zinc-400">
@@ -52,7 +58,7 @@
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-xl"
                 href="https://prismlauncher.org/download/"
               >
-                Prism 啟動器
+                {t.tutorial.prism}
               </a>
               <span>
                 <a
@@ -66,42 +72,33 @@
               </span>
               <ol class="ps-5 mt-2 space-y-1 list-decimal list-inside">
                 <p>
-                  你需要{" "}
+                  {t.tutorial.needJava("8", "1.8+")}{" "}
                   <a
                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     href="https://adoptium.net/temurin/releases/?version=8&package=jre&arch=x64"
                   >
                     Java 8
                   </a>{" "}
-                  才能運行Minecraft 1.8+ 以上
                 </p>
                 <p>
-                  你需要{" "}
+                  {t.tutorial.needJava("17", "1.16+")}{" "}
                   <a
                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     href="https://adoptium.net/temurin/releases/?version=17&package=jre&arch=x64"
                   >
                     Java 17
                   </a>{" "}
-                  才能運行Minecraft 1.16+ 以上
                 </p>
                 <p>
-                  你需要{" "}
+                  {t.tutorial.needJava("21", "1.20.5+")}{" "}
                   <a
                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     href="https://adoptium.net/temurin/releases/?version=21&package=jre&arch=x64"
                   >
                     Java 21
                   </a>{" "}
-                  才能運行Minecraft 1.20.5+ 以上
                 </p>
-                <li>按一下 '新增實例'</li>
-                <li>從左側選擇 Modrinth 選項卡</li>
-                <li>搜尋 'DBOP'</li>
-                <li>選擇 "DirtTW's Basement Optimize Pack"</li>
-                <li>按下 'OK'</li>
-                <li>模組包會自動安裝。</li>
-                <li>安裝後 雙擊DBOP圖案即可遊玩</li>
+                {t.tutorial.prismSteps.map((step) => <li>{step}</li>)}
               </ol>
             </li>
             <br />
@@ -111,7 +108,7 @@
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-xl"
                 href="https://www.curseforge.com/download/app#download-options"
               >
-                Curseforge 啟動器
+                {t.tutorial.curseforge}
               </a>
               <span>
                 <a
@@ -124,13 +121,7 @@
                 </a>
               </span>
               <ul class="ps-5 mt-2 space-y-1 list-decimal list-inside">
-                <li>選擇 Minecraft</li>
-                <li>搜尋 'DirtTW's Basement Optimize Pack'</li>
-                <li>按下 '安裝' 或 'Install'</li>
-                <li>
-                  如果要運行模組包，請將滑鼠懸停在模組包圖示上，然後按一下
-                  'Play' 或著 '開始'
-                </li>
+                {t.tutorial.curseforgeSteps.map((step) => <li>{step}</li>)}
               </ul>
             </li>
             <br />
@@ -140,7 +131,7 @@
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-xl"
                 href="https://modrinth.com/app"
               >
-                Modrinth 啟動器
+                {t.tutorial.modrinth}
               </a>
               <span>
                 <a
@@ -153,12 +144,7 @@
                 </a>
               </span>
               <ul class="ps-5 mt-2 space-y-1 list-decimal list-inside">
-                <p>需要應用程式版本 0.6.2 或更高版本</p>
-                <li>按下左側的 🔍 搜尋 'DirtTW's Basement Optimize Pack'</li>
-                <li>按下 ⤓ Install</li>
-                <li>模組包會自動安裝。</li>
-                <li>安裝後，將滑鼠懸停在「Jump back in」下所建立的實例上</li>
-                <li>按下 ▶️ 按鈕來開始遊玩</li>
+                {t.tutorial.modrinthSteps.map((step) => <li>{step}</li>)}
               </ul>
             </li>
           </ul>

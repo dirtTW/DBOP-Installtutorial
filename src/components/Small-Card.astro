@@ -1,9 +1,13 @@
 ---
+import { getSiteLabel } from "../i18n";
+
 interface Props {
   link: string;
   altText: string;
+  locale?: string;
 }
-const { altText, link } = Astro.props;
+const { altText, link, locale } = Astro.props;
+const label = getSiteLabel(locale ?? Astro.currentLocale, link, altText);
 ---
 
 <a
@@ -11,5 +15,5 @@ const { altText, link } = Astro.props;
   href={link}
   target="_blank"
 >
-  <span class="p-1">{altText}</span>
+  <span class="p-1">{label}</span>
 </a>

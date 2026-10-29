@@ -1,17 +1,22 @@
 ---
+import { getLocale, getMessages } from "../i18n";
+
 export interface Props {
   title: string;
+  locale?: string;
 }
-const { title } = Astro.props;
+const { title, locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp);
+const t = getMessages(locale);
 ---
 
 <!doctype html>
-<html lang="zh_TW" class="dark:bg-zinc-900">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta
       name="description"
-      content="DBOP是一個基於 Fabric 模組平台的一個優化包 大部分模組都是用戶端的 並且能夠優化Minecraft麥塊 這是DBOP模組包安裝教學網站"
+      content={t.description}
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="sitemap" href="/sitemap-0.xml" />
@@ -29,12 +34,71 @@ const { title } = Astro.props;
     />
     <meta name="theme-color" content="#874c50" />
     <meta name="viewport" content="width=device-width" />
+    <script is:inline>
+      const savedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle(
+        "dark",
+        savedTheme ? savedTheme === "dark" : prefersDark,
+      );
+    </script>
   </head>
-  <body class="dark:bg-zinc-900">
+  <body class="min-h-full bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white">
     <slot />
     <script
       is:inline
       src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"
     ></script>
+    <script>
+      const navToggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+      const navMenu = document.querySelector<HTMLElement>("#navbar-menu");
+
+      if (navToggle && navMenu) {
+        const closeMenu = () => {
+          navMenu.classList.add("hidden");
+          navToggle.setAttribute("aria-expanded", "false");
+        };
+
+        navToggle.addEventListener("click", () => {
+          const isOpen = navToggle.getAttribute("aria-expanded") === "true";
+          navMenu.classList.toggle("hidden", isOpen);
+          navToggle.setAttribute("aria-expanded", String(!isOpen));
+        });
+
+        navMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", closeMenu);
+        });
+
+        document.addEventListener("click", (event) => {
+          if (
+            event.target instanceof Node &&
+            !navToggle.contains(event.target) &&
+            !navMenu.contains(event.target)
+          ) {
+            closeMenu();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") closeMenu();
+        });
+      }
+
+      document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+        const updateThemeLabel = (isDark: boolean) => {
+          button.setAttribute("aria-pressed", String(isDark));
+          button.setAttribute(
+            "aria-label",
+            isDark ? button.dataset.lightLabel ?? "" : button.dataset.darkLabel ?? "",
+          );
+        };
+        updateThemeLabel(document.documentElement.classList.contains("dark"));
+        button.addEventListener("click", () => {
+          const isDark = document.documentElement.classList.toggle("dark");
+          localStorage.setItem("theme", isDark ? "dark" : "light");
+          updateThemeLabel(isDark);
+        });
+      });
+    </script>
   </body>
 </html>

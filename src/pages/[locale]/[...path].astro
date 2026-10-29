@@ -1,0 +1,70 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import LandingPage from "../../layouts/LandingPage.astro";
+import ModpackInstall from "../../layouts/ModpackInstall.astro";
+import ModpackSelection from "../../layouts/Modpack_Selection.astro";
+import MinecraftUsefulLinks from "../../layouts/MCusefullink.astro";
+import UsefulLinks from "../../layouts/Usefullink.astro";
+import Feature from "../../components/Feature.astro";
+import FlagsGenerator from "../../components/FlagsGenerator.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import "../../styles/global.css";
+import { getMessages, locales } from "../../i18n";
+
+export function getStaticPaths() {
+  const localizedPages = [
+    "",
+    "dbop-install-tutorial",
+    "recommended-modpacks",
+    "minecraft-useful-website",
+    "useful-website",
+    "flags-generator",
+  ];
+
+  return locales
+    .filter((locale) => locale !== "en")
+    .flatMap((locale) =>
+      localizedPages.map((path) => ({
+        params: { locale, path: path || undefined },
+        props: { locale, page: path },
+      })),
+    );
+}
+
+const { locale, page } = Astro.props;
+const t = getMessages(locale);
+const titles: Record<string, string> = {
+  "": t.home.title,
+  "dbop-install-tutorial": t.tutorial.title,
+  "recommended-modpacks": t.nav.modpacks,
+  "minecraft-useful-website": t.nav.minecraftSites,
+  "useful-website": t.nav.usefulSites,
+  "flags-generator": t.flags.title,
+};
+---
+
+{page === "flags-generator" ? (
+  <FlagsGenerator locale={locale} />
+) : (
+  <Layout title={titles[page] ?? t.home.title} locale={locale}>
+    <Navbar locale={locale} />
+    {page === "" && (
+      <>
+        <LandingPage locale={locale} />
+        <Feature locale={locale} />
+      </>
+    )}
+    {page === "dbop-install-tutorial" && (
+      <>
+        <Sidebar locale={locale} />
+        <ModpackInstall locale={locale} />
+      </>
+    )}
+    {page === "recommended-modpacks" && <ModpackSelection locale={locale} />}
+    {page === "minecraft-useful-website" && <MinecraftUsefulLinks locale={locale} />}
+    {page === "useful-website" && <UsefulLinks locale={locale} />}
+    <Footer locale={locale} />
+  </Layout>
+)}

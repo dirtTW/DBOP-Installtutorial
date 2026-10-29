@@ -1,93 +1,142 @@
-<nav class="fixed px-4 top-0 z-50 w-full bg-white border-zinc-200 dark:bg-zinc-900">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+---
+import { getLocale, getMessages, locales, localizedPath } from "../i18n";
+
+const locale = getLocale(Astro.props.locale);
+const t = getMessages(locale);
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
+const pathSegments = pathname.split("/").filter(Boolean);
+const route = (
+  locales.includes(pathSegments[0] ?? "")
+    ? pathSegments.slice(1)
+    : pathSegments
+).join("/");
+const links = [
+  { href: "", label: t.nav.home },
+  { href: "dbop-install-tutorial", label: t.nav.tutorial },
+  { href: "recommended-modpacks", label: t.nav.modpacks },
+  { href: "minecraft-useful-website", label: t.nav.minecraftSites },
+  { href: "useful-website", label: t.nav.usefulSites },
+  { href: "flags-generator", label: t.nav.flags },
+];
+---
+
+<nav class="fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/95 px-4 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
+  <div class="mx-auto flex h-16 max-w-screen-xl items-center justify-between gap-4">
     <a
-      href="/DBOP-Installtutorial"
-      class="flex items-center space-x-3 rtl:space-x-reverse"
+      href={localizedPath(locale, "")}
+      class="flex min-w-0 items-center gap-3"
     >
       <img
         src="https://raw.githubusercontent.com/yichifauzi/DBOP-Installtutorial/5c9ecdb2a4f8024edd2860527e92ffd13a49413a/public/favicon.svg"
-        class="h-8"
+        class="h-8 w-8"
         alt="DBOP Logo"
       />
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-        <b>dirtTW 土靈</b>
+      <span class="truncate text-base font-semibold text-zinc-900 dark:text-white sm:text-xl">
+        dirtTW 土靈
       </span>
     </a>
-    <button
-      data-collapse-toggle="navbar-default"
-      type="button"
-      class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-zinc-500 rounded-lg md:hidden hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:focus:ring-zinc-600"
-      aria-controls="navbar-default"
-      aria-expanded="false"
-    >
-      <span class="sr-only"></span>
-      <svg
-        class="w-5 h-5"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 17 14"
+
+    <div class="flex shrink-0 items-center gap-1">
+      <button
+        type="button"
+        data-theme-toggle
+        aria-label={t.theme}
+        data-light-label={t.lightTheme}
+        data-dark-label={t.darkTheme}
+        aria-pressed="false"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-zinc-300 dark:hover:bg-zinc-700"
       >
-        <path
+        <svg
+          class="h-5 w-5"
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
           stroke="currentColor"
+          stroke-width="1.8"
           stroke-linecap="round"
           stroke-linejoin="round"
-          stroke-width="2"
-          d="M1 1h15M1 7h15M1 13h15"
-        ></path>
-      </svg>
-    </button>
-    <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-      <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-zinc-100 rounded-lg bg-zinc-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-zinc-800 md:dark:bg-zinc-900 dark:border-zinc-700 md:">
-        <li>
-          <a
-            href="/DBOP-Installtutorial"
-            class="block py-2 px-3 text-zinc-900 rounded hover:bg-zinc-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-zinc-700 dark:hover:text-white md:dark:hover:bg-transparent"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+        </svg>
+        <span class="sr-only">{t.theme}</span>
+      </button>
+
+      <details class="relative">
+        <summary
+          aria-label={t.language}
+          class="flex h-10 cursor-pointer list-none items-center gap-2 rounded-lg px-3 text-sm font-medium text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-700"
+        >
+          <span>{t.languageName}</span>
+          <svg
+            aria-hidden="true"
+            class="h-4 w-4"
+            viewBox="0 0 20 20"
+            fill="currentColor"
           >
-            <b>首頁</b>
-          </a>
-        </li>
-        <li>
-          <a
-            href="/DBOP-Installtutorial/dbop-install-tutorial/"
-            class="block py-2 px-3 text-zinc-900 rounded hover:bg-zinc-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-zinc-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >
-            <b>DBOP 模組包安裝教學</b>
-          </a>
-        </li>
-        <li>
-          <a
-            href="/DBOP-Installtutorial/recommended-modpacks"
-            class="block py-2 px-3 text-zinc-900 rounded hover:bg-zinc-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-zinc-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >
-            <b>模組包推薦</b>
-          </a>
-        </li>
-        <li>
-          <a
-            href="/DBOP-Installtutorial/minecraft-useful-website"
-            class="block py-2 px-3 text-zinc-900 rounded hover:bg-zinc-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-zinc-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >
-            <b>Minecraft 實用網站</b>
-          </a>
-        </li>
-        <li>
-          <a
-            href="/DBOP-Installtutorial/useful-website"
-            class="block py-2 px-3 text-zinc-900 rounded hover:bg-zinc-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-zinc-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >
-            <b>軟體實用網站</b>
-          </a>
-        </li>
-        <li>
-          <a
-            href="/DBOP-Installtutorial/flags-generator"
-            class="block py-2 px-3 text-zinc-900 rounded hover:bg-zinc-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-zinc-700 dark:hover:text-white md:dark:hover:bg-transparent"
-          >
-            <b>伺服器啟動參數</b>
-          </a>
-        </li>
-      </ul>
+            <path
+              fill-rule="evenodd"
+              d="M5.22 7.22a.75.75 0 0 1 1.06 0L10 10.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.28a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </summary>
+        <div class="absolute right-0 z-10 mt-2 min-w-40 rounded-lg border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-800">
+          {locales.map((supportedLocale) => (
+            <a
+              href={localizedPath(supportedLocale, route)}
+              lang={supportedLocale}
+              aria-current={supportedLocale === locale ? "true" : undefined}
+              class="block rounded px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-700"
+            >
+              {getMessages(supportedLocale).languageName}
+            </a>
+          ))}
+        </div>
+      </details>
+
+      <button
+        type="button"
+        data-nav-toggle
+        aria-controls="navbar-menu"
+        aria-expanded="false"
+        aria-label={t.toggleNavigation}
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-zinc-300 dark:hover:bg-zinc-700"
+      >
+        <svg
+          class="h-5 w-5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 17 14"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M1 1h15M1 7h15M1 13h15"
+          ></path>
+        </svg>
+      </button>
     </div>
+  </div>
+
+  <div
+    id="navbar-menu"
+    class="absolute right-4 top-full hidden w-[min(20rem,calc(100vw-2rem))] rounded-b-xl border border-t-0 border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+  >
+    <ul class="flex flex-col gap-1 font-medium">
+      {links.map(({ href, label }) => (
+        <li>
+          <a
+            href={localizedPath(locale, href)}
+            class="block rounded-lg px-4 py-3 text-zinc-800 hover:bg-zinc-100 hover:text-blue-700 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-blue-400"
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
   </div>
 </nav>
