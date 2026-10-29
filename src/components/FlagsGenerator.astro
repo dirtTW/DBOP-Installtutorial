@@ -174,28 +174,37 @@ const t = getMessages(locale);
             aria-label={t.flags.outputFormat}
           >
             <button
+              id="platform-unix"
               type="button"
-              class="platform-tab flex min-h-11 items-center justify-center rounded-full bg-brand-700 px-2 py-2 text-center text-xs font-medium text-white shadow-sm transition-colors dark:bg-[#d4e3ff] dark:text-[#102f54] sm:px-3 sm:text-sm"
+              class="platform-tab flex min-h-11 items-center justify-center rounded-full bg-m3-primary px-2 py-2 text-center text-xs font-medium text-m3-on-primary shadow-sm transition-colors sm:px-3 sm:text-sm"
               role="tab"
               aria-selected="true"
+              aria-controls="script-output"
+              tabindex="0"
               data-platform="unix"
             >
               Linux / macOS
             </button>
             <button
+              id="platform-windows"
               type="button"
-              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-zinc-600 transition-colors hover:bg-white dark:text-zinc-300 dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
+              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-m3-on-surface-variant transition-colors hover:bg-white dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
               role="tab"
               aria-selected="false"
+              aria-controls="script-output"
+              tabindex="-1"
               data-platform="windows"
             >
               Windows
             </button>
             <button
+              id="platform-java"
               type="button"
-              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-zinc-600 transition-colors hover:bg-white dark:text-zinc-300 dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
+              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-m3-on-surface-variant transition-colors hover:bg-white dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
               role="tab"
               aria-selected="false"
+              aria-controls="script-output"
+              tabindex="-1"
               data-platform="java"
             >
               {t.flags.javaCommand}
@@ -218,7 +227,7 @@ const t = getMessages(locale);
             </button>
           </div>
         </div>
-        <pre class="min-h-48 overflow-x-auto bg-zinc-950 p-4 text-xs leading-6 text-zinc-100 sm:p-5 sm:text-sm"><code id="script-output"></code></pre>
+        <pre id="script-output" role="tabpanel" aria-labelledby="platform-unix" tabindex="0" class="min-h-48 overflow-x-auto bg-zinc-950 p-4 text-xs leading-6 text-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-400 sm:p-5 sm:text-sm"><code></code></pre>
         <p
           id="generator-status"
           class="min-h-10 px-4 py-2 text-sm text-zinc-600 dark:text-zinc-300"
@@ -307,7 +316,8 @@ const t = getMessages(locale);
   const cancelMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-cancel");
   const guiCheckbox = document.querySelector<HTMLInputElement>("#enable-gui");
   const restartCheckbox = document.querySelector<HTMLInputElement>("#auto-restart");
-  const output = document.querySelector<HTMLElement>("#script-output");
+  const output = document.querySelector<HTMLElement>("#script-output code");
+  const outputPanel = document.querySelector<HTMLElement>("#script-output");
   const status = document.querySelector<HTMLElement>("#generator-status");
   const copyButton = document.querySelector<HTMLButtonElement>("#copy-script");
   const downloadButton = document.querySelector<HTMLButtonElement>("#download-script");
@@ -370,24 +380,43 @@ const t = getMessages(locale);
     }
   }
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const selectedPlatform = tab.dataset.platform;
-      if (selectedPlatform !== "unix" && selectedPlatform !== "windows" && selectedPlatform !== "java") return;
-      platform = selectedPlatform;
-      tabs.forEach((item) => {
-        const selected = item === tab;
-        item.setAttribute("aria-selected", String(selected));
-        item.classList.toggle("bg-brand-700", selected);
-        item.classList.toggle("dark:bg-[#d4e3ff]", selected);
-        item.classList.toggle("text-white", selected);
-        item.classList.toggle("text-zinc-600", !selected);
-        item.classList.toggle("dark:text-zinc-300", !selected);
-        item.classList.toggle("hover:bg-brand-50", !selected);
-        item.classList.toggle("dark:hover:bg-brand-900", !selected);
-        item.classList.toggle("dark:text-[#102f54]", selected);
-      });
-      renderScript();
+  function selectPlatform(tab: HTMLButtonElement, focus = false) {
+    const selectedPlatform = tab.dataset.platform;
+    if (
+      selectedPlatform !== "unix" &&
+      selectedPlatform !== "windows" &&
+      selectedPlatform !== "java"
+    ) {
+      return;
+    }
+
+    platform = selectedPlatform;
+    if (focus) tab.focus();
+    if (outputPanel) outputPanel.setAttribute("aria-labelledby", tab.id);
+    tabs.forEach((item) => {
+      const selected = item === tab;
+      item.setAttribute("aria-selected", String(selected));
+      item.tabIndex = selected ? 0 : -1;
+      item.classList.toggle("bg-m3-primary", selected);
+      item.classList.toggle("text-m3-on-primary", selected);
+      item.classList.toggle("shadow-sm", selected);
+      item.classList.toggle("text-m3-on-surface-variant", !selected);
+    });
+    renderScript();
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => selectPlatform(tab));
+    tab.addEventListener("keydown", (event) => {
+      let nextIndex: number | undefined;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+      if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = tabs.length - 1;
+      if (nextIndex === undefined) return;
+      event.preventDefault();
+      const nextTab = tabs.item(nextIndex);
+      if (nextTab) selectPlatform(nextTab, true);
     });
   });
 

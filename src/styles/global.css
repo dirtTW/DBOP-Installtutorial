@@ -3,6 +3,16 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --color-m3-primary: #005cbb;
+  --color-m3-on-primary: #ffffff;
+  --color-m3-surface: #f7f9ff;
+  --color-m3-on-surface: #191c20;
+  --color-m3-on-surface-variant: #44474f;
+  --color-m3-outline: #747780;
+  --text-m3-headline-small: 1.875rem;
+  --text-m3-headline-small--line-height: 2.25rem;
+  --text-m3-headline-medium: 2.25rem;
+  --text-m3-headline-medium--line-height: 2.5rem;
   --color-brand-50: #f2f6fc;
   --color-brand-100: #e2eaf5;
   --color-brand-200: #c5d6ec;
@@ -19,29 +29,29 @@
 html {
   height: 100%;
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+  --color-m3-primary: #d4e3ff;
+  --color-m3-on-primary: #102f54;
+  --color-m3-surface: #111318;
+  --color-m3-on-surface: #e2e2e9;
+  --color-m3-on-surface-variant: #c4c6d0;
+  --color-m3-outline: #8e9099;
 }
 
 body {
-  background-color: #f7f9ff;
-}
-
-html.dark body {
-  background-color: #111318;
-}
-
-body {
-  color: #191c20;
-}
-
-html.dark body {
-  color: #e2e2e9;
+  background-color: var(--color-m3-surface);
+  color: var(--color-m3-on-surface);
 }
 
 #generator input[type="checkbox"] {
   appearance: none;
   display: grid;
   place-content: center;
-  border: 2px solid #747780;
+  border: 2px solid var(--color-m3-outline);
   border-radius: 0.25rem;
   background-color: transparent;
   transition:
@@ -53,16 +63,16 @@ html.dark body {
 #generator input[type="checkbox"]::before {
   width: 0.65rem;
   height: 0.35rem;
-  border-bottom: 2px solid white;
-  border-left: 2px solid white;
+  border-bottom: 2px solid var(--color-m3-on-primary);
+  border-left: 2px solid var(--color-m3-on-primary);
   content: "";
   transform: rotate(-45deg) scale(0);
   transition: transform 120ms ease;
 }
 
 #generator input[type="checkbox"]:checked {
-  border-color: #005cbb;
-  background-color: #005cbb;
+  border-color: var(--color-m3-primary);
+  background-color: var(--color-m3-primary);
 }
 
 #generator input[type="checkbox"]:checked::before {
@@ -70,30 +80,16 @@ html.dark body {
 }
 
 #generator input[type="checkbox"]:focus-visible {
-  outline: 2px solid #005cbb;
+  outline: 2px solid var(--color-m3-primary);
   outline-offset: 3px;
 }
 
-html.dark #generator input[type="checkbox"] {
-  border-color: #8e9099;
-}
-
-html.dark #generator input[type="checkbox"]:checked {
-  border-color: #d4e3ff;
-  background-color: #d4e3ff;
-}
-
-html.dark #generator input[type="checkbox"]:checked::before {
-  border-color: #102f54;
-}
-
-html.dark #generator input[type="checkbox"]:focus-visible {
-  outline-color: #d4e3ff;
-}
-
-html.theme-transition,
 html.theme-transition body,
-html.theme-transition body * {
+html.theme-transition body [class*="bg-"],
+html.theme-transition body [class*="text-"],
+html.theme-transition body [class*="border-"],
+html.theme-transition body [class*="ring-"],
+html.theme-transition body [class*="shadow-"] {
   transition-property:
     color,
     background-color,
