@@ -123,7 +123,6 @@ nav button,
 footer a,
 #generator button,
 #generator a,
-#logo-sidebar a,
 #learnmore article {
   transition-property: color, background-color, border-color, box-shadow, transform;
   transition-duration: 180ms;
@@ -140,8 +139,7 @@ nav a:active,
 nav button:active,
 footer a:active,
 #generator button:active,
-#generator a:active,
-#logo-sidebar a:active {
+#generator a:active {
   transform: scale(0.97);
 }
 
