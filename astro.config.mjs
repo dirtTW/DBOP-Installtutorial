@@ -24,6 +24,6 @@ export default defineConfig({
   },
   integrations: [sitemap()],
   prefetch: {
-    prefetchAll: true
-  }
+    prefetchAll: false,
+  },
 });

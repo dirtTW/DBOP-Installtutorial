@@ -1,5 +1,6 @@
 ---
 import { getLocale, getMessages, localizedPath } from "../i18n";
+import { Image } from "astro:assets";
 import logo from "../img/logo.webp";
 
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
@@ -73,12 +74,14 @@ const t = getMessages(locale);
           <div class="relative flex min-h-64 items-center justify-center py-5 sm:min-h-80">
             <div aria-hidden="true" class="absolute h-52 w-52 rounded-full border border-brand-900/10 dark:border-white/10 sm:h-64 sm:w-64"></div>
             <div aria-hidden="true" class="absolute h-40 w-40 rounded-full bg-brand-100/80 blur-xl dark:bg-[#33445f]/60 sm:h-52 sm:w-52"></div>
-            <img
+            <Image
               fetchpriority="high"
-              src={logo.src}
+              src={logo}
               alt="DBOP"
               width="225"
               height="225"
+              format="webp"
+              loading="eager"
               class="relative z-10 h-40 w-40 object-contain drop-shadow-2xl sm:h-48 sm:w-48"
             />
             <span class="absolute right-0 top-2 z-20 rounded-2xl bg-[#f7f9ff] px-3 py-2 text-xs font-semibold text-zinc-700 shadow-md dark:bg-[#30343b] dark:text-zinc-200 sm:right-4 sm:top-4">{t.home.shaders}</span>
