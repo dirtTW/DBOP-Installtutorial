@@ -27,3 +27,4 @@ link:
 - https://www.curseforge.com/minecraft/modpacks/all-the-mods-10
 - https://www.curseforge.com/minecraft/modpacks/all-the-mods-9-to-the-sky
 - https://www.curseforge.com/minecraft/modpacks/craftoria
+- https://modrinth.com/modpack/sodiumplus
