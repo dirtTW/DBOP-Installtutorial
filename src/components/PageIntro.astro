@@ -9,13 +9,21 @@ const { eyebrow, title, description } = Astro.props;
 ---
 
 <header class="mx-auto max-w-screen-xl px-5 pb-8 pt-28 sm:px-8 sm:pb-10 lg:px-10">
-  <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-brand-700 dark:text-brand-400">
-    {eyebrow}
-  </p>
-  <h1 class="max-w-3xl text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
-    {title}
-  </h1>
-  <p class="mt-4 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg dark:text-zinc-400">
-    {description}
-  </p>
+  <p class="md3-eyebrow mb-3">{eyebrow}</p>
+  <h1 class="md3-headline page-title max-w-3xl">{title}</h1>
+  <p class="md3-body mt-4 max-w-2xl">{description}</p>
 </header>
+
+<style>
+  .page-title {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .page-title {
+      font-size: 2.5rem;
+      line-height: 3rem;
+    }
+  }
+</style>

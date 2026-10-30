@@ -205,10 +205,10 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
     description={t.pages.modpacksDescription}
   />
   <section class="mx-auto max-w-screen-xl px-4 pb-8 sm:px-8 sm:pb-20 lg:px-10">
-    <div class="m3-panel">
-      <div class="m3-search" role="search">
+    <div class="md3-panel p-3 sm:p-5">
+      <div class="md3-search" role="search">
         <svg
-          class="m3-search-icon"
+          class="md3-search-icon"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -229,12 +229,12 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
           aria-controls="modpack-list"
           autocomplete="off"
           spellcheck="false"
-          class="m3-search-input"
+          class="md3-search-input"
         />
         <button
           id="modpack-search-clear"
           type="button"
-          class="m3-search-clear"
+          class="md3-search-clear"
           aria-label={t.search.clearSearch}
           hidden
         >
@@ -252,14 +252,14 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
       </div>
       <p
         id="modpack-search-status"
-        class="m3-search-status"
+        class="md3-search-status"
         role="status"
         aria-live="polite"
         data-found-template={t.search.foundModpacks}
         data-not-found-template={t.search.noModpacks}
         data-total-template={t.search.totalModpacks}
       ></p>
-      <div id="modpack-list" class="m3-list">
+      <div id="modpack-list" class="md3-stack mt-3">
         {recommendations.map((recommendation) => (
           <Card locale={locale} {...recommendation} />
         ))}
@@ -269,122 +269,8 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
 </main>
 
 <style>
-  .m3-panel {
-    padding: 0.75rem;
-    border-radius: 1.75rem;
-    background-color: var(--m3-panel-surface);
-  }
-
-  .m3-search {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 3.5rem;
-    padding: 0 0.5rem 0 1rem;
-    border-radius: 1.75rem;
-    background-color: var(--m3-surface-container-high);
-    transition:
-      background-color 180ms var(--m3-easing),
-      box-shadow 180ms var(--m3-easing);
-  }
-
-  .m3-search:hover {
-    background-color: var(--m3-surface-container-highest);
-  }
-
-  .m3-search:focus-within {
-    background-color: var(--m3-surface-container-highest);
-    box-shadow: inset 0 0 0 2px var(--m3-primary);
-  }
-
-  .m3-search-icon {
-    flex: none;
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--m3-on-surface-variant);
-  }
-
-  .m3-search-input {
-    flex: 1;
-    min-width: 0;
-    min-height: 3.5rem;
-    border: 0;
-    background-color: transparent;
-    color: var(--m3-on-surface);
-    font-size: 1rem;
-    line-height: 1.5rem;
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    text-overflow: ellipsis;
-  }
-
-  .m3-search-input::placeholder {
-    color: var(--m3-on-surface-variant);
-    opacity: 1;
-  }
-
-  .m3-search-input::-webkit-search-cancel-button,
-  .m3-search-input::-webkit-search-decoration {
-    display: none;
-    appearance: none;
-  }
-
-  .m3-search-clear {
-    display: grid;
-    flex: none;
-    place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 9999px;
-    color: var(--m3-on-surface-variant);
-    transition:
-      background-color 180ms var(--m3-easing),
-      color 180ms var(--m3-easing);
-  }
-
-  .m3-search-clear[hidden] {
-    display: none;
-  }
-
-  .m3-search-clear:hover {
-    background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent);
-    color: var(--m3-on-surface);
-  }
-
-  .m3-search-clear:focus-visible {
-    outline: 3px solid var(--m3-primary);
-    outline-offset: 2px;
-  }
-
-  .m3-search-clear svg {
-    width: 1.125rem;
-    height: 1.125rem;
-  }
-
-  .m3-search-status {
-    margin-top: 0.75rem;
-    padding: 0 1rem;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 500;
-    color: var(--m3-on-surface-variant);
-  }
-
-  .m3-list {
-    display: grid;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-  }
-
-  @media (min-width: 640px) {
-    .m3-panel {
-      padding: 1.25rem;
-    }
-
-    .m3-list {
-      gap: 0.75rem;
-    }
+  #modpack-list {
+    gap: 0.75rem;
   }
 </style>
 

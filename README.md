@@ -93,9 +93,12 @@ entries without a translation fall back to the label in the Markdown file.
 ### Theme
 
 The navbar toggle switches between light and dark mode, persists the choice in
-`localStorage`, and falls back to the operating system preference. The flags generator and the
-recommended modpacks page each carry their own Material 3 token set, so they can evolve
-independently of the rest of the site.
+`localStorage`, and falls back to the operating system preference.
+
+The whole site uses a Material 3 (Material You) design system. Color roles are defined once in
+`src/styles/global.css` under `:root` / `html.dark`, and reusable `md3-*` classes cover the app
+bar, buttons, chips, cards, search bar, and typography. Those classes live in
+`@layer components`, so page-level Tailwind utilities still override them when needed.
 
 ## Flags generator
 

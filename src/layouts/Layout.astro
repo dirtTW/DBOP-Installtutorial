@@ -24,7 +24,7 @@ const t = getMessages(locale);
     <link rel="icon" type="image/svg+xml" href={favicon.src} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <meta name="theme-color" content="#f7f9ff" />
+    <meta name="theme-color" content="#f9f9ff" />
     <meta name="viewport" content="width=device-width" />
     <script is:inline>
       const savedTheme = localStorage.getItem("theme");
@@ -35,7 +35,7 @@ const t = getMessages(locale);
       );
     </script>
   </head>
-  <body class="min-h-screen bg-[#f7f9ff] text-zinc-900 dark:bg-[#111318] dark:text-white">
+  <body class="min-h-screen bg-[var(--m3-surface)] text-[var(--m3-on-surface)]">
     <slot />
     <script>
       const navToggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");

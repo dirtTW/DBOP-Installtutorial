@@ -12,15 +12,34 @@ const label = getSiteLabel(locale ?? Astro.currentLocale, link, altText);
 ---
 
 <a
-  class="group flex min-h-20 items-center gap-4 rounded-[1.5rem] bg-[#eef2f9] p-4 text-left transition-colors hover:bg-brand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 dark:bg-[#1c1f25] dark:hover:bg-[#252a31]"
+  class="site-card md3-card group flex min-h-20 items-center gap-4 p-4 text-left"
   href={link}
   target="_blank"
   rel="noopener noreferrer"
   data-categories={categories.join(" ")}
 >
-  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-[#252a31] dark:text-[#d4e3ff]" aria-hidden="true">
+  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--m3-surface-container-high)] text-[var(--m3-primary)]" aria-hidden="true">
     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7m-1-6-9 9"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
   </span>
-  <span class="min-w-0 flex-1 text-sm font-semibold leading-5 text-zinc-800 group-hover:text-brand-800 dark:text-zinc-100 dark:group-hover:text-brand-200">{label}</span>
-  <span aria-hidden="true" class="text-zinc-400 transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300">↗</span>
+  <span class="min-w-0 flex-1 text-sm font-semibold leading-5 text-[var(--m3-on-surface)]">{label}</span>
+  <span aria-hidden="true" class="text-[var(--m3-on-surface-variant)] transition-colors group-hover:text-[var(--m3-primary)]">↗</span>
 </a>
+
+<style>
+  .site-card {
+    transition:
+      background-color 180ms var(--m3-easing),
+      box-shadow 180ms var(--m3-easing);
+  }
+
+  .site-card:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--m3-on-surface) 5%,
+      var(--m3-surface-container-low)
+    );
+    box-shadow:
+      0 1px 3px 1px rgb(0 0 0 / 0.12),
+      0 1px 2px rgb(0 0 0 / 0.24);
+  }
+</style>

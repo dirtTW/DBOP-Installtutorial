@@ -8,33 +8,33 @@ const t = getMessages(locale);
 ---
 
 <main class="overflow-hidden">
-  <section class="relative isolate bg-[#f7f9ff] pt-24 dark:bg-[#111318] sm:pt-28">
+  <section class="relative isolate pt-24 sm:pt-28">
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute -right-36 -top-32 -z-10 h-[34rem] w-[34rem] rounded-full bg-brand-200/45 blur-3xl dark:bg-[#33445f]/35"
+      class="pointer-events-none absolute -right-36 -top-32 -z-10 h-[34rem] w-[34rem] rounded-full bg-[var(--m3-primary-container)] opacity-50 blur-3xl dark:opacity-25"
     ></div>
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute -bottom-48 -left-40 -z-10 h-[30rem] w-[30rem] rounded-full bg-brand-100/70 blur-3xl dark:bg-[#252a31]/50"
+      class="pointer-events-none absolute -bottom-48 -left-40 -z-10 h-[30rem] w-[30rem] rounded-full bg-[var(--m3-secondary-container)] opacity-60 blur-3xl dark:opacity-30"
     ></div>
 
     <div class="mx-auto grid max-w-screen-xl items-center gap-12 px-5 pb-20 pt-10 sm:px-8 sm:pb-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-10 lg:pb-32 lg:pt-14">
       <div class="max-w-2xl">
-        <p class="mb-6 inline-flex items-center gap-2 rounded-full bg-brand-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-800 dark:bg-[#252a31] dark:text-[#d4e3ff]">
-          <span class="h-2 w-2 rounded-full bg-brand-500"></span>
+        <p class="mb-6 inline-flex items-center gap-2 rounded-full bg-[var(--m3-primary-container)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--m3-on-primary-container)]">
+          <span class="h-2 w-2 rounded-full bg-[var(--m3-primary)]"></span>
           {t.home.eyebrow}
         </p>
-        <h1 class="max-w-xl text-5xl font-semibold tracking-[-0.04em] text-zinc-950 sm:text-6xl lg:text-7xl dark:text-white">
-          {t.home.title}<span class="text-brand-700 dark:text-brand-400">.</span>
+        <h1 class="md3-display max-w-xl">
+          {t.home.title}<span class="text-[var(--m3-primary)]">.</span>
         </h1>
-        <p class="mt-6 max-w-xl text-lg leading-8 text-zinc-600 sm:text-xl dark:text-zinc-300">
+        <p class="md3-body mt-6 max-w-xl text-lg leading-7">
           {t.home.description}
         </p>
 
         <div class="mt-9 flex flex-col gap-3 sm:flex-row">
           <a
             href={localizedPath(locale, "dbop-install-tutorial")}
-            class="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-brand-700 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-brand-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/30 dark:bg-[#d4e3ff] dark:text-[#102f54] dark:hover:bg-[#b6cefa]"
+            class="md3-btn md3-btn--filled group min-h-12 px-6"
           >
             {t.home.install}
             <svg aria-hidden="true" class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none">
@@ -43,37 +43,37 @@ const t = getMessages(locale);
           </a>
           <a
             href="#learnmore"
-            class="inline-flex min-h-12 items-center justify-center rounded-full bg-brand-100 px-6 py-3 font-semibold text-brand-800 transition hover:bg-brand-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-300/50 dark:bg-[#252a31] dark:text-[#d4e3ff] dark:hover:bg-[#30343b]"
+            class="md3-btn md3-btn--tonal min-h-12 px-6"
           >
             {t.home.learnMore}
           </a>
         </div>
 
-        <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-zinc-900/10 pt-5 text-sm font-medium text-zinc-600 dark:border-white/10 dark:text-zinc-400">
+        <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-[var(--m3-outline-variant)] pt-5 text-sm font-medium text-[var(--m3-on-surface-variant)]">
           <span class="inline-flex items-center gap-2">
-            <svg aria-hidden="true" class="h-4 w-4 text-brand-700 dark:text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.1 7.16a1 1 0 0 1-1.42.003l-3.9-3.9a1 1 0 0 1 1.414-1.414l3.19 3.19 6.393-6.447a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"></path></svg>
+            <svg aria-hidden="true" class="h-4 w-4 text-[var(--m3-primary)]" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.1 7.16a1 1 0 0 1-1.42.003l-3.9-3.9a1 1 0 0 1 1.414-1.414l3.19 3.19 6.393-6.447a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"></path></svg>
             {t.home.clientSide}
           </span>
           <span class="inline-flex items-center gap-2">
-            <svg aria-hidden="true" class="h-4 w-4 text-brand-700 dark:text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.1 7.16a1 1 0 0 1-1.42.003l-3.9-3.9a1 1 0 0 1 1.414-1.414l3.19 3.19 6.393-6.447a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"></path></svg>
+            <svg aria-hidden="true" class="h-4 w-4 text-[var(--m3-primary)]" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.1 7.16a1 1 0 0 1-1.42.003l-3.9-3.9a1 1 0 0 1 1.414-1.414l3.19 3.19 6.393-6.447a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"></path></svg>
             {t.home.performance}
           </span>
         </div>
       </div>
 
       <div class="relative mx-auto w-full max-w-lg lg:max-w-none">
-        <div aria-hidden="true" class="absolute inset-8 rounded-[2.5rem] bg-brand-700/10 blur-2xl dark:bg-[#33445f]/20"></div>
-        <div class="relative overflow-hidden rounded-[1.75rem] border border-brand-100 bg-[#eef2f9] p-5 shadow-[0_12px_36px_-24px_rgba(25,28,32,0.35)] sm:p-7 dark:border-white/5 dark:bg-[#1c1f25]">
-          <div class="flex items-center justify-between border-b border-zinc-900/10 pb-4 dark:border-white/10">
+        <div aria-hidden="true" class="absolute inset-8 rounded-[2.5rem] bg-[var(--m3-primary)] opacity-10 blur-2xl"></div>
+        <div class="md3-card relative overflow-hidden p-5 sm:p-7">
+          <div class="flex items-center justify-between border-b border-[var(--m3-outline-variant)] pb-4">
             <div class="flex items-center gap-2.5">
-              <span class="h-2.5 w-2.5 rounded-full bg-brand-500"></span>
-              <span class="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">{t.home.packLabel}</span>
+              <span class="h-2.5 w-2.5 rounded-full bg-[var(--m3-primary)]"></span>
+              <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--m3-on-surface-variant)]">{t.home.packLabel}</span>
             </div>
-            <span class="rounded-full bg-[#dcefe1] px-3 py-1 text-xs font-semibold text-[#174b2b] dark:bg-[#1e3a2a] dark:text-[#b7f0c2]">{t.home.readyToPlay}</span>
+            <span class="rounded-full bg-[var(--m3-secondary-container)] px-3 py-1 text-xs font-semibold text-[var(--m3-on-secondary-container)]">{t.home.readyToPlay}</span>
           </div>
           <div class="relative flex min-h-64 items-center justify-center py-5 sm:min-h-80">
-            <div aria-hidden="true" class="absolute h-52 w-52 rounded-full border border-brand-900/10 dark:border-white/10 sm:h-64 sm:w-64"></div>
-            <div aria-hidden="true" class="absolute h-40 w-40 rounded-full bg-brand-100/80 blur-xl dark:bg-[#33445f]/60 sm:h-52 sm:w-52"></div>
+            <div aria-hidden="true" class="absolute h-52 w-52 rounded-full border border-[var(--m3-outline-variant)] sm:h-64 sm:w-64"></div>
+            <div aria-hidden="true" class="absolute h-40 w-40 rounded-full bg-[var(--m3-primary-container)] opacity-70 blur-xl dark:opacity-40 sm:h-52 sm:w-52"></div>
             <Image
               fetchpriority="high"
               src={logo}
@@ -84,18 +84,18 @@ const t = getMessages(locale);
               loading="eager"
               class="relative z-10 h-40 w-40 object-contain drop-shadow-2xl sm:h-48 sm:w-48"
             />
-            <span class="absolute right-0 top-2 z-20 rounded-2xl bg-[#f7f9ff] px-3 py-2 text-xs font-semibold text-zinc-700 shadow-md dark:bg-[#30343b] dark:text-zinc-200 sm:right-4 sm:top-4">{t.home.shaders}</span>
-            <span class="absolute bottom-2 left-0 z-20 rounded-2xl bg-[#f7f9ff] px-3 py-2 text-xs font-semibold text-zinc-700 shadow-md dark:bg-[#30343b] dark:text-zinc-200 sm:bottom-4 sm:left-4">{t.home.stability}</span>
+            <span class="absolute right-0 top-2 z-20 rounded-2xl bg-[var(--m3-surface-container-high)] px-3 py-2 text-xs font-semibold text-[var(--m3-on-surface)] shadow-md sm:right-4 sm:top-4">{t.home.shaders}</span>
+            <span class="absolute bottom-2 left-0 z-20 rounded-2xl bg-[var(--m3-surface-container-high)] px-3 py-2 text-xs font-semibold text-[var(--m3-on-surface)] shadow-md sm:bottom-4 sm:left-4">{t.home.stability}</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 border-t border-zinc-900/10 pt-4 dark:border-white/10">
+          <div class="grid grid-cols-3 gap-2 border-t border-[var(--m3-outline-variant)] pt-4">
             {[t.home.performanceTag, t.home.visualsTag, t.home.qualityTag].map((tag) => (
-              <div class="rounded-xl bg-brand-100 px-2 py-2.5 text-center text-[10px] font-semibold uppercase tracking-wider text-brand-800 dark:bg-[#252a31] dark:text-[#d4e3ff] sm:text-xs">
+              <div class="rounded-xl bg-[var(--m3-surface-container-high)] px-2 py-2.5 text-center text-[10px] font-semibold uppercase tracking-wider text-[var(--m3-on-surface-variant)] sm:text-xs">
                 {tag}
               </div>
             ))}
           </div>
         </div>
-        <div aria-hidden="true" class="absolute -bottom-4 -right-3 -z-10 h-24 w-24 rounded-[1.5rem] border border-brand-900/15 dark:border-brand-200/15"></div>
+        <div aria-hidden="true" class="absolute -bottom-4 -right-3 -z-10 h-24 w-24 rounded-[1.5rem] border border-[var(--m3-outline-variant)]"></div>
       </div>
     </div>
   </section>

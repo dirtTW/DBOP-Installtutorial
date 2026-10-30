@@ -51,21 +51,21 @@ const features = [
 ];
 ---
 
-<section class="bg-[#f7f9ff] dark:bg-[#111318]" id="learnmore">
+<section id="learnmore">
   <div class="mx-auto max-w-screen-xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
     <div class="mb-10 flex flex-col gap-5 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
       <div class="max-w-2xl">
-        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-brand-700 dark:text-brand-400">{t.home.featureEyebrow}</p>
-        <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
+        <p class="md3-eyebrow mb-3">{t.home.featureEyebrow}</p>
+        <h2 class="md3-headline mb-4">
         DBOP (DirtTW's Basement Optimize Pack)
         </h2>
-        <p class="text-zinc-600 sm:text-lg dark:text-zinc-400">
+        <p class="md3-body">
           {t.home.features}
         </p>
       </div>
       <a
         href={localizedPath(getLocale(Astro.props.locale ?? Astro.currentLocale), "recommended-modpacks")}
-        class="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full px-5 font-semibold text-brand-700 transition hover:bg-brand-100 dark:text-[#d4e3ff] dark:hover:bg-white/10"
+        class="md3-btn md3-btn--text min-h-12 shrink-0 gap-2 px-5"
       >
         {t.home.explorePacks}
         <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L8.5 3.5M13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -73,22 +73,41 @@ const features = [
     </div>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {features.map((feature) => (
-        <article class="group relative rounded-[1.75rem] bg-[#eef2f9] p-5 transition duration-200 hover:-translate-y-0.5 hover:bg-brand-100 hover:shadow-md hover:shadow-black/5 dark:bg-[#1c1f25] dark:hover:bg-[#252a31] sm:p-6">
+        <article class="md3-card feature-card group relative p-5 sm:p-6">
           <div class="mb-5 flex items-center justify-between">
             {typeof feature.image === "string" ? (
               <img class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width="48" height="48" loading="lazy" />
             ) : (
               <Image class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width={48} height={48} format="webp" />
             )}
-            <span class="rounded-full bg-[#dce6f5] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand-800 dark:bg-[#30343b] dark:text-[#d4e3ff]">{feature.category}</span>
+            <span class="rounded-full bg-[var(--m3-secondary-container)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--m3-on-secondary-container)]">{feature.category}</span>
           </div>
-          <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">
+          <h3 class="md3-title mb-2">
             {feature.href ? <a href={feature.href} class="after:absolute after:inset-0">{feature.name}</a> : feature.name}
           </h3>
-          <p class="text-sm leading-6 text-zinc-600 dark:text-zinc-400">{feature.description}</p>
-          {feature.href && <div class="relative mt-5 border-t border-brand-200/70 pt-4 text-xs font-semibold text-brand-700 dark:border-white/10 dark:text-[#d4e3ff]">{t.home.learnMore} <span aria-hidden="true">→</span></div>}
+          <p class="md3-body-sm">{feature.description}</p>
+          {feature.href && <div class="relative mt-5 border-t border-[var(--m3-outline-variant)] pt-4 text-xs font-semibold text-[var(--m3-primary)]">{t.home.learnMore} <span aria-hidden="true">→</span></div>}
         </article>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .feature-card {
+    transition:
+      background-color 180ms var(--m3-easing),
+      box-shadow 180ms var(--m3-easing);
+  }
+
+  .feature-card:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--m3-on-surface) 5%,
+      var(--m3-surface-container-low)
+    );
+    box-shadow:
+      0 1px 3px 1px rgb(0 0 0 / 0.12),
+      0 1px 2px rgb(0 0 0 / 0.24);
+  }
+</style>

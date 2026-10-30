@@ -18,6 +18,48 @@ const canonical = new URL(destination, Astro.site ?? Astro.url).href;
     <meta http-equiv="refresh" content={`0; url=${destination}`} />
     <link rel="canonical" href={canonical} />
     <title>Redirecting…</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --m3-primary: #005ac1;
+        --m3-on-primary: #ffffff;
+        --m3-surface: #f9f9ff;
+        --m3-on-surface: #1a1b21;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --m3-primary: #adc6ff;
+          --m3-on-primary: #002e69;
+          --m3-surface: #111318;
+          --m3-on-surface: #e2e2e9;
+        }
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: var(--m3-surface);
+        color: var(--m3-on-surface);
+        font-family: "Roboto", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+      }
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.5rem;
+        padding: 0 1.5rem;
+        border-radius: 9999px;
+        background-color: var(--m3-primary);
+        color: var(--m3-on-primary);
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
     <a href={destination}>{label}</a>
