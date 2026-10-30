@@ -1,35 +1,139 @@
-My remake site using Astro.
+# DBOP Install Tutorial
 
-## Languages and appearance
+A bilingual (English / 繁體中文) Astro site that walks through installing and running a
+Minecraft server with **Dragon Block Origin: Project** (DBOP), alongside a curated list of
+Minecraft resources and a Minecraft server launch-flag generator.
 
-English is the default language at `/`; other languages use `/<locale>/` routes.
-Language dictionaries live in `src/i18n/locales/`. To add a language, add a
-locale file there using the same message keys as `en.ts`; Astro discovers the
-file and generates localized versions of the site pages automatically.
+**Live site:** https://dirttw.github.io/DBOP-Installtutorial/
 
-The theme control in the navigation switches between light and dark mode and
-remembers the choice in the browser.
+## Pages
 
-## Website directory
+| Route | What it is |
+| --- | --- |
+| `/` | Landing page with links to every section |
+| `/dbop-install-tutorial` | Step-by-step DBOP install and modpack setup guide |
+| `/recommended-modpacks` | Modpack recommendations, with Modrinth metadata and optional CurseForge art |
+| `/useful-website` | Searchable, category-filtered directory of Minecraft and general software links |
+| `/flags-generator` | Minecraft server launch-script generator (Paper, Purpur, Velocity, …) |
+| `/zh-TW/...` | Traditional Chinese version of every page above |
 
-The Minecraft resources and useful websites lists are merged into a single
-directory at `/useful-website` (and `/zh-TW/useful-website`). Entries live in
-`lists/useful-websites.md` and carry category tags that power the filter chips;
-see `lists/README.md` for the format. The old Minecraft page redirects there.
+The legacy `/minecraft-useful-website` page redirects to `/useful-website` and is excluded
+from the sitemap.
+
+## Tech stack
+
+- **Astro 7** with file-based routing and static output
+- **Tailwind CSS 4** through the Vite plugin
+- **TypeScript** (checked during `npm run build` via `astro check`)
+- **Vitest** for unit tests, **Playwright** for end-to-end tests
+- Deployed to **GitHub Pages** by GitHub Actions
+
+## Getting started
+
+Requires **Node.js 24** or newer (`engines` in `package.json`).
+
+```bash
+npm install
+npm run dev        # http://localhost:4321/DBOP-Installtutorial/
+```
+
+Other scripts:
+
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` / `npm start` | Start the dev server with HMR |
+| `npm run build` | Type-check with `astro check`, then build to `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm test` / `npm run test:unit` | Run the Vitest unit tests |
+| `npm run test:e2e` | Run the Playwright end-to-end tests |
+
+The site is served from the `/DBOP-Installtutorial` base path, so use the full URL above
+rather than `http://localhost:4321/`.
+
+## Project structure
+
+```
+lists/                     Content: website directory + modpack entries (Markdown)
+src/components/            Navbar, footer, cards, and the flags generator
+src/i18n/                  Translation loader and the per-locale dictionaries
+src/layouts/               Page shells (landing page, guides, directory, modpacks)
+src/lib/website-links.ts   Parses the website lists and category tags
+src/pages/                 Routes, including the [locale] catch-all
+src/styles/global.css      Tailwind entry point and shared component styles
+tests/unit/                Vitest tests
+tests/e2e/                 Playwright tests
+```
+
+## Editing content
+
+### Website directory
+
+Entries live in `lists/useful-websites.md`, one link per line with at least one category
+tag. The tags drive the filter chips on `/useful-website`.
+
+```markdown
+- [Prism Launcher](https://prismlauncher.org/) #minecraft #launchers
+```
+
+Available tags: `minecraft`, `launchers`, `mods`, `servers`, `world`, `software`, `media`,
+`security`. See [`lists/README.md`](lists/README.md) for the full format.
+
+`lists/recommended-modpacks.md` uses its own `link:` format because the modpack page can
+fetch Modrinth metadata and supports optional CurseForge image URLs.
+
+### Languages
+
+English is the default at `/`; other languages use `/<locale>/` routes. Dictionaries live in
+`src/i18n/locales/` and are discovered automatically at build time — to add a language, copy
+`en.ts` to a new `<locale>.ts` and translate the message keys. No route files need to change.
+
+Translated site names for directory entries go in the `siteLabels` map of each locale;
+entries without a translation fall back to the label in the Markdown file.
+
+### Theme
+
+The navbar toggle switches between light and dark mode, persists the choice in
+`localStorage`, and falls back to the operating system preference. The flags generator uses a
+separate Material 3 token set so it can evolve independently of the rest of the site.
+
+## Flags generator
+
+`/flags-generator` builds a ready-to-run launch script or raw `java` command from a few
+choices:
+
+- **Presets:** Basic, Aikar's (default), ZGC, Shenandoah, and Velocity / Proxy. Aikar's flags
+  switch to the 12 GB+ tuning automatically once the heap reaches 12 GB.
+- **Memory:** slider with presets, plus a dialog for fractional values.
+- **Options:** GUI toggle (`--nogui`) and an **Ignore Java version** switch that adds
+  `-Dpaper.ignoreJavaVersion=true`. Both are disabled where they would be invalid, such as
+  the GUI toggle for Velocity proxies.
+- **Output:** Linux / macOS script, Windows `.bat`, or the plain Java command, with copy and
+  download buttons.
+
+The presets mirror the arrays published by the
+[Flectone flags generator](https://flectone.net/en/tools/server-flags-generator); Aikar's
+values follow the [Paper documentation](https://docs.papermc.io/paper/aikars-flags). The
+implementation is original and inspired by [flags.sh](https://flags.sh/) by
+[YouHaveTrouble](https://github.com/YouHaveTrouble/flags.sh) — no flags.sh source code is
+used.
 
 ## Tests
 
-- `npm test` runs the Vitest unit tests.
-- `npm run build` then `npm run test:e2e` runs the Playwright end-to-end tests.
+```bash
+npm test             # Vitest: list parsing, category filters, search
+npm run build        # Playwright e2e serves this preview build
+npm run test:e2e     # Playwright: directory filters and flags generator behaviour
+```
 
-Playwright uses the installed Google Chrome by default. To use Playwright's
-bundled browser instead, run `npx playwright install chromium` and set
-`PLAYWRIGHT_CHANNEL=chromium`.
+Playwright uses the installed Google Chrome by default. To use Playwright's bundled browser
+instead, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`.
 
-## Minecraft 伺服器啟動參數產生器
+## Deployment
 
-The site includes a configurable Minecraft server launch-script generator at
-`/DBOP-Installtutorial/flags-generator`. Its functionality was independently
-implemented, with inspiration from [flags.sh](https://flags.sh/) by
-[YouHaveTrouble](https://github.com/YouHaveTrouble/flags.sh). No flags.sh
-source code is used.
+Pushing to `master` triggers `.github/workflows/astro.yml`, which builds the site on Node 24
+and deploys `dist/` to GitHub Pages. Builds can also be started manually from the Actions tab
+or via a `rebuild` `repository_dispatch` event.
+
+## License
+
+No license file is included in this repository.
