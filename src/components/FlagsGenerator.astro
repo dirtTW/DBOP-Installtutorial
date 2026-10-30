@@ -110,23 +110,34 @@ const presetOptions: PresetOption[] = [
               </md-icon-button>
             </div>
           </div>
-          <md-slider
-            id="memory"
-            class="mt-2 w-full"
-            min="1"
-            max="32"
-            step="0.25"
-            value="4"
-            aria-label={t.flags.memory}
-          ></md-slider>
+          <div class="relative mt-2">
+            <md-slider
+              id="memory"
+              class="w-full"
+              min="1"
+              max="32"
+              step="0.25"
+              value="4"
+              aria-label={t.flags.memory}
+            ></md-slider>
+            <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+              { [1, 4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
+                <span
+                  data-memory-tick={size}
+                  class="memory-tick absolute top-1/2 h-0.5 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  style={`left: calc(20px + (100% - 40px) * ${(size - 1) / 31})`}
+                ></span>
+              )) }
+            </div>
+          </div>
           <div class="relative mt-2 h-5">
-            { [4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
+            { [1, 4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
               <button
                 type="button"
                 class="memory-preset absolute -translate-x-1/2 whitespace-nowrap text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)] transition-colors hover:text-[var(--md-sys-color-primary)] focus-visible:text-[var(--md-sys-color-primary)] focus-visible:outline-none"
                 data-memory={size}
                 aria-label={t.flags.setMemory(size)}
-                style={`left: calc(8px + (100% - 16px) * ${(size - 1) / 31})`}
+                style={`left: calc(20px + (100% - 40px) * ${(size - 1) / 31})`}
               >
                 {size} GB
               </button>
@@ -363,6 +374,7 @@ const presetOptions: PresetOption[] = [
   const fileInput = document.querySelector<TextFieldElement>("#server-file");
   const memoryInput = document.querySelector<SliderElement>("#memory");
   const memoryValue = document.querySelector<HTMLOutputElement>("#memory-value");
+  const memoryTicks = document.querySelectorAll<HTMLElement>("[data-memory-tick]");
   const memoryDialog = document.querySelector<DialogElement>("#custom-memory-dialog");
   const customMemoryInput = document.querySelector<TextFieldElement>("#custom-memory");
   const openMemoryDialogButton = document.querySelector<HTMLElement>("#custom-memory-open");
@@ -521,6 +533,12 @@ const presetOptions: PresetOption[] = [
     if (memoryInput && memoryValue) {
       memoryValue.value = `${memoryInput.value} GB`;
       memoryInput.valueLabel = memoryValue.value;
+      memoryTicks.forEach((tick) => {
+        tick.classList.toggle(
+          "is-passed",
+          Number(tick.dataset.memoryTick) < Number(memoryInput.value),
+        );
+      });
     }
     const script = getGeneratedScript();
     output.textContent = script ?? "";
@@ -646,6 +664,14 @@ const presetOptions: PresetOption[] = [
 <style>
   #custom-memory-dialog {
     width: min(28rem, calc(100% - 2rem));
+  }
+
+  .memory-tick {
+    background-color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .memory-tick.is-passed {
+    background-color: var(--md-sys-color-on-primary);
   }
 
   .option-row:has(md-switch[disabled]) {
