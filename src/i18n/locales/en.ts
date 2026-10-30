@@ -11,7 +11,6 @@ const messages = {
     home: "Home",
     tutorial: "DBOP installation guide",
     modpacks: "Recommended modpacks",
-    minecraftSites: "Minecraft resources",
     usefulSites: "Useful websites",
     flags: "Server launch flags",
   },
@@ -55,12 +54,9 @@ const messages = {
     modpacksEyebrow: "Find your next world",
     modpacksDescription:
       "Browse community favorites, compare pack versions, and jump straight to the launcher you use.",
-    minecraftEyebrow: "Tools for your next build",
-    minecraftDescription:
-      "A curated collection of launchers, mod platforms, server tools, and Minecraft resources.",
     softwareEyebrow: "Useful websites, all in one place",
     softwareDescription:
-      "A hand-picked collection of useful websites, online tools, references, and resources for everyday tasks.",
+      "A combined directory of Minecraft resources and useful websites, including launchers, mod platforms, server tools, online utilities, and everyday resources.",
   },
   modpacks: {
     dbopName: "DBOP (DirtTW's Basement Optimize Pack)",
@@ -89,14 +85,27 @@ const messages = {
     modpacksPlaceholder: "Search modpack names, descriptions, or versions...",
     websitesLabel: "Search useful websites",
     websitesPlaceholder: "Search website names or URLs...",
-    minecraftSitesLabel: "Search Minecraft resources",
-    usefulSitesLabel: "Search useful software sites",
     foundModpacks: "{count} modpack(s) found",
     noModpacks: 'No modpacks found for "{query}"',
     totalModpacks: "{count} modpack(s) total",
     foundWebsites: "{count} website(s) found",
     noWebsites: 'No websites found for "{query}"',
     totalWebsites: "{count} website(s) total",
+  },
+  filters: {
+    label: "Filter websites by category",
+    all: "All",
+    noResults: "No websites in this category",
+    categories: {
+      minecraft: "Minecraft",
+      launchers: "Launchers",
+      mods: "Mod platforms",
+      servers: "Server tools",
+      world: "Maps & world tools",
+      software: "Software & tools",
+      media: "Media & downloads",
+      security: "Security",
+    },
   },
   siteLabels: {
     "https://www.minecraft.net/zh-hant": "Minecraft official website",
@@ -171,8 +180,6 @@ const messages = {
     prism: "Prism Launcher",
     curseforge: "CurseForge App",
     modrinth: "Modrinth App",
-    needJava: (_version: string, minecraft: string) =>
-      `Minecraft ${minecraft} and later requires `,
     prismSteps: [
       "Click 'Add Instance'.",
       "Choose the Modrinth tab on the left.",

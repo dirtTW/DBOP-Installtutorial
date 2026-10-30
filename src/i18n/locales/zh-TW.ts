@@ -13,7 +13,6 @@ const messages = {
     home: "首頁",
     tutorial: "DBOP 模組包安裝教學",
     modpacks: "模組包推薦",
-    minecraftSites: "Minecraft 實用網站",
     usefulSites: "實用網站",
     flags: "伺服器啟動參數",
   },
@@ -57,12 +56,9 @@ const messages = {
     modpacksEyebrow: "尋找下一場冒險",
     modpacksDescription:
       "瀏覽推薦模組包、比較版本資訊，並直接前往你慣用的啟動器下載。",
-    minecraftEyebrow: "打造世界的實用工具",
-    minecraftDescription:
-      "精選啟動器、模組平台、伺服器工具與 Minecraft 相關資源。",
     softwareEyebrow: "實用網站，一次整理",
     softwareDescription:
-      "整理各類實用網站，包含線上工具、參考資料與日常資源，不限於軟體下載。",
+      "整合 Minecraft 資源與各類實用網站，包含啟動器、模組平台、伺服器工具、線上工具與日常資源。",
   },
   modpacks: {
     dbopName: "DBOP (DirtTW's Basement Optimize Pack) (土靈的地下室優化包)",
@@ -89,14 +85,27 @@ const messages = {
     modpacksPlaceholder: "搜尋模組包名稱、描述或版本...",
     websitesLabel: "搜尋實用網站",
     websitesPlaceholder: "搜尋網站名稱或網址...",
-    minecraftSitesLabel: "搜尋 Minecraft 實用網站",
-    usefulSitesLabel: "搜尋軟體實用網站",
     foundModpacks: "找到 {count} 個模組包",
     noModpacks: '找不到符合「{query}」的模組包',
     totalModpacks: "共 {count} 個模組包",
     foundWebsites: "找到 {count} 個網站",
     noWebsites: '找不到符合「{query}」的網站',
     totalWebsites: "共 {count} 個網站",
+  },
+  filters: {
+    label: "依分類篩選網站",
+    all: "全部",
+    noResults: "此分類目前沒有網站",
+    categories: {
+      minecraft: "Minecraft",
+      launchers: "啟動器",
+      mods: "模組平台",
+      servers: "伺服器工具",
+      world: "地圖與世界工具",
+      software: "軟體與工具",
+      media: "媒體下載",
+      security: "安全性",
+    },
   },
   siteLabels: {
     "https://www.minecraft.net/zh-hant": "Minecraft 官方網站",
@@ -171,8 +180,6 @@ const messages = {
     prism: "Prism 啟動器",
     curseforge: "CurseForge 啟動器",
     modrinth: "Modrinth 啟動器",
-    needJava: (_version: string, minecraft: string) =>
-      "Minecraft " + minecraft + " 以上版本需要安裝 ",
     prismSteps: [
       "按一下「新增實例」。",
       "從左側選擇 Modrinth 分頁。",

@@ -8,10 +8,12 @@ const locales = readdirSync(new URL("./src/i18n/locales/", import.meta.url))
   .map((file) => file.slice(0, -".ts".length))
   .sort();
 
+const base = "/DBOP-Installtutorial";
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://yichifauzi.github.io/DBOP-Installtutorial",
-  base: "/DBOP-Installtutorial",
+  site: "https://dirttw.github.io",
+  base,
   i18n: {
     locales,
     defaultLocale: "en",
@@ -22,7 +24,11 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes("/minecraft-useful-website"),
+    }),
+  ],
   prefetch: {
     prefetchAll: false,
   },

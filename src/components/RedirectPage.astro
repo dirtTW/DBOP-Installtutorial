@@ -1,0 +1,25 @@
+---
+interface Props {
+  destination: string;
+  lang: string;
+  label: string;
+}
+
+const { destination, lang, label } = Astro.props;
+const canonical = new URL(destination, Astro.site ?? Astro.url).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0; url=${destination}`} />
+    <link rel="canonical" href={canonical} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <a href={destination}>{label}</a>
+  </body>
+</html>

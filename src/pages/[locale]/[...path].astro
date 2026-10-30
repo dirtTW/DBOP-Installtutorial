@@ -3,7 +3,6 @@ import Layout from "../../layouts/Layout.astro";
 import LandingPage from "../../layouts/LandingPage.astro";
 import ModpackInstall from "../../layouts/ModpackInstall.astro";
 import ModpackSelection from "../../layouts/Modpack_Selection.astro";
-import MinecraftUsefulLinks from "../../layouts/MCusefullink.astro";
 import UsefulLinks from "../../layouts/Usefullink.astro";
 import Feature from "../../components/Feature.astro";
 import FlagsGenerator from "../../components/FlagsGenerator.astro";
@@ -17,7 +16,6 @@ export function getStaticPaths() {
     "",
     "dbop-install-tutorial",
     "recommended-modpacks",
-    "minecraft-useful-website",
     "useful-website",
     "flags-generator",
   ];
@@ -38,7 +36,6 @@ const titles: Record<string, string> = {
   "": t.home.title,
   "dbop-install-tutorial": t.tutorial.title,
   "recommended-modpacks": t.nav.modpacks,
-  "minecraft-useful-website": t.nav.minecraftSites,
   "useful-website": t.nav.usefulSites,
   "flags-generator": t.flags.title,
 };
@@ -61,7 +58,6 @@ const titles: Record<string, string> = {
       </>
     )}
     {page === "recommended-modpacks" && <ModpackSelection locale={locale} />}
-    {page === "minecraft-useful-website" && <MinecraftUsefulLinks locale={locale} />}
     {page === "useful-website" && <UsefulLinks locale={locale} />}
     <Footer locale={locale} />
   </Layout>
