@@ -141,7 +141,8 @@ const t = getMessages(locale);
           <input
             id="enable-gui"
             type="checkbox"
-            class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-brand-300 text-brand-700 focus:ring-brand-600"
+            role="switch"
+            class="mt-0.5 shrink-0"
           />
           <span>
             <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.enableGui}</span>
@@ -155,7 +156,8 @@ const t = getMessages(locale);
           <input
             id="auto-restart"
             type="checkbox"
-            class="mt-0.5 h-5 w-5 shrink-0 rounded-md border-brand-300 text-brand-700 focus:ring-brand-600"
+            role="switch"
+            class="mt-0.5 shrink-0"
           />
           <span>
             <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.autoRestart}</span>
