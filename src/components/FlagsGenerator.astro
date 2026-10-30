@@ -12,6 +12,45 @@ interface Props {
 
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
 const t = getMessages(locale);
+
+type PresetOption = {
+  id: string;
+  label: string;
+  description: string;
+  href?: string;
+};
+
+const presetOptions: PresetOption[] = [
+  {
+    id: "basic",
+    label: t.flags.presets.basic.name,
+    description: t.flags.presets.basic.description,
+  },
+  {
+    id: "aikars",
+    label: t.flags.presets.aikars.name,
+    description: t.flags.presets.aikars.description,
+    href: "https://docs.papermc.io/paper/aikars-flags/",
+  },
+  {
+    id: "zgc",
+    label: t.flags.presets.zgc.name,
+    description: t.flags.presets.zgc.description,
+    href: "https://obydux.github.io/Minecraft-startup-flags/",
+  },
+  {
+    id: "shenandoah",
+    label: t.flags.presets.shenandoah.name,
+    description: t.flags.presets.shenandoah.description,
+    href: "https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks",
+  },
+  {
+    id: "velocity",
+    label: t.flags.presets.velocity.name,
+    description: t.flags.presets.velocity.description,
+    href: "https://docs.papermc.io/velocity/getting-started/",
+  },
+];
 ---
 
 <Layout title={t.flags.title} locale={locale}>
@@ -27,11 +66,11 @@ const t = getMessages(locale);
   >
     <PageIntro eyebrow={t.flags.eyebrow} title={t.flags.title} description={t.flags.description} />
     <section class="mx-auto max-w-4xl px-5 sm:px-8 lg:px-0">
-      <div class="grid gap-5 rounded-[1.75rem] border border-brand-100 bg-white p-4 shadow-sm sm:gap-6 sm:p-6 md:grid-cols-2 dark:border-white/10 dark:bg-[#1c1f25]">
+      <div class="m3-card grid gap-5 p-4 sm:gap-6 sm:p-6 md:grid-cols-2">
         <div>
           <label
             for="server-file"
-            class="mb-2 block text-sm font-medium text-zinc-900 dark:text-white"
+            class="m3-label mb-2 block"
           >
             {t.flags.serverFile}
           </label>
@@ -43,9 +82,9 @@ const t = getMessages(locale);
             autocomplete="off"
             spellcheck="false"
             aria-describedby="filename-help"
-            class="block min-h-12 w-full rounded-xl border border-brand-200 bg-brand-50/50 px-4 py-3 text-sm text-zinc-900 focus:border-brand-600 focus:ring-brand-600 dark:border-brand-800 dark:bg-[#111318] dark:text-white"
+            class="m3-field block min-h-14 w-full px-4 py-3 text-base"
           />
-          <p id="filename-help" class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+          <p id="filename-help" class="m3-support mt-2">
             {t.flags.filenameHelp}
           </p>
         </div>
@@ -54,7 +93,7 @@ const t = getMessages(locale);
           <div class="mb-2 flex items-center justify-between">
             <label
               for="memory"
-              class="block text-sm font-medium text-zinc-900 dark:text-white"
+              class="m3-label block"
             >
               {t.flags.memory}
             </label>
@@ -62,14 +101,14 @@ const t = getMessages(locale);
               <output
                 id="memory-value"
                 for="memory"
-                class="text-sm font-semibold text-zinc-900 dark:text-white"
+                class="m3-label"
               >4 GB</output>
               <button
                 id="custom-memory-open"
                 type="button"
                 aria-label={t.flags.advancedMemory}
                 aria-haspopup="dialog"
-                class="flex h-10 w-10 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-brand-100 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 dark:text-zinc-300 dark:hover:bg-[#30343b] dark:hover:text-white"
+                class="m3-icon-btn"
               >
                 <svg
                   aria-hidden="true"
@@ -98,24 +137,24 @@ const t = getMessages(locale);
               class="absolute inset-0 z-20 h-full w-full cursor-pointer opacity-0"
             />
             <div
-              class="memory-slider-track pointer-events-none absolute inset-x-2 top-1/2 h-2 -translate-y-1/2 rounded-full bg-brand-100 dark:bg-brand-900"
+              class="memory-slider-track m3-slider-track pointer-events-none absolute inset-x-2 top-1/2 h-1 -translate-y-1/2 rounded-full"
               aria-hidden="true"
             >
               <span
                 id="memory-slider-fill"
-                class="absolute inset-y-0 left-0 rounded-full bg-brand-600"
+                class="m3-slider-fill absolute inset-y-0 left-0 rounded-full"
                 style="width: 9.6774%"
               ></span>
               { [4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
                 <span
                   data-memory-tick={size}
-                  class="memory-slider-tick absolute top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-500 dark:bg-brand-300"
+                  class="memory-slider-tick m3-slider-tick absolute top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full"
                   style={`left: ${(size - 1) / 31 * 100}%`}
                 ></span>
               )) }
               <span
                 id="memory-slider-thumb"
-                class="absolute left-[9.6774%] top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-600 ring-2 ring-white dark:ring-[#1c1f25]"
+                class="m3-slider-thumb absolute left-[9.6774%] top-1/2 z-10 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full"
               ></span>
             </div>
           </div>
@@ -123,7 +162,7 @@ const t = getMessages(locale);
             { [4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
               <button
                 type="button"
-                class="memory-preset absolute -translate-x-1/2 whitespace-nowrap text-xs text-zinc-500 hover:text-brand-700 focus:outline-none focus:underline dark:text-zinc-400 dark:hover:text-brand-300"
+                class="memory-preset m3-memory-preset absolute -translate-x-1/2 whitespace-nowrap"
                 data-memory={size}
                 aria-label={t.flags.setMemory(size)}
                 style={`left: calc(8px + (100% - 16px) * ${(size - 1) / 31})`}
@@ -132,12 +171,12 @@ const t = getMessages(locale);
               </button>
             )) }
           </div>
-          <p class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+          <p class="m3-support mt-2">
             {t.flags.memoryHelp}
           </p>
         </div>
 
-        <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-brand-100 bg-brand-50/40 p-4 transition-colors hover:bg-brand-50 dark:border-white/10 dark:bg-[#111318]/60 dark:hover:bg-[#111318]">
+        <label class="m3-option">
           <input
             id="enable-gui"
             type="checkbox"
@@ -145,14 +184,14 @@ const t = getMessages(locale);
             class="shrink-0"
           />
           <span>
-            <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.enableGui}</span>
-            <span class="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">
+            <span class="m3-option-title">{t.flags.enableGui}</span>
+            <span class="m3-support mt-1 block">
               {t.flags.guiHelp}
             </span>
           </span>
         </label>
 
-        <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-brand-100 bg-brand-50/40 p-4 transition-colors hover:bg-brand-50 dark:border-white/10 dark:bg-[#111318]/60 dark:hover:bg-[#111318]">
+        <label class="m3-option">
           <input
             id="auto-restart"
             type="checkbox"
@@ -160,24 +199,98 @@ const t = getMessages(locale);
             class="shrink-0"
           />
           <span>
-            <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.autoRestart}</span>
-            <span class="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">
+            <span class="m3-option-title">{t.flags.autoRestart}</span>
+            <span class="m3-support mt-1 block">
               {t.flags.restartHelp}
+            </span>
+          </span>
+        </label>
+
+        <label
+          id="ignore-java-option"
+          class="m3-option md:col-span-2"
+        >
+          <input
+            id="ignore-java-version"
+            type="checkbox"
+            role="switch"
+            class="shrink-0"
+          />
+          <span>
+            <span class="m3-option-title">{t.flags.ignoreJavaVersion}</span>
+            <span class="m3-support mt-1 block">
+              {t.flags.ignoreJavaVersionHelp}
             </span>
           </span>
         </label>
       </div>
 
-      <section class="mt-6 overflow-hidden rounded-[1.75rem] border border-brand-100 bg-white shadow-sm sm:mt-8 dark:border-white/10 dark:bg-[#1c1f25]">
-        <div class="flex flex-col gap-3 border-b border-brand-100 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4 dark:border-white/10">
+      <section class="m3-card mt-5 p-4 sm:mt-6 sm:p-6">
+        <div>
+          <h2 class="m3-title">
+            {t.flags.presetHeading}
+          </h2>
+          <p class="m3-support mt-1">
+            {t.flags.presetHelp}
+          </p>
+        </div>
+        <ul
+          class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-5"
+          aria-label={t.flags.presetHeading}
+        >
+          {presetOptions.map((option) => (
+            <li class="flex flex-col">
+              <button
+                type="button"
+                class="preset-option m3-preset"
+                aria-pressed={option.id === "aikars" ? "true" : "false"}
+                data-preset={option.id}
+              >
+                <svg
+                  class="m3-preset-check"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m5 13 4 4L19 7"></path>
+                </svg>
+                <span>{option.label}</span>
+              </button>
+              <p class="m3-support mt-2">
+                {option.description}
+                {option.href && (
+                  <>
+                    {" "}
+                    <a
+                      class="m3-link whitespace-nowrap"
+                      href={option.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t.flags.learnMore}
+                    </a>
+                  </>
+                )}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="m3-card mt-6 overflow-hidden sm:mt-8">
+        <div class="flex flex-col gap-2 p-2 sm:flex-row sm:items-center sm:justify-between sm:p-3">
           <div
-            class="grid grid-cols-3 gap-1 rounded-full bg-brand-50 p-1 dark:bg-[#111318]"
+            class="m3-tabs"
             role="tablist"
             aria-label={t.flags.outputFormat}
           >
             <button
               type="button"
-              class="platform-tab flex min-h-11 items-center justify-center rounded-full bg-brand-700 px-2 py-2 text-center text-xs font-medium text-white shadow-sm transition-colors dark:bg-[#d4e3ff] dark:text-[#102f54] sm:px-3 sm:text-sm"
+              class="platform-tab m3-tab text-xs sm:text-sm"
               role="tab"
               aria-selected="true"
               data-platform="unix"
@@ -186,7 +299,7 @@ const t = getMessages(locale);
             </button>
             <button
               type="button"
-              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-zinc-600 transition-colors hover:bg-white dark:text-zinc-300 dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
+              class="platform-tab m3-tab text-xs sm:text-sm"
               role="tab"
               aria-selected="false"
               data-platform="windows"
@@ -195,7 +308,7 @@ const t = getMessages(locale);
             </button>
             <button
               type="button"
-              class="platform-tab flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-medium text-zinc-600 transition-colors hover:bg-white dark:text-zinc-300 dark:hover:bg-[#30343b] sm:px-3 sm:text-sm"
+              class="platform-tab m3-tab text-xs sm:text-sm"
               role="tab"
               aria-selected="false"
               data-platform="java"
@@ -203,59 +316,69 @@ const t = getMessages(locale);
               {t.flags.javaCommand}
             </button>
           </div>
-          <div class="flex gap-2 sm:shrink-0">
+          <div class="flex gap-2 px-1 pb-1 sm:shrink-0 sm:px-0 sm:pb-0">
             <button
               id="copy-script"
               type="button"
-              class="min-h-11 flex-1 rounded-full border border-brand-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-brand-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 sm:flex-none dark:border-white/10 dark:text-zinc-200 dark:hover:bg-[#30343b]"
+              class="m3-btn m3-btn-outlined min-h-11 flex-1 sm:flex-none"
             >
               {t.flags.copy}
             </button>
             <button
               id="download-script"
               type="button"
-              class="min-h-11 flex-1 rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 sm:flex-none dark:bg-[#d4e3ff] dark:text-[#102f54] dark:hover:bg-[#b6cefa]"
+              class="m3-btn m3-btn-filled min-h-11 flex-1 sm:flex-none"
             >
               {t.flags.download}
             </button>
           </div>
         </div>
-        <pre class="min-h-48 overflow-x-auto bg-zinc-950 p-4 text-xs leading-6 text-zinc-100 sm:p-5 sm:text-sm"><code id="script-output"></code></pre>
+        <pre class="m3-code min-h-48 overflow-x-auto p-4 text-xs leading-6 sm:p-5 sm:text-sm"><code id="script-output"></code></pre>
         <p
           id="generator-status"
-          class="min-h-10 px-4 py-2 text-sm text-zinc-600 dark:text-zinc-300"
+          class="m3-support min-h-10 px-4 py-3"
           aria-live="polite"
         ></p>
       </section>
 
-      <p class="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
+      <p class="m3-support mt-6">
         {t.flags.attributionStart}
         <a
-          class="font-medium text-brand-700 hover:underline dark:text-brand-300"
+          class="m3-link"
           href="https://flags.sh/"
           target="_blank"
           rel="noopener noreferrer"
         >flags.sh</a>
         {t.flags.attributionBy}
         <a
-          class="font-medium text-brand-700 hover:underline dark:text-brand-300"
+          class="m3-link"
           href="https://github.com/YouHaveTrouble/flags.sh"
           target="_blank"
           rel="noopener noreferrer"
         >YouHaveTrouble</a>
         {t.flags.attributionEnd}
       </p>
+      <p class="m3-support mt-2">
+        {t.flags.presetAttributionStart}
+        <a
+          class="m3-link"
+          href="https://flectone.net/en/tools/server-flags-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+        >{t.flags.presetAttributionLink}</a>
+        {t.flags.presetAttributionEnd}
+      </p>
     </section>
     <dialog
       id="custom-memory-dialog"
       aria-labelledby="custom-memory-title"
-      class="fixed inset-0 m-auto w-[min(28rem,calc(100%-2rem))] rounded-[1.75rem] border border-brand-200 bg-[#f7f9ff] p-0 text-zinc-900 shadow-xl backdrop:bg-black/60 dark:border-white/10 dark:bg-[#1c1f25] dark:text-white"
+      class="m3-dialog fixed inset-0 m-auto w-[min(28rem,calc(100%-2rem))] p-0"
     >
       <form id="custom-memory-form" class="p-5 sm:p-6">
-        <h2 id="custom-memory-title" class="mb-5 text-lg font-semibold">
+        <h2 id="custom-memory-title" class="m3-dialog-title mb-5">
           {t.flags.advancedOptions}
         </h2>
-        <label for="custom-memory" class="mb-2 block text-sm text-zinc-700 dark:text-zinc-300">
+        <label for="custom-memory" class="m3-label mb-2 block">
           {t.flags.customMemory}
         </label>
         <input
@@ -267,22 +390,22 @@ const t = getMessages(locale);
           value="4.00"
           required
           inputmode="decimal"
-          class="block w-full rounded-xl border border-brand-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-brand-600 focus:outline-none focus:ring-1 focus:ring-brand-600 dark:border-white/10 dark:bg-[#111318] dark:text-white dark:focus:border-brand-400 dark:focus:ring-brand-400"
+          class="m3-field block min-h-14 w-full px-4 py-3 text-base"
         />
-        <p class="mt-2 text-xs text-zinc-400">
+        <p class="m3-support mt-2">
           {t.flags.customMemoryHelp}
         </p>
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex justify-end gap-2">
           <button
             id="custom-memory-cancel"
             type="button"
-            class="min-h-11 rounded-full border border-brand-200 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-brand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:border-white/10 dark:text-zinc-200 dark:hover:bg-[#30343b]"
+            class="m3-btn m3-btn-text min-h-10"
           >
             {t.flags.cancel}
           </button>
           <button
             type="submit"
-            class="min-h-11 rounded-full bg-brand-700 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 dark:bg-[#d4e3ff] dark:text-[#102f54] dark:hover:bg-[#b6cefa]"
+            class="m3-btn m3-btn-filled min-h-10"
           >
             {t.flags.apply}
           </button>
@@ -295,6 +418,7 @@ const t = getMessages(locale);
 
 <script>
   type Platform = "unix" | "windows" | "java";
+  type PresetId = "basic" | "aikars" | "zgc" | "shenandoah" | "velocity";
 
   const fileInput = document.querySelector<HTMLInputElement>("#server-file");
   const memoryInput = document.querySelector<HTMLInputElement>("#memory");
@@ -309,6 +433,9 @@ const t = getMessages(locale);
   const cancelMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-cancel");
   const guiCheckbox = document.querySelector<HTMLInputElement>("#enable-gui");
   const restartCheckbox = document.querySelector<HTMLInputElement>("#auto-restart");
+  const ignoreJavaVersionCheckbox =
+    document.querySelector<HTMLInputElement>("#ignore-java-version");
+  const presetButtons = document.querySelectorAll<HTMLButtonElement>(".preset-option");
   const output = document.querySelector<HTMLElement>("#script-output");
   const status = document.querySelector<HTMLElement>("#generator-status");
   const copyButton = document.querySelector<HTMLButtonElement>("#copy-script");
@@ -317,6 +444,107 @@ const t = getMessages(locale);
   const generator = document.querySelector<HTMLElement>("#generator");
 
   let platform: Platform = "unix";
+  let preset: PresetId = "aikars";
+
+  function isPresetId(value: string | undefined): value is PresetId {
+    return (
+      value === "basic" ||
+      value === "aikars" ||
+      value === "zgc" ||
+      value === "shenandoah" ||
+      value === "velocity"
+    );
+  }
+
+  function buildFlags(memoryGb: number): string[] {
+    const memory = Math.round(memoryGb * 1024);
+    const heap = [`-Xms${memory}M`, `-Xmx${memory}M`];
+    const vectorModule = "--add-modules=jdk.incubator.vector";
+    const ignoreJavaVersion = ignoreJavaVersionCheckbox?.checked
+      ? ["-Dpaper.ignoreJavaVersion=true"]
+      : [];
+
+    switch (preset) {
+      case "basic":
+        return [...heap, vectorModule, ...ignoreJavaVersion];
+      case "zgc":
+        return [
+          ...heap,
+          vectorModule,
+          "-XX:+UseZGC",
+          "-XX:+ZGenerational",
+          "-XX:+AlwaysPreTouch",
+          "-XX:+UseStringDeduplication",
+          "-XX:TrimNativeHeapInterval=5000",
+          ...ignoreJavaVersion,
+        ];
+      case "shenandoah":
+        return [
+          ...heap,
+          vectorModule,
+          "-XX:+UseShenandoahGC",
+          "-XX:ShenandoahGCMode=iu",
+          "-XX:ShenandoahGuaranteedGCInterval=1000000",
+          "-XX:+AlwaysPreTouch",
+          "-XX:+DisableExplicitGC",
+          "-XX:AllocatePrefetchStyle=1",
+          ...ignoreJavaVersion,
+        ];
+      case "velocity":
+        return [
+          ...heap,
+          "-XX:+UseG1GC",
+          "-XX:G1HeapRegionSize=4M",
+          "-XX:+UnlockExperimentalVMOptions",
+          "-XX:+ParallelRefProcEnabled",
+          "-XX:+AlwaysPreTouch",
+          "-XX:MaxInlineLevel=15",
+        ];
+      case "aikars": {
+        const largeHeap = Math.floor(memoryGb) >= 12;
+        return [
+          ...heap,
+          vectorModule,
+          "-XX:+UseG1GC",
+          "-XX:+ParallelRefProcEnabled",
+          "-XX:MaxGCPauseMillis=200",
+          "-XX:+UnlockExperimentalVMOptions",
+          "-XX:+DisableExplicitGC",
+          "-XX:+AlwaysPreTouch",
+          `-XX:G1NewSizePercent=${largeHeap ? 40 : 30}`,
+          `-XX:G1MaxNewSizePercent=${largeHeap ? 50 : 40}`,
+          `-XX:G1HeapRegionSize=${largeHeap ? 16 : 8}M`,
+          `-XX:G1ReservePercent=${largeHeap ? 15 : 20}`,
+          "-XX:G1HeapWastePercent=5",
+          "-XX:G1MixedGCCountTarget=4",
+          "-XX:InitiatingHeapOccupancyPercent=15",
+          "-XX:G1MixedGCLiveThresholdPercent=90",
+          "-XX:G1RSetUpdatingPauseTimePercent=5",
+          "-XX:SurvivorRatio=32",
+          "-XX:+PerfDisableSharedMem",
+          "-XX:MaxTenuringThreshold=1",
+          "-Dusing.aikars.flags=https://mcflags.emc.gs",
+          "-Daikars.new.flags=true",
+          ...ignoreJavaVersion,
+        ];
+      }
+    }
+  }
+
+  function syncPresetOptions() {
+    const isProxy = preset === "velocity";
+    const isBasic = preset === "basic";
+
+    if (guiCheckbox) {
+      if (isProxy) guiCheckbox.checked = false;
+      guiCheckbox.disabled = isProxy;
+    }
+
+    if (ignoreJavaVersionCheckbox) {
+      if (isBasic || isProxy) ignoreJavaVersionCheckbox.checked = false;
+      ignoreJavaVersionCheckbox.disabled = isBasic || isProxy;
+    }
+  }
 
   function getGeneratedScript(): string | null {
     if (!fileInput || !memoryInput || !guiCheckbox || !restartCheckbox) return null;
@@ -329,14 +557,14 @@ const t = getMessages(locale);
       return null;
     }
 
-    const memory = Number(memoryInput.value) * 1024;
-    const serverOptions = guiCheckbox.checked ? "" : " --nogui";
-    const javaCommand = `java -Xms${memory}M -Xmx${memory}M -XX:+UseG1GC -jar "${filename}"${serverOptions}`;
+    const memory = Number(memoryInput.value);
+    const flags = buildFlags(memory).join(" ");
+    const serverOptions = preset === "velocity" || guiCheckbox.checked ? "" : " --nogui";
+    const javaCommand = `java ${flags} -jar "${filename}"${serverOptions}`;
 
     if (platform === "windows") {
-      const command = `java -Xms${memory}M -Xmx${memory}M -XX:+UseG1GC -jar "${filename}"${guiCheckbox.checked ? "" : " --nogui"}`;
-      if (!restartCheckbox.checked) return `@echo off\r\ncd /d "%~dp0"\r\n${command}\r\n`;
-      return `@echo off\r\ncd /d "%~dp0"\r\n:run\r\n${command}\r\ntimeout /t 5 /nobreak >nul\r\ngoto run\r\n`;
+      if (!restartCheckbox.checked) return `@echo off\r\ncd /d "%~dp0"\r\n${javaCommand}\r\n`;
+      return `@echo off\r\ncd /d "%~dp0"\r\n:run\r\n${javaCommand}\r\ntimeout /t 5 /nobreak >nul\r\ngoto run\r\n`;
     }
 
     if (platform === "java") return javaCommand;
@@ -358,8 +586,7 @@ const t = getMessages(locale);
       memoryTicks.forEach((tick) => {
         const tickValue = Number(tick.dataset.memoryTick);
         tick.classList.toggle("invisible", tickValue === Number(memoryInput.value));
-        tick.classList.toggle("bg-brand-200", tickValue < Number(memoryInput.value));
-        tick.classList.toggle("dark:bg-brand-400", tickValue < Number(memoryInput.value));
+        tick.classList.toggle("is-passed", tickValue < Number(memoryInput.value));
       });
     }
     const script = getGeneratedScript();
@@ -378,24 +605,37 @@ const t = getMessages(locale);
       if (selectedPlatform !== "unix" && selectedPlatform !== "windows" && selectedPlatform !== "java") return;
       platform = selectedPlatform;
       tabs.forEach((item) => {
-        const selected = item === tab;
-        item.setAttribute("aria-selected", String(selected));
-        item.classList.toggle("bg-brand-700", selected);
-        item.classList.toggle("dark:bg-[#d4e3ff]", selected);
-        item.classList.toggle("text-white", selected);
-        item.classList.toggle("text-zinc-600", !selected);
-        item.classList.toggle("dark:text-zinc-300", !selected);
-        item.classList.toggle("hover:bg-brand-50", !selected);
-        item.classList.toggle("dark:hover:bg-brand-900", !selected);
-        item.classList.toggle("dark:text-[#102f54]", selected);
+        item.setAttribute("aria-selected", String(item === tab));
       });
       renderScript();
     });
   });
 
-  [fileInput, memoryInput, guiCheckbox, restartCheckbox].forEach((input) => {
-    input?.addEventListener("input", renderScript);
-    input?.addEventListener("change", renderScript);
+  [fileInput, memoryInput, guiCheckbox, restartCheckbox, ignoreJavaVersionCheckbox].forEach(
+    (input) => {
+      input?.addEventListener("input", renderScript);
+      input?.addEventListener("change", renderScript);
+    },
+  );
+
+  function syncPresetButtons() {
+    presetButtons.forEach((button) => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.preset === preset),
+      );
+    });
+  }
+
+  presetButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const value = button.dataset.preset;
+      if (!isPresetId(value)) return;
+      preset = value;
+      syncPresetButtons();
+      syncPresetOptions();
+      renderScript();
+    });
   });
 
   openMemoryDialogButton?.addEventListener("click", () => {
@@ -470,12 +710,393 @@ const t = getMessages(locale);
     }
   });
 
+  syncPresetButtons();
+  syncPresetOptions();
   renderScript();
 </script>
 
 <style>
+  #generator {
+    /* Material 3 color roles (blue seed) */
+    --m3-primary: #005ac1;
+    --m3-on-primary: #ffffff;
+    --m3-primary-container: #d8e2ff;
+    --m3-on-primary-container: #001a41;
+    --m3-secondary-container: #dae2f9;
+    --m3-on-secondary-container: #131c2b;
+    --m3-surface: #f9f9ff;
+    --m3-surface-container-lowest: #ffffff;
+    --m3-surface-container-low: #f3f3fa;
+    --m3-surface-container: #ededf4;
+    --m3-surface-container-high: #e8e7ef;
+    --m3-surface-container-highest: #e2e2e9;
+    --m3-on-surface: #1a1b21;
+    --m3-on-surface-variant: #44474f;
+    --m3-outline: #74777f;
+    --m3-outline-variant: #c4c6d0;
+    --m3-inverse-surface: #2f3036;
+    --m3-inverse-on-surface: #f0f0f7;
+    --m3-card-surface: var(--m3-surface-container-low);
+    --m3-option-surface: var(--m3-surface-container-high);
+    --m3-option-surface-hover: var(--m3-surface-container-highest);
+    --m3-code-surface: #2f3036;
+    --m3-code-text: #f0f0f7;
+    --m3-slider-track: var(--m3-surface-container-highest);
+
+    --m3-easing: cubic-bezier(0.2, 0, 0, 1);
+    font-family:
+      "Roboto", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  html.dark #generator {
+    --m3-primary: #adc6ff;
+    --m3-on-primary: #002e69;
+    --m3-primary-container: #004494;
+    --m3-on-primary-container: #d8e2ff;
+    --m3-secondary-container: #3e4759;
+    --m3-on-secondary-container: #dae2f9;
+    --m3-surface: #111318;
+    --m3-surface-container-lowest: #0c0e13;
+    --m3-surface-container-low: #191c20;
+    --m3-surface-container: #1d2024;
+    --m3-surface-container-high: #282a2f;
+    --m3-surface-container-highest: #33353a;
+    --m3-on-surface: #e2e2e9;
+    --m3-on-surface-variant: #c4c6d0;
+    --m3-outline: #8e9099;
+    --m3-outline-variant: #44474f;
+    --m3-inverse-surface: #e2e2e9;
+    --m3-inverse-on-surface: #2f3036;
+    --m3-card-surface: var(--m3-surface-container);
+    --m3-option-surface: var(--m3-surface-container-high);
+    --m3-option-surface-hover: var(--m3-surface-container-highest);
+    --m3-code-surface: var(--m3-surface-container-lowest);
+    --m3-code-text: var(--m3-on-surface);
+    --m3-slider-track: #44474f;
+  }
+
+  .m3-card {
+    background-color: var(--m3-card-surface);
+    border-radius: 1.75rem;
+    color: var(--m3-on-surface);
+  }
+
+  .m3-title {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    color: var(--m3-on-surface);
+  }
+
+  .m3-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--m3-on-surface);
+  }
+
+  .m3-support {
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1rem;
+    color: var(--m3-on-surface-variant);
+  }
+
+  .m3-link {
+    color: var(--m3-primary);
+    font-weight: 500;
+  }
+
+  .m3-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Filled text field */
+  .m3-field {
+    background-color: var(--m3-surface-container-highest);
+    border: 0;
+    border-bottom: 1px solid var(--m3-on-surface-variant);
+    border-radius: 0.75rem 0.75rem 0 0;
+    color: var(--m3-on-surface);
+    outline: none;
+    transition:
+      background-color 180ms var(--m3-easing),
+      border-color 180ms var(--m3-easing),
+      box-shadow 180ms var(--m3-easing);
+  }
+
+  .m3-field:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--m3-on-surface) 4%,
+      var(--m3-surface-container-highest)
+    );
+  }
+
+  .m3-field:focus {
+    border-bottom-color: var(--m3-primary);
+    box-shadow: inset 0 -1px 0 var(--m3-primary);
+  }
+
+  /* List option row */
+  .m3-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 1rem;
+    background-color: var(--m3-option-surface);
+    padding: 1rem;
+    cursor: pointer;
+    transition: background-color 180ms var(--m3-easing);
+  }
+
+  .m3-option:not(:has(input:disabled)):hover {
+    background-color: var(--m3-option-surface-hover);
+  }
+
+  .m3-option:has(input:disabled) {
+    cursor: not-allowed;
+    opacity: 0.38;
+  }
+
+  .m3-option-title {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--m3-on-surface);
+  }
+
+  /* Segmented-style preset buttons */
+  .m3-preset {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--m3-outline-variant);
+    border-radius: 0.75rem;
+    background-color: transparent;
+    color: var(--m3-on-surface);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    transition:
+      background-color 180ms var(--m3-easing),
+      border-color 180ms var(--m3-easing),
+      color 180ms var(--m3-easing);
+  }
+
+  .m3-preset:hover {
+    background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent);
+  }
+
+  .m3-preset[aria-pressed="true"] {
+    background-color: var(--m3-secondary-container);
+    border-color: transparent;
+    color: var(--m3-on-secondary-container);
+  }
+
+  .m3-preset[aria-pressed="true"]:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--m3-on-secondary-container) 8%,
+      var(--m3-secondary-container)
+    );
+  }
+
+  .m3-preset-check {
+    display: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    flex: none;
+  }
+
+  .m3-preset[aria-pressed="true"] .m3-preset-check {
+    display: block;
+  }
+
+  /* Primary tabs */
+  .m3-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .m3-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0 0.5rem;
+    border-radius: 0;
+    color: var(--m3-on-surface-variant);
+    font-weight: 500;
+    transition:
+      background-color 180ms var(--m3-easing),
+      color 180ms var(--m3-easing);
+  }
+
+  .m3-tab::after {
+    content: "";
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0;
+    left: 0.75rem;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background-color: transparent;
+    transition: background-color 180ms var(--m3-easing);
+  }
+
+  .m3-tab:hover {
+    background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent);
+  }
+
+  .m3-tab[aria-selected="true"] {
+    color: var(--m3-primary);
+  }
+
+  .m3-tab[aria-selected="true"]::after {
+    background-color: var(--m3-primary);
+  }
+
+  /* Buttons */
+  .m3-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 1.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    transition:
+      background-color 180ms var(--m3-easing),
+      color 180ms var(--m3-easing);
+  }
+
+  .m3-btn-filled {
+    background-color: var(--m3-primary);
+    color: var(--m3-on-primary);
+  }
+
+  .m3-btn-filled:hover {
+    background-color: color-mix(in srgb, var(--m3-on-primary) 8%, var(--m3-primary));
+  }
+
+  .m3-btn-outlined {
+    border: 1px solid var(--m3-outline);
+    background-color: transparent;
+    color: var(--m3-primary);
+  }
+
+  .m3-btn-outlined:hover {
+    background-color: color-mix(in srgb, var(--m3-primary) 8%, transparent);
+  }
+
+  .m3-btn-text {
+    background-color: transparent;
+    color: var(--m3-primary);
+    padding: 0 1rem;
+  }
+
+  .m3-btn-text:hover {
+    background-color: color-mix(in srgb, var(--m3-primary) 8%, transparent);
+  }
+
+  .m3-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    color: var(--m3-on-surface-variant);
+    transition:
+      background-color 180ms var(--m3-easing),
+      color 180ms var(--m3-easing);
+  }
+
+  .m3-icon-btn:hover {
+    background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent);
+    color: var(--m3-on-surface);
+  }
+
+  /* Slider */
+  .m3-slider-track {
+    background-color: var(--m3-slider-track);
+  }
+
+  .m3-slider-fill {
+    background-color: var(--m3-primary);
+  }
+
+  .m3-slider-tick {
+    background-color: var(--m3-on-surface-variant);
+  }
+
+  .m3-slider-tick.is-passed {
+    background-color: var(--m3-on-primary);
+  }
+
+  .m3-slider-thumb {
+    background-color: var(--m3-primary);
+    box-shadow: 0 0 0 2px var(--m3-card-surface);
+  }
+
+  .m3-memory-preset {
+    color: var(--m3-on-surface-variant);
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  .m3-memory-preset:hover {
+    color: var(--m3-primary);
+  }
+
+  /* Code block */
+  .m3-code {
+    background-color: var(--m3-code-surface);
+    color: var(--m3-code-text);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  /* Dialog */
+  .m3-dialog {
+    background-color: var(--m3-surface-container-high);
+    color: var(--m3-on-surface);
+    border: 0;
+    border-radius: 1.75rem;
+    box-shadow:
+      0 8px 12px 6px rgb(0 0 0 / 0.15),
+      0 4px 4px rgb(0 0 0 / 0.3);
+  }
+
+  .m3-dialog::backdrop {
+    background-color: rgb(0 0 0 / 0.4);
+  }
+
+  .m3-dialog-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 2rem;
+    color: var(--m3-on-surface);
+  }
+
+  .m3-preset:focus-visible,
+  .m3-tab:focus-visible,
+  .m3-btn:focus-visible {
+    outline: 3px solid var(--m3-primary);
+    outline-offset: 2px;
+  }
+
   #memory:focus-visible + .memory-slider-track {
-    outline: 2px solid #60a5fa;
+    outline: 2px solid var(--m3-primary);
     outline-offset: 4px;
   }
 </style>

@@ -218,6 +218,33 @@ const messages = {
     guiHelp: "勾選後會移除 --nogui 參數。",
     autoRestart: "伺服器結束後自動重啟",
     restartHelp: "每次結束後等待 5 秒再啟動；按 Ctrl+C 可停止。",
+    ignoreJavaVersion: "忽略 Java 版本",
+    ignoreJavaVersionHelp: "加入 -Dpaper.ignoreJavaVersion=true 參數。",
+    presetHeading: "啟動參數",
+    presetHelp: "依照伺服器類型選擇適合的 JVM 參數。",
+    presets: {
+      basic: {
+        name: "Basic",
+        description: "不加任何特殊參數，使用 Java 預設設定。",
+      },
+      aikars: {
+        name: "Aikar's Flags",
+        description: "適合 Paper 的最佳化參數，適用於大多數情況。",
+      },
+      zgc: {
+        name: "ZGC",
+        description: "低 GC 延遲的現代參數，但記憶體用量較高（Java 21+）。",
+      },
+      shenandoah: {
+        name: "Shenandoah",
+        description: "另一種低 GC 延遲的參數（建議使用 Temurin JDK）。",
+      },
+      velocity: {
+        name: "Velocity / Proxy",
+        description: "為代理伺服器最佳化的參數。",
+      },
+    },
+    learnMore: "深入了解",
     outputFormat: "選擇輸出格式",
     javaCommand: "Java 指令",
     copy: "複製",
@@ -235,6 +262,9 @@ const messages = {
     attributionStart: "此頁面為獨立實作，功能設計靈感來自 ",
     attributionBy: "，由 ",
     attributionEnd: " 製作；未使用其原始碼。",
+    presetAttributionStart: "參數預設組合改編自 ",
+    presetAttributionLink: "Flectone Tools 伺服器參數產生器",
+    presetAttributionEnd: "，以及各預設組合所連結的官方文件。",
   },
 } as const;
 
