@@ -125,6 +125,25 @@ implementation is original and inspired by [flags.sh](https://flags.sh/) by
 [YouHaveTrouble](https://github.com/YouHaveTrouble/flags.sh) — no flags.sh source code is
 used.
 
+## Special thanks
+
+Built with [Astro](https://astro.build) (MIT), [Tailwind CSS](https://tailwindcss.com) (MIT),
+[@material/web](https://github.com/material-components/material-web) and
+[Material Symbols](https://fonts.google.com/icons) (Apache-2.0, Google), and TypeScript
+(Apache-2.0). Data and downloads come from [Modrinth](https://modrinth.com),
+[CurseForge](https://www.curseforge.com), [Adoptium](https://adoptium.net), and
+[Prism Launcher](https://prismlauncher.org) (GPL-3.0).
+
+The flags generator is inspired by [flags.sh](https://flags.sh) (MIT) and uses values from
+[Flectone](https://flectone.net/en/tools/server-flags-generator) and
+[Aikar's flags](https://docs.papermc.io/paper/aikars-flags) (PaperMC docs, BSD-2-Clause). Thanks
+also to CaffeineMC ([Sodium](https://modrinth.com/mod/sodium)), the
+[Iris Shaders](https://modrinth.com/mod/iris) team, embeddedt
+([ModernFix](https://modrinth.com/mod/modernfix)), lucko ([spark](https://modrinth.com/mod/spark)),
+every mod author in DBOP, and every project in the [useful websites directory](lists/useful-websites.md).
+
+Minecraft is a trademark of Mojang Studios and Microsoft. This is an unofficial community project.
+
 ## Tests
 
 ```bash
