@@ -1,0 +1,98 @@
+---
+import SmallCard from "./Small-Card.astro";
+import type { WebsiteLink } from "../lib/website-links";
+
+interface Props {
+  websites: WebsiteLink[];
+  locale: string;
+  searchId: string;
+  listId: string;
+  searchLabel: string;
+  searchPlaceholder: string;
+  foundTemplate: string;
+  notFoundTemplate: string;
+  totalTemplate: string;
+}
+
+const {
+  websites,
+  locale,
+  searchId,
+  listId,
+  searchLabel,
+  searchPlaceholder,
+  foundTemplate,
+  notFoundTemplate,
+  totalTemplate,
+} = Astro.props;
+---
+
+<section class="mx-auto max-w-screen-xl px-5 pb-20 sm:px-8 lg:px-10">
+  <div class="mb-6 rounded-2xl border border-brand-100 bg-brand-50/70 p-4 dark:border-white/10 dark:bg-[#1c1f25] sm:p-5">
+    <label for={searchId} class="sr-only">{searchLabel}</label>
+    <input
+      id={searchId}
+      type="search"
+      placeholder={searchPlaceholder}
+      aria-controls={listId}
+      data-website-search
+      class="block w-full min-w-0 rounded-xl border border-brand-200 bg-white px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 dark:border-white/10 dark:bg-[#111318] dark:text-white dark:placeholder:text-zinc-500 sm:text-sm"
+    />
+    <p
+      class="mt-3 text-xs font-medium text-zinc-500 dark:text-zinc-400"
+      role="status"
+      aria-live="polite"
+      data-website-search-status
+      data-found-template={foundTemplate}
+      data-not-found-template={notFoundTemplate}
+      data-total-template={totalTemplate}
+    ></p>
+  </div>
+  <div id={listId} class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    {websites.map((website) => <SmallCard locale={locale} {...website} />)}
+  </div>
+</section>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>(
+    "[data-website-search]",
+  );
+  const resultStatus = document.querySelector<HTMLElement>(
+    "[data-website-search-status]",
+  );
+  const listId = searchInput?.getAttribute("aria-controls");
+  const cards = listId
+    ? Array.from(
+        document.querySelectorAll<HTMLAnchorElement>(`#${CSS.escape(listId)} > a`),
+      )
+    : [];
+
+  if (searchInput && resultStatus) {
+    const format = (template: string | undefined, placeholder: string, value: string) =>
+      (template ?? "").replace(placeholder, value);
+    const filterCards = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      for (const card of cards) {
+        const searchableText = `${card.textContent ?? ""} ${card.href}`.toLowerCase();
+        const isMatch = searchableText.includes(query);
+        card.style.display = isMatch ? "" : "none";
+        if (isMatch) visibleCount++;
+      }
+
+      resultStatus.textContent = query
+        ? visibleCount > 0
+          ? format(resultStatus.dataset.foundTemplate, "{count}", String(visibleCount))
+          : format(
+              resultStatus.dataset.notFoundTemplate,
+              "{query}",
+              searchInput.value.trim(),
+            )
+        : format(resultStatus.dataset.totalTemplate, "{count}", String(visibleCount));
+    };
+
+    searchInput.addEventListener("input", filterCards);
+    filterCards();
+  }
+</script>
