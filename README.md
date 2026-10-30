@@ -1,8 +1,8 @@
 # DBOP Install Tutorial
 
-A bilingual (English / 繁體中文) Astro site that walks through installing and running a
-Minecraft server with **Dragon Block Origin: Project** (DBOP), alongside a curated list of
-Minecraft resources and a Minecraft server launch-flag generator.
+A bilingual (English / 繁體中文) Astro site for **DBOP — DirtTW's Basement Optimize Pack**, a
+Minecraft optimization modpack. It hosts the step-by-step installation guide, modpack
+recommendations, a directory of useful websites, and a Minecraft server launch-flag generator.
 
 **Live site:** https://dirttw.github.io/DBOP-Installtutorial/
 
