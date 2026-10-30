@@ -12,6 +12,45 @@ interface Props {
 
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
 const t = getMessages(locale);
+
+type PresetOption = {
+  id: string;
+  label: string;
+  description: string;
+  href?: string;
+};
+
+const presetOptions: PresetOption[] = [
+  {
+    id: "basic",
+    label: t.flags.presets.basic.name,
+    description: t.flags.presets.basic.description,
+  },
+  {
+    id: "aikars",
+    label: t.flags.presets.aikars.name,
+    description: t.flags.presets.aikars.description,
+    href: "https://docs.papermc.io/paper/aikars-flags/",
+  },
+  {
+    id: "zgc",
+    label: t.flags.presets.zgc.name,
+    description: t.flags.presets.zgc.description,
+    href: "https://obydux.github.io/Minecraft-startup-flags/",
+  },
+  {
+    id: "shenandoah",
+    label: t.flags.presets.shenandoah.name,
+    description: t.flags.presets.shenandoah.description,
+    href: "https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks",
+  },
+  {
+    id: "velocity",
+    label: t.flags.presets.velocity.name,
+    description: t.flags.presets.velocity.description,
+    href: "https://docs.papermc.io/velocity/getting-started/",
+  },
+];
 ---
 
 <Layout title={t.flags.title} locale={locale}>
@@ -166,7 +205,69 @@ const t = getMessages(locale);
             </span>
           </span>
         </label>
+
+        <label
+          id="ignore-java-option"
+          class="flex cursor-pointer items-center gap-3 rounded-2xl border border-brand-100 bg-brand-50/40 p-4 transition-colors hover:bg-brand-50 md:col-span-2 dark:border-white/10 dark:bg-[#111318]/60 dark:hover:bg-[#111318]"
+        >
+          <input
+            id="ignore-java-version"
+            type="checkbox"
+            role="switch"
+            class="shrink-0"
+          />
+          <span>
+            <span class="block text-sm font-medium text-zinc-900 dark:text-white">{t.flags.ignoreJavaVersion}</span>
+            <span class="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">
+              {t.flags.ignoreJavaVersionHelp}
+            </span>
+          </span>
+        </label>
       </div>
+
+      <section class="mt-5 rounded-[1.75rem] border border-brand-100 bg-white p-4 shadow-sm sm:mt-6 sm:p-6 dark:border-white/10 dark:bg-[#1c1f25]">
+        <div>
+          <h2 class="text-sm font-semibold text-zinc-900 dark:text-white">
+            {t.flags.presetHeading}
+          </h2>
+          <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+            {t.flags.presetHelp}
+          </p>
+        </div>
+        <ul
+          class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-5"
+          aria-label={t.flags.presetHeading}
+        >
+          {presetOptions.map((option) => (
+            <li class="flex flex-col">
+              <button
+                type="button"
+                class="preset-option min-h-11 w-full rounded-xl border border-brand-200 bg-brand-50/50 px-3 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-brand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 dark:border-white/10 dark:bg-[#111318]/60 dark:text-zinc-200 dark:hover:bg-[#111318]"
+                aria-pressed={option.id === "aikars" ? "true" : "false"}
+                data-preset={option.id}
+              >
+                {option.label}
+              </button>
+              <p class="mt-2 text-xs leading-5 text-zinc-500 dark:text-zinc-400">
+                {option.description}
+                {option.href && (
+                  <>
+                    {" "}
+                    <a
+                      class="whitespace-nowrap font-medium text-brand-700 hover:underline dark:text-brand-300"
+                      href={option.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t.flags.learnMore}
+                    </a>
+                  </>
+                )}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <section class="mt-6 overflow-hidden rounded-[1.75rem] border border-brand-100 bg-white shadow-sm sm:mt-8 dark:border-white/10 dark:bg-[#1c1f25]">
         <div class="flex flex-col gap-3 border-b border-brand-100 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4 dark:border-white/10">
@@ -245,6 +346,16 @@ const t = getMessages(locale);
         >YouHaveTrouble</a>
         {t.flags.attributionEnd}
       </p>
+      <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+        {t.flags.presetAttributionStart}
+        <a
+          class="font-medium text-brand-700 hover:underline dark:text-brand-300"
+          href="https://flectone.net/en/tools/server-flags-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+        >{t.flags.presetAttributionLink}</a>
+        {t.flags.presetAttributionEnd}
+      </p>
     </section>
     <dialog
       id="custom-memory-dialog"
@@ -295,6 +406,7 @@ const t = getMessages(locale);
 
 <script>
   type Platform = "unix" | "windows" | "java";
+  type PresetId = "basic" | "aikars" | "zgc" | "shenandoah" | "velocity";
 
   const fileInput = document.querySelector<HTMLInputElement>("#server-file");
   const memoryInput = document.querySelector<HTMLInputElement>("#memory");
@@ -308,7 +420,13 @@ const t = getMessages(locale);
   const openMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-open");
   const cancelMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-cancel");
   const guiCheckbox = document.querySelector<HTMLInputElement>("#enable-gui");
+  const guiOption = document.querySelector<HTMLElement>("#enable-gui")?.closest("label");
   const restartCheckbox = document.querySelector<HTMLInputElement>("#auto-restart");
+  const ignoreJavaVersionCheckbox =
+    document.querySelector<HTMLInputElement>("#ignore-java-version");
+  const ignoreJavaVersionOption =
+    document.querySelector<HTMLElement>("#ignore-java-option");
+  const presetButtons = document.querySelectorAll<HTMLButtonElement>(".preset-option");
   const output = document.querySelector<HTMLElement>("#script-output");
   const status = document.querySelector<HTMLElement>("#generator-status");
   const copyButton = document.querySelector<HTMLButtonElement>("#copy-script");
@@ -317,6 +435,117 @@ const t = getMessages(locale);
   const generator = document.querySelector<HTMLElement>("#generator");
 
   let platform: Platform = "unix";
+  let preset: PresetId = "aikars";
+
+  function isPresetId(value: string | undefined): value is PresetId {
+    return (
+      value === "basic" ||
+      value === "aikars" ||
+      value === "zgc" ||
+      value === "shenandoah" ||
+      value === "velocity"
+    );
+  }
+
+  function buildFlags(memoryGb: number): string[] {
+    const memory = Math.round(memoryGb * 1024);
+    const heap = [`-Xms${memory}M`, `-Xmx${memory}M`];
+    const vectorModule = "--add-modules=jdk.incubator.vector";
+    const ignoreJavaVersion = ignoreJavaVersionCheckbox?.checked
+      ? ["-Dpaper.ignoreJavaVersion=true"]
+      : [];
+
+    switch (preset) {
+      case "basic":
+        return [...heap, vectorModule, ...ignoreJavaVersion];
+      case "zgc":
+        return [
+          ...heap,
+          vectorModule,
+          "-XX:+UseZGC",
+          "-XX:+ZGenerational",
+          "-XX:+AlwaysPreTouch",
+          "-XX:+UseStringDeduplication",
+          "-XX:TrimNativeHeapInterval=5000",
+          ...ignoreJavaVersion,
+        ];
+      case "shenandoah":
+        return [
+          ...heap,
+          vectorModule,
+          "-XX:+UseShenandoahGC",
+          "-XX:ShenandoahGCMode=iu",
+          "-XX:ShenandoahGuaranteedGCInterval=1000000",
+          "-XX:+AlwaysPreTouch",
+          "-XX:+DisableExplicitGC",
+          "-XX:AllocatePrefetchStyle=1",
+          ...ignoreJavaVersion,
+        ];
+      case "velocity":
+        return [
+          ...heap,
+          "-XX:+UseG1GC",
+          "-XX:G1HeapRegionSize=4M",
+          "-XX:+UnlockExperimentalVMOptions",
+          "-XX:+ParallelRefProcEnabled",
+          "-XX:+AlwaysPreTouch",
+          "-XX:MaxInlineLevel=15",
+        ];
+      case "aikars": {
+        const largeHeap = Math.floor(memoryGb) >= 12;
+        return [
+          ...heap,
+          vectorModule,
+          "-XX:+UseG1GC",
+          "-XX:+ParallelRefProcEnabled",
+          "-XX:MaxGCPauseMillis=200",
+          "-XX:+UnlockExperimentalVMOptions",
+          "-XX:+DisableExplicitGC",
+          "-XX:+AlwaysPreTouch",
+          `-XX:G1NewSizePercent=${largeHeap ? 40 : 30}`,
+          `-XX:G1MaxNewSizePercent=${largeHeap ? 50 : 40}`,
+          `-XX:G1HeapRegionSize=${largeHeap ? 16 : 8}M`,
+          `-XX:G1ReservePercent=${largeHeap ? 15 : 20}`,
+          "-XX:G1HeapWastePercent=5",
+          "-XX:G1MixedGCCountTarget=4",
+          "-XX:InitiatingHeapOccupancyPercent=15",
+          "-XX:G1MixedGCLiveThresholdPercent=90",
+          "-XX:G1RSetUpdatingPauseTimePercent=5",
+          "-XX:SurvivorRatio=32",
+          "-XX:+PerfDisableSharedMem",
+          "-XX:MaxTenuringThreshold=1",
+          "-Dusing.aikars.flags=https://mcflags.emc.gs",
+          "-Daikars.new.flags=true",
+          ...ignoreJavaVersion,
+        ];
+      }
+    }
+  }
+
+  function syncPresetOptions() {
+    const isProxy = preset === "velocity";
+    const isBasic = preset === "basic";
+
+    if (guiCheckbox) {
+      if (isProxy) guiCheckbox.checked = false;
+      guiCheckbox.disabled = isProxy;
+    }
+    guiOption?.classList.toggle("opacity-60", isProxy);
+    guiOption?.classList.toggle("cursor-pointer", !isProxy);
+    guiOption?.classList.toggle("cursor-not-allowed", isProxy);
+
+    if (ignoreJavaVersionCheckbox) {
+      if (isBasic || isProxy) ignoreJavaVersionCheckbox.checked = false;
+      ignoreJavaVersionCheckbox.disabled = isBasic || isProxy;
+    }
+    const isIgnoreDisabled = isBasic || isProxy;
+    ignoreJavaVersionOption?.classList.toggle("opacity-60", isIgnoreDisabled);
+    ignoreJavaVersionOption?.classList.toggle("cursor-pointer", !isIgnoreDisabled);
+    ignoreJavaVersionOption?.classList.toggle(
+      "cursor-not-allowed",
+      isIgnoreDisabled,
+    );
+  }
 
   function getGeneratedScript(): string | null {
     if (!fileInput || !memoryInput || !guiCheckbox || !restartCheckbox) return null;
@@ -329,14 +558,14 @@ const t = getMessages(locale);
       return null;
     }
 
-    const memory = Number(memoryInput.value) * 1024;
-    const serverOptions = guiCheckbox.checked ? "" : " --nogui";
-    const javaCommand = `java -Xms${memory}M -Xmx${memory}M -XX:+UseG1GC -jar "${filename}"${serverOptions}`;
+    const memory = Number(memoryInput.value);
+    const flags = buildFlags(memory).join(" ");
+    const serverOptions = preset === "velocity" || guiCheckbox.checked ? "" : " --nogui";
+    const javaCommand = `java ${flags} -jar "${filename}"${serverOptions}`;
 
     if (platform === "windows") {
-      const command = `java -Xms${memory}M -Xmx${memory}M -XX:+UseG1GC -jar "${filename}"${guiCheckbox.checked ? "" : " --nogui"}`;
-      if (!restartCheckbox.checked) return `@echo off\r\ncd /d "%~dp0"\r\n${command}\r\n`;
-      return `@echo off\r\ncd /d "%~dp0"\r\n:run\r\n${command}\r\ntimeout /t 5 /nobreak >nul\r\ngoto run\r\n`;
+      if (!restartCheckbox.checked) return `@echo off\r\ncd /d "%~dp0"\r\n${javaCommand}\r\n`;
+      return `@echo off\r\ncd /d "%~dp0"\r\n:run\r\n${javaCommand}\r\ntimeout /t 5 /nobreak >nul\r\ngoto run\r\n`;
     }
 
     if (platform === "java") return javaCommand;
@@ -393,9 +622,56 @@ const t = getMessages(locale);
     });
   });
 
-  [fileInput, memoryInput, guiCheckbox, restartCheckbox].forEach((input) => {
-    input?.addEventListener("input", renderScript);
-    input?.addEventListener("change", renderScript);
+  [fileInput, memoryInput, guiCheckbox, restartCheckbox, ignoreJavaVersionCheckbox].forEach(
+    (input) => {
+      input?.addEventListener("input", renderScript);
+      input?.addEventListener("change", renderScript);
+    },
+  );
+
+  const presetSelectedClasses = [
+    "border-brand-700",
+    "bg-brand-700",
+    "text-white",
+    "hover:bg-brand-800",
+    "dark:border-[#d4e3ff]",
+    "dark:bg-[#d4e3ff]",
+    "dark:text-[#102f54]",
+    "dark:hover:bg-[#b6cefa]",
+  ];
+  const presetUnselectedClasses = [
+    "border-brand-200",
+    "bg-brand-50/50",
+    "text-zinc-700",
+    "hover:bg-brand-100",
+    "dark:border-white/10",
+    "dark:bg-[#111318]/60",
+    "dark:text-zinc-200",
+    "dark:hover:bg-[#111318]",
+  ];
+
+  function syncPresetButtons() {
+    presetButtons.forEach((button) => {
+      const selected = button.dataset.preset === preset;
+      button.setAttribute("aria-pressed", String(selected));
+      presetSelectedClasses.forEach((className) =>
+        button.classList.toggle(className, selected),
+      );
+      presetUnselectedClasses.forEach((className) =>
+        button.classList.toggle(className, !selected),
+      );
+    });
+  }
+
+  presetButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const value = button.dataset.preset;
+      if (!isPresetId(value)) return;
+      preset = value;
+      syncPresetButtons();
+      syncPresetOptions();
+      renderScript();
+    });
   });
 
   openMemoryDialogButton?.addEventListener("click", () => {
@@ -470,6 +746,8 @@ const t = getMessages(locale);
     }
   });
 
+  syncPresetButtons();
+  syncPresetOptions();
   renderScript();
 </script>
 

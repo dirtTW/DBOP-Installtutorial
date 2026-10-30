@@ -221,6 +221,34 @@ const messages = {
     guiHelp: "When enabled, the --nogui argument is removed.",
     autoRestart: "Automatically restart the server",
     restartHelp: "Wait 5 seconds after each exit before restarting; press Ctrl+C to stop.",
+    ignoreJavaVersion: "Ignore Java version",
+    ignoreJavaVersionHelp: "Adds the -Dpaper.ignoreJavaVersion=true flag.",
+    presetHeading: "Flags",
+    presetHelp: "Choose the JVM flags that match your server type.",
+    presets: {
+      basic: {
+        name: "Basic",
+        description: "Runs Java without special flags (default settings).",
+      },
+      aikars: {
+        name: "Aikar's Flags",
+        description: "Optimal flags for Paper. Suitable for most cases.",
+      },
+      zgc: {
+        name: "ZGC",
+        description:
+          "Modern flags with low GC latency, but higher memory consumption (Java 21+).",
+      },
+      shenandoah: {
+        name: "Shenandoah",
+        description: "Alternative flags with low GC latency (Temurin JDK recommended).",
+      },
+      velocity: {
+        name: "Velocity / Proxy",
+        description: "Optimized flags for a proxy server.",
+      },
+    },
+    learnMore: "Learn more",
     outputFormat: "Choose output format",
     javaCommand: "Java command",
     copy: "Copy",
@@ -241,6 +269,9 @@ const messages = {
     attributionStart: "This page is an independent implementation inspired by ",
     attributionBy: " by ",
     attributionEnd: ". It does not use its source code.",
+    presetAttributionStart: "Flag presets are adapted from the ",
+    presetAttributionLink: "Flectone Tools server flags generator",
+    presetAttributionEnd: " and the documentation linked by each preset.",
   },
 } as const;
 
