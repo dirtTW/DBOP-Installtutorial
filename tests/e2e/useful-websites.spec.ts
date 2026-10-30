@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const card = "#useful-website-list > a";
 const status = "[data-website-search-status]";
-const search = "[data-website-search]";
+const search = "[data-website-search] input";
 
 test.describe("unified useful websites directory", () => {
   test.beforeEach(async ({ page }) => {

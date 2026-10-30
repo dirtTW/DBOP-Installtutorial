@@ -22,6 +22,12 @@ const t = getMessages(locale);
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="sitemap" href="/sitemap-0.xml" />
     <link rel="icon" type="image/svg+xml" href={favicon.src} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..600,0..1,-50..200&family=Roboto:wght@400;500;700&display=block"
+    />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="theme-color" content="#f9f9ff" />
@@ -35,10 +41,10 @@ const t = getMessages(locale);
       );
     </script>
   </head>
-  <body class="min-h-screen bg-[var(--m3-surface)] text-[var(--m3-on-surface)]">
+  <body class="min-h-screen bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)]">
     <slot />
     <script>
-      const navToggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+      const navToggle = document.querySelector<HTMLElement>("[data-nav-toggle]");
       const navMenu = document.querySelector<HTMLElement>("#navbar-menu");
       const languageMenu = document.querySelector<HTMLDetailsElement>("nav details");
 
@@ -79,9 +85,9 @@ const t = getMessages(locale);
       }
 
       let themeTransitionTimeout: number | undefined;
-      document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+      document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((button) => {
         const updateThemeLabel = (isDark: boolean) => {
-          button.setAttribute("aria-pressed", String(isDark));
+          button.toggleAttribute("selected", isDark);
           button.setAttribute(
             "aria-label",
             isDark ? button.dataset.lightLabel ?? "" : button.dataset.darkLabel ?? "",

@@ -56,10 +56,10 @@ test.describe("server flags generator presets", () => {
   test("velocity preset drops --nogui and disables the GUI switch", async ({
     page,
   }) => {
-    await page.locator("#enable-gui").check();
+    await page.locator("#enable-gui input").check();
     await page.getByRole("button", { name: "Velocity / Proxy" }).click();
 
-    const gui = page.locator("#enable-gui");
+    const gui = page.locator("#enable-gui input");
     await expect(gui).toBeDisabled();
     await expect(gui).not.toBeChecked();
     await expect(page.locator(output)).toContainText("-XX:MaxInlineLevel=15");
@@ -67,7 +67,7 @@ test.describe("server flags generator presets", () => {
   });
 
   test("ignore Java version adds the Paper property", async ({ page }) => {
-    const ignoreVersion = page.locator("#ignore-java-version");
+    const ignoreVersion = page.locator("#ignore-java-version input");
     await ignoreVersion.check();
 
     await expect(page.locator(output)).toContainText(

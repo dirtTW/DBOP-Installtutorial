@@ -24,6 +24,8 @@ from the sitemap.
 
 - **Astro 7** with file-based routing and static output
 - **Tailwind CSS 4** through the Vite plugin
+- **@material/web 2** (Google's Material 3 web components) for interactive controls
+- **Material Symbols Outlined** + Roboto from Google Fonts
 - **TypeScript** (checked during `npm run build` via `astro check`)
 - **Vitest** for unit tests, **Playwright** for end-to-end tests
 - Deployed to **GitHub Pages** by GitHub Actions
@@ -96,9 +98,11 @@ The navbar toggle switches between light and dark mode, persists the choice in
 `localStorage`, and falls back to the operating system preference.
 
 The whole site uses a Material 3 (Material You) design system. Color roles are defined once in
-`src/styles/global.css` under `:root` / `html.dark`, and reusable `md3-*` classes cover the app
-bar, buttons, chips, cards, search bar, and typography. Those classes live in
-`@layer components`, so page-level Tailwind utilities still override them when needed.
+`src/styles/global.css` under `:root` / `html.dark` as `--md-sys-color-*` tokens, which style the
+`@material/web` components directly. Buttons, icon buttons, text fields, chips, switches, sliders,
+tabs, and the dialog are official `md-*` custom elements; only the layout surfaces with no
+upstream component (cards, panels, the search-bar skin) keep a small set of local classes.
+Tailwind handles layout and typography. Icons come from Material Symbols Outlined.
 
 ## Flags generator
 

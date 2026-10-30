@@ -205,61 +205,43 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
     description={t.pages.modpacksDescription}
   />
   <section class="mx-auto max-w-screen-xl px-4 pb-8 sm:px-8 sm:pb-20 lg:px-10">
-    <div class="md3-panel p-3 sm:p-5">
-      <div class="md3-search" role="search">
-        <svg
-          class="md3-search-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="7"></circle>
-          <path d="m20 20-3.4-3.4"></path>
-        </svg>
-        <label for="modpack-search" class="sr-only">
-          {t.search.modpacksLabel}
-        </label>
-        <input
+    <div class="surface-panel p-3 sm:p-5">
+      <div role="search">
+        <md-outlined-text-field
           id="modpack-search"
           type="search"
+          class="search-field"
+          aria-label={t.search.modpacksLabel}
           placeholder={t.search.modpacksPlaceholder}
           aria-controls="modpack-list"
           autocomplete="off"
           spellcheck="false"
-          class="md3-search-input"
-        />
-        <button
-          id="modpack-search-clear"
-          type="button"
-          class="md3-search-clear"
-          aria-label={t.search.clearSearch}
-          hidden
+          has-leading-icon
+          has-trailing-icon
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            aria-hidden="true"
+          <span slot="leading-icon" class="material-symbols-outlined" aria-hidden="true">search</span>
+          <md-icon-button
+            slot="trailing-icon"
+            id="modpack-search-clear"
+            type="button"
+            aria-label={t.search.clearSearch}
+            class="[--md-icon-button-icon-color:var(--md-sys-color-on-surface-variant)]"
+            hidden
           >
-            <path d="m6 6 12 12M18 6 6 18"></path>
-          </svg>
-        </button>
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </md-icon-button>
+        </md-outlined-text-field>
       </div>
       <p
         id="modpack-search-status"
-        class="md3-search-status"
+        class="mt-3 px-4 text-xs font-medium leading-4 text-[var(--md-sys-color-on-surface-variant)]"
         role="status"
         aria-live="polite"
         data-found-template={t.search.foundModpacks}
         data-not-found-template={t.search.noModpacks}
         data-total-template={t.search.totalModpacks}
       ></p>
-      <div id="modpack-list" class="md3-stack mt-3">
+      <div id="modpack-list" class="mt-3 grid gap-3">
         {recommendations.map((recommendation) => (
           <Card locale={locale} {...recommendation} />
         ))}
@@ -268,17 +250,14 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
   </section>
 </main>
 
-<style>
-  #modpack-list {
-    gap: 0.75rem;
-  }
-</style>
-
 <script>
-  const searchInput =
-    document.querySelector<HTMLInputElement>("#modpack-search");
-  const clearButton =
-    document.querySelector<HTMLButtonElement>("#modpack-search-clear");
+  import "@material/web/textfield/outlined-text-field.js";
+  import "@material/web/iconbutton/icon-button.js";
+
+  type TextField = HTMLElement & { value: string; focus(): void };
+
+  const searchInput = document.querySelector<TextField>("#modpack-search");
+  const clearButton = document.querySelector<HTMLElement>("#modpack-search-clear");
   const resultStatus = document.querySelector<HTMLElement>(
     "#modpack-search-status",
   );
@@ -322,8 +301,9 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
 
     clearButton?.addEventListener("click", clearSearch);
     searchInput.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && searchInput.value) {
-        event.preventDefault();
+      const keyboardEvent = event as KeyboardEvent;
+      if (keyboardEvent.key === "Escape" && searchInput.value) {
+        keyboardEvent.preventDefault();
         clearSearch();
       }
     });

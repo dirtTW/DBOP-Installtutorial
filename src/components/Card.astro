@@ -73,11 +73,11 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     <h2 class="m3-modpack-name">{displayName}</h2>
     <p class="m3-modpack-desc">{description}</p>
     <div class="m3-modpack-meta">
-      <span class="m3-chip">
+      <span class="meta-chip">
         {t.cards.version} <strong>{version}</strong>
       </span>
       {gameVersions.length > 0 && (
-        <span class="m3-chip">
+        <span class="meta-chip">
           {t.cards.supportedVersions} <strong>{gameVersions.join(", ")}</strong>
         </span>
       )}
@@ -90,16 +90,22 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     ]}
   >
     {isModrinthLinkValid && (
-      <a class="m3-download m3-download--modrinth" href={modrinthlink}>
-        <i class="md-logo" aria-hidden="true" />
+      <md-filled-button
+        class="m3-download m3-download--modrinth w-full"
+        href={modrinthlink}
+      >
+        <i slot="icon" class="md-logo" aria-hidden="true"></i>
         {t.cards.downloadModrinthShort}
-      </a>
+      </md-filled-button>
     )}
     {isCurseforgeLinkValid && (
-      <a class="m3-download m3-download--curseforge" href={curseforgelink}>
-        <i class="cf-logo" aria-hidden="true" />
+      <md-filled-button
+        class="m3-download m3-download--curseforge w-full"
+        href={curseforgelink}
+      >
+        <i slot="icon" class="cf-logo" aria-hidden="true"></i>
         {t.cards.downloadCurseforgeShort}
-      </a>
+      </md-filled-button>
     )}
   </div>
 </article>
@@ -112,15 +118,15 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     gap: 0.75rem;
     padding: 0.875rem;
     border-radius: 1.5rem;
-    background-color: var(--m3-item-surface);
-    transition: background-color 180ms var(--m3-easing);
+    background-color: var(--surface-item);
+    transition: background-color 180ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   .m3-modpack:hover {
     background-color: color-mix(
       in srgb,
-      var(--m3-on-surface) 4%,
-      var(--m3-item-surface)
+      var(--md-sys-color-on-surface) 4%,
+      var(--surface-item)
     );
   }
 
@@ -129,7 +135,7 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 1rem;
-    background-color: var(--m3-surface-container-high);
+    background-color: var(--md-sys-color-surface-container-high);
     object-fit: cover;
   }
 
@@ -142,7 +148,7 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     font-size: 1rem;
     font-weight: 500;
     line-height: 1.5rem;
-    color: var(--m3-on-surface);
+    color: var(--md-sys-color-on-surface);
     overflow-wrap: anywhere;
   }
 
@@ -150,7 +156,7 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     margin-top: 0.125rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
-    color: var(--m3-on-surface-variant);
+    color: var(--md-sys-color-on-surface-variant);
   }
 
   .m3-modpack-meta {
@@ -160,22 +166,22 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     margin-top: 0.625rem;
   }
 
-  .m3-chip {
+  .meta-chip {
     display: inline-flex;
     align-items: center;
     min-height: 1.75rem;
     padding: 0 0.625rem;
-    border: 1px solid var(--m3-outline-variant);
+    border: 1px solid var(--md-sys-color-outline-variant);
     border-radius: 0.5rem;
-    color: var(--m3-on-surface-variant);
+    color: var(--md-sys-color-on-surface-variant);
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1rem;
   }
 
-  .m3-chip strong {
+  .meta-chip strong {
     margin-left: 0.25rem;
-    color: var(--m3-on-surface);
+    color: var(--md-sys-color-on-surface);
     font-weight: 600;
   }
 
@@ -190,49 +196,28 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
   }
 
   .m3-download {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    min-height: 2.75rem;
-    padding: 0 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1rem;
-    text-align: center;
-    transition:
-      background-color 180ms var(--m3-easing),
-      box-shadow 180ms var(--m3-easing);
-  }
-
-  .m3-download:hover {
-    box-shadow:
-      0 1px 3px 1px rgb(0 0 0 / 0.15),
-      0 1px 2px rgb(0 0 0 / 0.3);
-  }
-
-  .m3-download:focus-visible {
-    outline: 3px solid var(--m3-primary);
-    outline-offset: 2px;
+    --md-filled-button-container-height: 2.75rem;
+    --md-filled-button-icon-size: 1rem;
+    --md-filled-button-leading-space: 0.75rem;
+    --md-filled-button-trailing-space: 0.75rem;
+    --md-filled-button-with-leading-icon-leading-space: 0.75rem;
+    --md-filled-button-with-leading-icon-trailing-space: 1rem;
   }
 
   .m3-download--modrinth {
-    background-color: #1bd96a;
-    color: #102217;
-  }
-
-  .m3-download--modrinth:hover {
-    background-color: #16c45d;
+    --md-filled-button-container-color: #1bd96a;
+    --md-filled-button-label-text-color: #102217;
+    --md-filled-button-icon-color: #102217;
+    --md-filled-button-hover-container-color: #16c45d;
+    --md-filled-button-focus-container-color: #16c45d;
   }
 
   .m3-download--curseforge {
-    background-color: #f16436;
-    color: #ffffff;
-  }
-
-  .m3-download--curseforge:hover {
-    background-color: #db5128;
+    --md-filled-button-container-color: #f16436;
+    --md-filled-button-label-text-color: #ffffff;
+    --md-filled-button-icon-color: #ffffff;
+    --md-filled-button-hover-container-color: #db5128;
+    --md-filled-button-focus-container-color: #db5128;
   }
 
   @media (min-width: 640px) {
@@ -248,10 +233,7 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
     }
 
     .m3-download {
-      min-height: 2.5rem;
-      padding: 0 1.25rem;
-      font-size: 0.875rem;
-      line-height: 1.25rem;
+      --md-filled-button-container-height: 2.5rem;
     }
   }
 
@@ -276,6 +258,8 @@ const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid
 </style>
 
   <script>
+    import "@material/web/button/filled-button.js";
+
     document.querySelectorAll<HTMLImageElement>("[data-fallback-src]").forEach((image) => {
       image.addEventListener(
         "error",

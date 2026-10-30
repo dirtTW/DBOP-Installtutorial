@@ -66,103 +66,64 @@ const presetOptions: PresetOption[] = [
   >
     <PageIntro eyebrow={t.flags.eyebrow} title={t.flags.title} description={t.flags.description} />
     <section class="mx-auto max-w-4xl px-5 sm:px-8 lg:px-0">
-      <div class="m3-card grid gap-5 p-4 sm:gap-6 sm:p-6 md:grid-cols-2">
+      <div class="surface-card grid gap-5 p-4 sm:gap-6 sm:p-6 md:grid-cols-2">
         <div>
           <label
             for="server-file"
-            class="m3-label mb-2 block"
+            class="mb-2 block text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]"
           >
             {t.flags.serverFile}
           </label>
-          <input
+          <md-outlined-text-field
             id="server-file"
-            type="text"
+            class="w-full"
             value="server.jar"
             pattern="[A-Za-z0-9][A-Za-z0-9._-]*\.jar"
             autocomplete="off"
             spellcheck="false"
             aria-describedby="filename-help"
-            class="m3-field block min-h-14 w-full px-4 py-3 text-base"
-          />
-          <p id="filename-help" class="m3-support mt-2">
+          ></md-outlined-text-field>
+          <p id="filename-help" class="mt-2 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
             {t.flags.filenameHelp}
           </p>
         </div>
 
         <div>
           <div class="mb-2 flex items-center justify-between">
-            <label
-              for="memory"
-              class="m3-label block"
-            >
+            <span class="block text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]">
               {t.flags.memory}
-            </label>
+            </span>
             <div class="flex items-center gap-2">
               <output
                 id="memory-value"
                 for="memory"
-                class="m3-label"
+                class="text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]"
               >4 GB</output>
-              <button
+              <md-icon-button
                 id="custom-memory-open"
                 type="button"
                 aria-label={t.flags.advancedMemory}
                 aria-haspopup="dialog"
-                class="m3-icon-btn"
+                class="[--md-icon-button-icon-color:var(--md-sys-color-on-surface-variant)]"
               >
-                <svg
-                  aria-hidden="true"
-                  class="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4L14 12l-2-2 2.7-3.7Z"></path>
-                </svg>
-              </button>
+                <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+              </md-icon-button>
             </div>
           </div>
-          <div class="relative h-8">
-            <input
-              id="memory"
-              type="range"
-              min="1"
-              max="32"
-              step="0.25"
-              value="4"
-              aria-valuetext="4 GB"
-              class="absolute inset-0 z-20 h-full w-full cursor-pointer opacity-0"
-            />
-            <div
-              class="memory-slider-track m3-slider-track pointer-events-none absolute inset-x-2 top-1/2 h-1 -translate-y-1/2 rounded-full"
-              aria-hidden="true"
-            >
-              <span
-                id="memory-slider-fill"
-                class="m3-slider-fill absolute inset-y-0 left-0 rounded-full"
-                style="width: 9.6774%"
-              ></span>
-              { [4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
-                <span
-                  data-memory-tick={size}
-                  class="memory-slider-tick m3-slider-tick absolute top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                  style={`left: ${(size - 1) / 31 * 100}%`}
-                ></span>
-              )) }
-              <span
-                id="memory-slider-thumb"
-                class="m3-slider-thumb absolute left-[9.6774%] top-1/2 z-10 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full"
-              ></span>
-            </div>
-          </div>
+          <md-slider
+            id="memory"
+            class="mt-2 w-full"
+            min="1"
+            max="32"
+            step="0.25"
+            value="4"
+            aria-label={t.flags.memory}
+          ></md-slider>
           <div class="relative mt-2 h-5">
             { [4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
               <button
                 type="button"
-                class="memory-preset m3-memory-preset absolute -translate-x-1/2 whitespace-nowrap"
+                class="memory-preset absolute -translate-x-1/2 whitespace-nowrap text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)] transition-colors hover:text-[var(--md-sys-color-primary)] focus-visible:text-[var(--md-sys-color-primary)] focus-visible:outline-none"
                 data-memory={size}
                 aria-label={t.flags.setMemory(size)}
                 style={`left: calc(8px + (100% - 16px) * ${(size - 1) / 31})`}
@@ -171,102 +132,83 @@ const presetOptions: PresetOption[] = [
               </button>
             )) }
           </div>
-          <p class="m3-support mt-2">
+          <p class="mt-2 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
             {t.flags.memoryHelp}
           </p>
         </div>
 
-        <label class="m3-option">
-          <input
-            id="enable-gui"
-            type="checkbox"
-            role="switch"
-            class="shrink-0"
-          />
-          <span>
-            <span class="m3-option-title">{t.flags.enableGui}</span>
-            <span class="m3-support mt-1 block">
+        <div class="option-row flex items-center gap-3 rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-4 transition-colors hover:bg-[var(--md-sys-color-surface-container-highest)]">
+          <div class="min-w-0 flex-1">
+            <label
+              for="enable-gui"
+              class="block text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]"
+            >{t.flags.enableGui}</label>
+            <p class="mt-1 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
               {t.flags.guiHelp}
-            </span>
-          </span>
-        </label>
+            </p>
+          </div>
+          <md-switch id="enable-gui" aria-label={t.flags.enableGui}></md-switch>
+        </div>
 
-        <label class="m3-option">
-          <input
-            id="auto-restart"
-            type="checkbox"
-            role="switch"
-            class="shrink-0"
-          />
-          <span>
-            <span class="m3-option-title">{t.flags.autoRestart}</span>
-            <span class="m3-support mt-1 block">
+        <div class="option-row flex items-center gap-3 rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-4 transition-colors hover:bg-[var(--md-sys-color-surface-container-highest)]">
+          <div class="min-w-0 flex-1">
+            <label
+              for="auto-restart"
+              class="block text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]"
+            >{t.flags.autoRestart}</label>
+            <p class="mt-1 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
               {t.flags.restartHelp}
-            </span>
-          </span>
-        </label>
+            </p>
+          </div>
+          <md-switch id="auto-restart" aria-label={t.flags.autoRestart}></md-switch>
+        </div>
 
-        <label
+        <div
           id="ignore-java-option"
-          class="m3-option md:col-span-2"
+          class="option-row flex items-center gap-3 rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-4 transition-colors hover:bg-[var(--md-sys-color-surface-container-highest)] md:col-span-2"
         >
-          <input
-            id="ignore-java-version"
-            type="checkbox"
-            role="switch"
-            class="shrink-0"
-          />
-          <span>
-            <span class="m3-option-title">{t.flags.ignoreJavaVersion}</span>
-            <span class="m3-support mt-1 block">
+          <div class="min-w-0 flex-1">
+            <label
+              for="ignore-java-version"
+              class="block text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]"
+            >{t.flags.ignoreJavaVersion}</label>
+            <p class="mt-1 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
               {t.flags.ignoreJavaVersionHelp}
-            </span>
-          </span>
-        </label>
+            </p>
+          </div>
+          <md-switch id="ignore-java-version" aria-label={t.flags.ignoreJavaVersion}></md-switch>
+        </div>
       </div>
 
-      <section class="m3-card mt-5 p-4 sm:mt-6 sm:p-6">
+      <section class="surface-card mt-5 p-4 sm:mt-6 sm:p-6">
         <div>
-          <h2 class="m3-title">
+          <h2 class="text-base font-medium leading-6">
             {t.flags.presetHeading}
           </h2>
-          <p class="m3-support mt-1">
+          <p class="mt-1 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
             {t.flags.presetHelp}
           </p>
         </div>
         <ul
-          class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-5"
+          class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5"
           aria-label={t.flags.presetHeading}
         >
           {presetOptions.map((option) => (
             <li class="flex flex-col">
-              <button
-                type="button"
-                class="preset-option m3-preset"
-                aria-pressed={option.id === "aikars" ? "true" : "false"}
+              <md-filter-chip
+                class="preset-option self-start [--md-filter-chip-container-height:2.5rem]"
+                selected={option.id === "aikars"}
                 data-preset={option.id}
               >
-                <svg
-                  class="m3-preset-check"
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="m5 13 4 4L19 7"></path>
-                </svg>
-                <span>{option.label}</span>
-              </button>
-              <p class="m3-support mt-2">
+                {option.label}
+              </md-filter-chip>
+              <p class="mt-2 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
                 {option.description}
                 {option.href && (
                   <>
                     {" "}
                     <a
-                      class="m3-link whitespace-nowrap"
+                      class="whitespace-nowrap font-medium text-[var(--md-sys-color-primary)] hover:underline"
                       href={option.href}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -281,87 +223,65 @@ const presetOptions: PresetOption[] = [
         </ul>
       </section>
 
-      <section class="m3-card mt-6 overflow-hidden sm:mt-8">
+      <section class="surface-card mt-6 overflow-hidden sm:mt-8">
         <div class="flex flex-col gap-2 p-2 sm:flex-row sm:items-center sm:justify-between sm:p-3">
-          <div
-            class="m3-tabs"
-            role="tablist"
-            aria-label={t.flags.outputFormat}
-          >
-            <button
-              type="button"
-              class="platform-tab m3-tab text-xs sm:text-sm"
-              role="tab"
-              aria-selected="true"
-              data-platform="unix"
-            >
+          <md-tabs class="min-w-0" aria-label={t.flags.outputFormat}>
+            <md-primary-tab data-platform="unix" class="text-xs sm:text-sm">
               Linux / macOS
-            </button>
-            <button
-              type="button"
-              class="platform-tab m3-tab text-xs sm:text-sm"
-              role="tab"
-              aria-selected="false"
-              data-platform="windows"
-            >
+            </md-primary-tab>
+            <md-primary-tab data-platform="windows" class="text-xs sm:text-sm">
               Windows
-            </button>
-            <button
-              type="button"
-              class="platform-tab m3-tab text-xs sm:text-sm"
-              role="tab"
-              aria-selected="false"
-              data-platform="java"
-            >
+            </md-primary-tab>
+            <md-primary-tab data-platform="java" class="text-xs sm:text-sm">
               {t.flags.javaCommand}
-            </button>
-          </div>
+            </md-primary-tab>
+          </md-tabs>
           <div class="flex gap-2 px-1 pb-1 sm:shrink-0 sm:px-0 sm:pb-0">
-            <button
+            <md-outlined-button
               id="copy-script"
               type="button"
-              class="m3-btn m3-btn-outlined min-h-11 flex-1 sm:flex-none"
+              class="flex-1 sm:flex-none [--md-outlined-button-container-height:2.75rem]"
             >
               {t.flags.copy}
-            </button>
-            <button
+            </md-outlined-button>
+            <md-filled-button
               id="download-script"
               type="button"
-              class="m3-btn m3-btn-filled min-h-11 flex-1 sm:flex-none"
+              class="flex-1 sm:flex-none [--md-filled-button-container-height:2.75rem]"
             >
               {t.flags.download}
-            </button>
+            </md-filled-button>
           </div>
         </div>
-        <pre class="m3-code min-h-48 overflow-x-auto p-4 text-xs leading-6 sm:p-5 sm:text-sm"><code id="script-output"></code></pre>
+        <pre class="min-h-48 overflow-x-auto bg-[var(--code-surface)] p-4 font-mono text-xs leading-6 text-[var(--code-text)] sm:p-5 sm:text-sm"><code id="script-output"></code></pre>
         <p
           id="generator-status"
-          class="m3-support min-h-10 px-4 py-3"
+          class="min-h-10 px-4 py-3 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]"
           aria-live="polite"
         ></p>
       </section>
 
-      <p class="m3-support mt-6">
+      <p class="mt-6 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
         {t.flags.attributionStart}
         <a
-          class="m3-link"
+          class="font-medium text-[var(--md-sys-color-primary)] hover:underline"
           href="https://flags.sh/"
           target="_blank"
           rel="noopener noreferrer"
         >flags.sh</a>
         {t.flags.attributionBy}
         <a
-          class="m3-link"
+          class="font-medium text-[var(--md-sys-color-primary)] hover:underline"
           href="https://github.com/YouHaveTrouble/flags.sh"
           target="_blank"
           rel="noopener noreferrer"
         >YouHaveTrouble</a>
         {t.flags.attributionEnd}
       </p>
-      <p class="m3-support mt-2">
+      <p class="mt-2 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
         {t.flags.presetAttributionStart}
         <a
-          class="m3-link"
+          class="font-medium text-[var(--md-sys-color-primary)] hover:underline"
           href="https://flectone.net/en/tools/server-flags-generator"
           target="_blank"
           rel="noopener noreferrer"
@@ -369,19 +289,18 @@ const presetOptions: PresetOption[] = [
         {t.flags.presetAttributionEnd}
       </p>
     </section>
-    <dialog
-      id="custom-memory-dialog"
-      aria-labelledby="custom-memory-title"
-      class="m3-dialog fixed inset-0 m-auto w-[min(28rem,calc(100%-2rem))] p-0"
-    >
-      <form id="custom-memory-form" class="p-5 sm:p-6">
-        <h2 id="custom-memory-title" class="m3-dialog-title mb-5">
-          {t.flags.advancedOptions}
-        </h2>
-        <label for="custom-memory" class="m3-label mb-2 block">
+    <md-dialog id="custom-memory-dialog">
+      <div slot="headline" class="px-6 pt-6 text-2xl leading-8">
+        {t.flags.advancedOptions}
+      </div>
+      <div slot="content" class="flex flex-col gap-2 px-6 pb-2 pt-4">
+        <label
+          for="custom-memory"
+          class="block text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]"
+        >
           {t.flags.customMemory}
         </label>
-        <input
+        <md-outlined-text-field
           id="custom-memory"
           type="number"
           min="1"
@@ -389,58 +308,76 @@ const presetOptions: PresetOption[] = [
           step="0.25"
           value="4.00"
           required
+          autofocus
           inputmode="decimal"
-          class="m3-field block min-h-14 w-full px-4 py-3 text-base"
-        />
-        <p class="m3-support mt-2">
+        ></md-outlined-text-field>
+        <p class="text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
           {t.flags.customMemoryHelp}
         </p>
-        <div class="mt-6 flex justify-end gap-2">
-          <button
-            id="custom-memory-cancel"
-            type="button"
-            class="m3-btn m3-btn-text min-h-10"
-          >
-            {t.flags.cancel}
-          </button>
-          <button
-            type="submit"
-            class="m3-btn m3-btn-filled min-h-10"
-          >
-            {t.flags.apply}
-          </button>
-        </div>
-      </form>
-    </dialog>
+      </div>
+      <div slot="actions" class="flex justify-end gap-2 px-6 pb-6 pt-4">
+        <md-text-button id="custom-memory-cancel" type="button">
+          {t.flags.cancel}
+        </md-text-button>
+        <md-filled-button id="custom-memory-apply" type="button">
+          {t.flags.apply}
+        </md-filled-button>
+      </div>
+    </md-dialog>
   </main>
   <Footer locale={locale} />
 </Layout>
 
 <script>
+  import "@material/web/textfield/outlined-text-field.js";
+  import "@material/web/button/filled-button.js";
+  import "@material/web/button/outlined-button.js";
+  import "@material/web/button/text-button.js";
+  import "@material/web/chips/filter-chip.js";
+  import "@material/web/dialog/dialog.js";
+  import "@material/web/iconbutton/icon-button.js";
+  import "@material/web/slider/slider.js";
+  import "@material/web/switch/switch.js";
+  import "@material/web/tabs/tabs.js";
+  import "@material/web/tabs/primary-tab.js";
+
   type Platform = "unix" | "windows" | "java";
   type PresetId = "basic" | "aikars" | "zgc" | "shenandoah" | "velocity";
 
-  const fileInput = document.querySelector<HTMLInputElement>("#server-file");
-  const memoryInput = document.querySelector<HTMLInputElement>("#memory");
+  type TextFieldElement = HTMLElement & {
+    value: string;
+    reportValidity(): boolean;
+    focus(): void;
+  };
+  type SliderElement = HTMLElement & { value: number; valueLabel: string };
+  type SwitchElement = HTMLElement & { selected: boolean; disabled: boolean };
+  type ChipElement = HTMLElement & { selected: boolean };
+  type DialogElement = HTMLElement & {
+    show(): Promise<void> | void;
+    close(returnValue?: string): Promise<void> | void;
+  };
+  type TabsElement = HTMLElement & {
+    activeTab: (HTMLElement & { dataset: DOMStringMap }) | null;
+  };
+
+  const fileInput = document.querySelector<TextFieldElement>("#server-file");
+  const memoryInput = document.querySelector<SliderElement>("#memory");
   const memoryValue = document.querySelector<HTMLOutputElement>("#memory-value");
-  const memoryTicks = document.querySelectorAll<HTMLElement>("[data-memory-tick]");
-  const memorySliderFill = document.querySelector<HTMLElement>("#memory-slider-fill");
-  const memorySliderThumb = document.querySelector<HTMLElement>("#memory-slider-thumb");
-  const memoryDialog = document.querySelector<HTMLDialogElement>("#custom-memory-dialog");
-  const memoryForm = document.querySelector<HTMLFormElement>("#custom-memory-form");
-  const customMemoryInput = document.querySelector<HTMLInputElement>("#custom-memory");
-  const openMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-open");
-  const cancelMemoryDialogButton = document.querySelector<HTMLButtonElement>("#custom-memory-cancel");
-  const guiCheckbox = document.querySelector<HTMLInputElement>("#enable-gui");
-  const restartCheckbox = document.querySelector<HTMLInputElement>("#auto-restart");
-  const ignoreJavaVersionCheckbox =
-    document.querySelector<HTMLInputElement>("#ignore-java-version");
-  const presetButtons = document.querySelectorAll<HTMLButtonElement>(".preset-option");
+  const memoryDialog = document.querySelector<DialogElement>("#custom-memory-dialog");
+  const customMemoryInput = document.querySelector<TextFieldElement>("#custom-memory");
+  const openMemoryDialogButton = document.querySelector<HTMLElement>("#custom-memory-open");
+  const cancelMemoryDialogButton = document.querySelector<HTMLElement>("#custom-memory-cancel");
+  const applyMemoryButton = document.querySelector<HTMLElement>("#custom-memory-apply");
+  const guiSwitch = document.querySelector<SwitchElement>("#enable-gui");
+  const restartSwitch = document.querySelector<SwitchElement>("#auto-restart");
+  const ignoreJavaVersionSwitch =
+    document.querySelector<SwitchElement>("#ignore-java-version");
+  const presetButtons = document.querySelectorAll<ChipElement>(".preset-option");
   const output = document.querySelector<HTMLElement>("#script-output");
   const status = document.querySelector<HTMLElement>("#generator-status");
-  const copyButton = document.querySelector<HTMLButtonElement>("#copy-script");
-  const downloadButton = document.querySelector<HTMLButtonElement>("#download-script");
-  const tabs = document.querySelectorAll<HTMLButtonElement>(".platform-tab");
+  const copyButton = document.querySelector<HTMLElement>("#copy-script");
+  const downloadButton = document.querySelector<HTMLElement>("#download-script");
+  const tabs = document.querySelector<TabsElement>("md-tabs");
   const generator = document.querySelector<HTMLElement>("#generator");
 
   let platform: Platform = "unix";
@@ -460,7 +397,7 @@ const presetOptions: PresetOption[] = [
     const memory = Math.round(memoryGb * 1024);
     const heap = [`-Xms${memory}M`, `-Xmx${memory}M`];
     const vectorModule = "--add-modules=jdk.incubator.vector";
-    const ignoreJavaVersion = ignoreJavaVersionCheckbox?.checked
+    const ignoreJavaVersion = ignoreJavaVersionSwitch?.selected
       ? ["-Dpaper.ignoreJavaVersion=true"]
       : [];
 
@@ -535,19 +472,23 @@ const presetOptions: PresetOption[] = [
     const isProxy = preset === "velocity";
     const isBasic = preset === "basic";
 
-    if (guiCheckbox) {
-      if (isProxy) guiCheckbox.checked = false;
-      guiCheckbox.disabled = isProxy;
+    if (guiSwitch) {
+      // Click instead of assigning `selected` so the switch's internal input
+      // stays in sync (it only tracks the `checked` attribute on first render).
+      if (isProxy && guiSwitch.selected) guiSwitch.click();
+      guiSwitch.disabled = isProxy;
     }
 
-    if (ignoreJavaVersionCheckbox) {
-      if (isBasic || isProxy) ignoreJavaVersionCheckbox.checked = false;
-      ignoreJavaVersionCheckbox.disabled = isBasic || isProxy;
+    if (ignoreJavaVersionSwitch) {
+      if ((isBasic || isProxy) && ignoreJavaVersionSwitch.selected) {
+        ignoreJavaVersionSwitch.click();
+      }
+      ignoreJavaVersionSwitch.disabled = isBasic || isProxy;
     }
   }
 
   function getGeneratedScript(): string | null {
-    if (!fileInput || !memoryInput || !guiCheckbox || !restartCheckbox) return null;
+    if (!fileInput || !memoryInput || !guiSwitch || !restartSwitch) return null;
 
     const filename = fileInput.value.trim();
     if (!/^[A-Za-z0-9][A-Za-z0-9._-]*\.jar$/i.test(filename)) {
@@ -559,17 +500,17 @@ const presetOptions: PresetOption[] = [
 
     const memory = Number(memoryInput.value);
     const flags = buildFlags(memory).join(" ");
-    const serverOptions = preset === "velocity" || guiCheckbox.checked ? "" : " --nogui";
+    const serverOptions = preset === "velocity" || guiSwitch.selected ? "" : " --nogui";
     const javaCommand = `java ${flags} -jar "${filename}"${serverOptions}`;
 
     if (platform === "windows") {
-      if (!restartCheckbox.checked) return `@echo off\r\ncd /d "%~dp0"\r\n${javaCommand}\r\n`;
+      if (!restartSwitch.selected) return `@echo off\r\ncd /d "%~dp0"\r\n${javaCommand}\r\n`;
       return `@echo off\r\ncd /d "%~dp0"\r\n:run\r\n${javaCommand}\r\ntimeout /t 5 /nobreak >nul\r\ngoto run\r\n`;
     }
 
     if (platform === "java") return javaCommand;
 
-    if (!restartCheckbox.checked) {
+    if (!restartSwitch.selected) {
       return `#!/usr/bin/env bash\ncd -- "$(dirname -- "$0")"\n${javaCommand}\n`;
     }
     return `#!/usr/bin/env bash\ncd -- "$(dirname -- "$0")"\nwhile true; do\n  ${javaCommand}\n  sleep 5\ndone\n`;
@@ -579,39 +520,32 @@ const presetOptions: PresetOption[] = [
     if (!output) return;
     if (memoryInput && memoryValue) {
       memoryValue.value = `${memoryInput.value} GB`;
-      memoryInput.setAttribute("aria-valuetext", memoryValue.value);
-      const progress = ((Number(memoryInput.value) - 1) / 31) * 100;
-      if (memorySliderFill) memorySliderFill.style.width = `${progress}%`;
-      if (memorySliderThumb) memorySliderThumb.style.left = `${progress}%`;
-      memoryTicks.forEach((tick) => {
-        const tickValue = Number(tick.dataset.memoryTick);
-        tick.classList.toggle("invisible", tickValue === Number(memoryInput.value));
-        tick.classList.toggle("is-passed", tickValue < Number(memoryInput.value));
-      });
+      memoryInput.valueLabel = memoryValue.value;
     }
     const script = getGeneratedScript();
     output.textContent = script ?? "";
     if (script && status) {
       status.textContent =
-        platform === "java" && restartCheckbox?.checked
+        platform === "java" && restartSwitch?.selected
           ? generator?.dataset.restartWarning ?? ""
           : "";
     }
   }
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const selectedPlatform = tab.dataset.platform;
-      if (selectedPlatform !== "unix" && selectedPlatform !== "windows" && selectedPlatform !== "java") return;
-      platform = selectedPlatform;
-      tabs.forEach((item) => {
-        item.setAttribute("aria-selected", String(item === tab));
-      });
-      renderScript();
-    });
+  tabs?.addEventListener("change", () => {
+    const selectedPlatform = tabs.activeTab?.dataset.platform;
+    if (
+      selectedPlatform !== "unix" &&
+      selectedPlatform !== "windows" &&
+      selectedPlatform !== "java"
+    ) {
+      return;
+    }
+    platform = selectedPlatform;
+    renderScript();
   });
 
-  [fileInput, memoryInput, guiCheckbox, restartCheckbox, ignoreJavaVersionCheckbox].forEach(
+  [fileInput, memoryInput, guiSwitch, restartSwitch, ignoreJavaVersionSwitch].forEach(
     (input) => {
       input?.addEventListener("input", renderScript);
       input?.addEventListener("change", renderScript);
@@ -620,10 +554,7 @@ const presetOptions: PresetOption[] = [
 
   function syncPresetButtons() {
     presetButtons.forEach((button) => {
-      button.setAttribute(
-        "aria-pressed",
-        String(button.dataset.preset === preset),
-      );
+      button.selected = button.dataset.preset === preset;
     });
   }
 
@@ -641,34 +572,31 @@ const presetOptions: PresetOption[] = [
   openMemoryDialogButton?.addEventListener("click", () => {
     if (!memoryDialog || !memoryInput || !customMemoryInput) return;
     customMemoryInput.value = Number(memoryInput.value).toFixed(2);
-    memoryDialog.showModal();
+    memoryDialog.show();
     customMemoryInput.focus();
-    customMemoryInput.select();
   });
 
   cancelMemoryDialogButton?.addEventListener("click", () => {
     memoryDialog?.close();
   });
 
-  memoryForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
+  applyMemoryButton?.addEventListener("click", () => {
     if (!memoryDialog || !memoryInput || !customMemoryInput) return;
     const memory = Number(customMemoryInput.value);
     if (!Number.isFinite(memory) || memory < 1 || memory > 32) {
       customMemoryInput.reportValidity();
       return;
     }
-    memoryInput.value = String(memory);
+    memoryInput.value = memory;
     memoryDialog.close();
     renderScript();
   });
 
-  document.querySelectorAll<HTMLButtonElement>(".memory-preset").forEach((preset) => {
-    preset.addEventListener("click", () => {
-      if (!memoryInput) return;
-      const memory = preset.dataset.memory;
-      if (!memory) return;
-      memoryInput.value = memory;
+  document.querySelectorAll<HTMLElement>(".memory-preset").forEach((presetButton) => {
+    presetButton.addEventListener("click", () => {
+      const memory = presetButton.dataset.memory;
+      if (!memory || !memoryInput) return;
+      memoryInput.value = Number(memory);
       renderScript();
     });
   });
@@ -716,329 +644,16 @@ const presetOptions: PresetOption[] = [
 </script>
 
 <style>
-
-  .m3-card {
-    background-color: var(--m3-card-surface);
-    border-radius: 1.75rem;
-    color: var(--m3-on-surface);
+  #custom-memory-dialog {
+    width: min(28rem, calc(100% - 2rem));
   }
 
-  .m3-title {
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.5rem;
-    color: var(--m3-on-surface);
-  }
-
-  .m3-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.25rem;
-    color: var(--m3-on-surface);
-  }
-
-  .m3-support {
-    font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1rem;
-    color: var(--m3-on-surface-variant);
-  }
-
-  .m3-link {
-    color: var(--m3-primary);
-    font-weight: 500;
-  }
-
-  .m3-link:hover {
-    text-decoration: underline;
-  }
-
-  /* Filled text field */
-  .m3-field {
-    background-color: var(--m3-surface-container-highest);
-    border: 0;
-    border-bottom: 1px solid var(--m3-on-surface-variant);
-    border-radius: 0.75rem 0.75rem 0 0;
-    color: var(--m3-on-surface);
-    outline: none;
-    transition:
-      background-color 180ms var(--m3-easing),
-      border-color 180ms var(--m3-easing),
-      box-shadow 180ms var(--m3-easing);
-  }
-
-  .m3-field:hover {
-    background-color: color-mix(
-      in srgb,
-      var(--m3-on-surface) 4%,
-      var(--m3-surface-container-highest)
-    );
-  }
-
-  .m3-field:focus {
-    border-bottom-color: var(--m3-primary);
-    box-shadow: inset 0 -1px 0 var(--m3-primary);
-  }
-
-  /* List option row */
-  .m3-option {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-radius: 1rem;
-    background-color: var(--m3-option-surface);
-    padding: 1rem;
-    cursor: pointer;
-    transition: background-color 180ms var(--m3-easing);
-  }
-
-  .m3-option:not(:has(input:disabled)):hover {
-    background-color: var(--m3-option-surface-hover);
-  }
-
-  .m3-option:has(input:disabled) {
+  .option-row:has(md-switch[disabled]) {
     cursor: not-allowed;
     opacity: 0.38;
   }
 
-  .m3-option-title {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.25rem;
-    color: var(--m3-on-surface);
-  }
-
-  /* Segmented-style preset buttons */
-  .m3-preset {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    min-height: 3rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid var(--m3-outline-variant);
-    border-radius: 0.75rem;
-    background-color: transparent;
-    color: var(--m3-on-surface);
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.25rem;
-    transition:
-      background-color 180ms var(--m3-easing),
-      border-color 180ms var(--m3-easing),
-      color 180ms var(--m3-easing);
-  }
-
-  .m3-preset:hover {
-    background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent);
-  }
-
-  .m3-preset[aria-pressed="true"] {
-    background-color: var(--m3-secondary-container);
-    border-color: transparent;
-    color: var(--m3-on-secondary-container);
-  }
-
-  .m3-preset[aria-pressed="true"]:hover {
-    background-color: color-mix(
-      in srgb,
-      var(--m3-on-secondary-container) 8%,
-      var(--m3-secondary-container)
-    );
-  }
-
-  .m3-preset-check {
-    display: none;
-    width: 1.125rem;
-    height: 1.125rem;
-    flex: none;
-  }
-
-  .m3-preset[aria-pressed="true"] .m3-preset-check {
-    display: block;
-  }
-
-  /* Primary tabs */
-  .m3-tabs {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .m3-tab {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 3rem;
-    padding: 0 0.5rem;
-    border-radius: 0;
-    color: var(--m3-on-surface-variant);
-    font-weight: 500;
-    transition:
-      background-color 180ms var(--m3-easing),
-      color 180ms var(--m3-easing);
-  }
-
-  .m3-tab::after {
-    content: "";
-    position: absolute;
-    right: 0.75rem;
-    bottom: 0;
-    left: 0.75rem;
-    height: 3px;
-    border-radius: 3px 3px 0 0;
-    background-color: transparent;
-    transition: background-color 180ms var(--m3-easing);
-  }
-
-  .m3-tab:hover {
-    background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent);
-  }
-
-  .m3-tab[aria-selected="true"] {
-    color: var(--m3-primary);
-  }
-
-  .m3-tab[aria-selected="true"]::after {
-    background-color: var(--m3-primary);
-  }
-
-  /* Buttons */
-  .m3-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    min-height: 2.5rem;
-    padding: 0 1.5rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.25rem;
-    transition:
-      background-color 180ms var(--m3-easing),
-      color 180ms var(--m3-easing);
-  }
-
-  .m3-btn-filled {
-    background-color: var(--m3-primary);
-    color: var(--m3-on-primary);
-  }
-
-  .m3-btn-filled:hover {
-    background-color: color-mix(in srgb, var(--m3-on-primary) 8%, var(--m3-primary));
-  }
-
-  .m3-btn-outlined {
-    border: 1px solid var(--m3-outline);
-    background-color: transparent;
-    color: var(--m3-primary);
-  }
-
-  .m3-btn-outlined:hover {
-    background-color: color-mix(in srgb, var(--m3-primary) 8%, transparent);
-  }
-
-  .m3-btn-text {
-    background-color: transparent;
-    color: var(--m3-primary);
-    padding: 0 1rem;
-  }
-
-  .m3-btn-text:hover {
-    background-color: color-mix(in srgb, var(--m3-primary) 8%, transparent);
-  }
-
-  .m3-icon-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 9999px;
-    color: var(--m3-on-surface-variant);
-    transition:
-      background-color 180ms var(--m3-easing),
-      color 180ms var(--m3-easing);
-  }
-
-  .m3-icon-btn:hover {
-    background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent);
-    color: var(--m3-on-surface);
-  }
-
-  /* Slider */
-  .m3-slider-track {
-    background-color: var(--m3-slider-track);
-  }
-
-  .m3-slider-fill {
-    background-color: var(--m3-primary);
-  }
-
-  .m3-slider-tick {
-    background-color: var(--m3-on-surface-variant);
-  }
-
-  .m3-slider-tick.is-passed {
-    background-color: var(--m3-on-primary);
-  }
-
-  .m3-slider-thumb {
-    background-color: var(--m3-primary);
-    box-shadow: 0 0 0 2px var(--m3-card-surface);
-  }
-
-  .m3-memory-preset {
-    color: var(--m3-on-surface-variant);
-    font-size: 0.75rem;
-    line-height: 1rem;
-  }
-
-  .m3-memory-preset:hover {
-    color: var(--m3-primary);
-  }
-
-  /* Code block */
-  .m3-code {
-    background-color: var(--m3-code-surface);
-    color: var(--m3-code-text);
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  }
-
-  /* Dialog */
-  .m3-dialog {
-    background-color: var(--m3-surface-container-high);
-    color: var(--m3-on-surface);
-    border: 0;
-    border-radius: 1.75rem;
-    box-shadow:
-      0 8px 12px 6px rgb(0 0 0 / 0.15),
-      0 4px 4px rgb(0 0 0 / 0.3);
-  }
-
-  .m3-dialog::backdrop {
-    background-color: rgb(0 0 0 / 0.4);
-  }
-
-  .m3-dialog-title {
-    font-size: 1.5rem;
-    font-weight: 400;
-    line-height: 2rem;
-    color: var(--m3-on-surface);
-  }
-
-  .m3-preset:focus-visible,
-  .m3-tab:focus-visible,
-  .m3-btn:focus-visible {
-    outline: 3px solid var(--m3-primary);
-    outline-offset: 2px;
-  }
-
-  #memory:focus-visible + .memory-slider-track {
-    outline: 2px solid var(--m3-primary);
-    outline-offset: 4px;
+  .option-row:has(md-switch[disabled]):hover {
+    background-color: var(--md-sys-color-surface-container-high);
   }
 </style>

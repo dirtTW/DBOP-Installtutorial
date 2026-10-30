@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 const card = "#modpack-list > article";
 const status = "#modpack-search-status";
-const search = "#modpack-search";
+const searchField = "#modpack-search";
+const search = "#modpack-search input";
 const clear = "#modpack-search-clear";
 
 test.describe("recommended modpacks search", () => {
@@ -47,7 +48,7 @@ test.describe("recommended modpacks search", () => {
     await expect(page.locator(`${card}:visible`)).toHaveCount(13);
     await expect(page.locator(status)).toHaveText("13 modpack(s) total");
     await expect(page.locator(clear)).toBeHidden();
-    await expect(page.locator(search)).toBeFocused();
+    await expect(page.locator(searchField)).toBeFocused();
   });
 
   test("clears the search with Escape", async ({ page }) => {
