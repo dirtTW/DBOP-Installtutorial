@@ -59,56 +59,221 @@ if (Astro.site) {
 const isModrinthLinkValid = !!modrinthlink;
 const isCurseforgeLinkValid = !!curseforgelink;
 const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid);
-const downloadButtonClass =
-  "inline-flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-full px-3 py-2 text-center text-[11px] font-semibold leading-tight shadow-sm transition hover:shadow-md active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:min-h-10 sm:flex-row sm:gap-0 sm:whitespace-nowrap sm:px-3.5 sm:text-xs sm:leading-normal dark:focus-visible:ring-offset-[#1c1f25]";
 ---
 
-<article class="grid grid-cols-[3.5rem_minmax(0,1fr)] items-start gap-x-3 gap-y-3 rounded-2xl border border-brand-100 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-950/5 sm:p-4 lg:grid-cols-[6rem_minmax(0,1fr)_auto] lg:items-center lg:gap-5 dark:border-brand-900 dark:bg-[#1c1f25] dark:hover:border-brand-700">
+<article class="m3-modpack">
   <img
-    class="row-span-1 h-14 w-14 rounded-xl border border-brand-100 bg-brand-50/60 object-cover shadow-sm lg:row-span-3 lg:h-24 lg:w-24 dark:border-brand-800 dark:bg-[#111318]"
+    class="m3-modpack-avatar"
     src={imagePath}
     data-fallback-src={fallbackImage.src}
     alt={`${displayName} ${locale === "en" ? "image" : "圖片"}`}
     loading="lazy"
   />
-  <h2 class="min-w-0 self-center py-1 text-sm font-bold leading-5 tracking-tight text-brand-950 sm:text-base lg:self-end lg:py-0 dark:text-white">
-    {displayName}
-  </h2>
-  <p class="col-span-full text-sm leading-5 text-zinc-600 lg:col-span-1 lg:col-start-2 lg:row-start-2 lg:leading-6 dark:text-zinc-400">{description}</p>
-  <div class="col-span-full flex flex-wrap items-center gap-1.5 lg:col-span-1 lg:col-start-2 lg:row-start-3">
-    <span class="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-800 dark:border-brand-800 dark:bg-brand-950/60 dark:text-brand-200">
-      {t.cards.version} <span class="ml-1 font-semibold text-brand-950 dark:text-brand-100">{version}</span>
-    </span>
-    {gameVersions.length > 0 && (
-      <span class="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-800 dark:border-brand-800 dark:bg-brand-950/60 dark:text-brand-200">
-        {t.cards.supportedVersions} <span class="ml-1 font-semibold text-brand-950 dark:text-brand-100">{gameVersions.join(", ")}</span>
+  <div class="m3-modpack-body">
+    <h2 class="m3-modpack-name">{displayName}</h2>
+    <p class="m3-modpack-desc">{description}</p>
+    <div class="m3-modpack-meta">
+      <span class="m3-chip">
+        {t.cards.version} <strong>{version}</strong>
       </span>
-    )}
+      {gameVersions.length > 0 && (
+        <span class="m3-chip">
+          {t.cards.supportedVersions} <strong>{gameVersions.join(", ")}</strong>
+        </span>
+      )}
+    </div>
   </div>
-  <div class:list={[
-    "col-span-full grid gap-2 lg:col-span-1 lg:col-start-3 lg:row-span-3 lg:flex lg:flex-col lg:justify-center",
-    downloadCount > 1 ? "grid-cols-2" : "grid-cols-1",
-  ]}>
+  <div
+    class:list={[
+      "m3-modpack-actions",
+      downloadCount > 1 && "m3-modpack-actions--multi",
+    ]}
+  >
     {isModrinthLinkValid && (
-      <a
-        class={`${downloadButtonClass} bg-[#1bd96a] text-[#102217] hover:bg-[#16c45d] focus-visible:ring-[#12833f] dark:bg-[#1bd96a] dark:text-[#102217] dark:hover:bg-[#16c45d] dark:focus-visible:ring-[#1bd96a]`}
-        href={modrinthlink}
-      >
-        <i class="md-logo sm:me-2" aria-hidden="true" />
+      <a class="m3-download m3-download--modrinth" href={modrinthlink}>
+        <i class="md-logo" aria-hidden="true" />
         {t.cards.downloadModrinthShort}
       </a>
     )}
     {isCurseforgeLinkValid && (
-      <a
-        class={`${downloadButtonClass} border border-[#d94d24] bg-[#f16436] text-white hover:bg-[#db5128] focus-visible:ring-[#d94d24] dark:border-[#d94d24] dark:bg-[#f16436] dark:text-white dark:hover:bg-[#db5128] dark:focus-visible:ring-[#ff8a65]`}
-        href={curseforgelink}
-      >
-        <i class="cf-logo sm:me-2" aria-hidden="true" />
+      <a class="m3-download m3-download--curseforge" href={curseforgelink}>
+        <i class="cf-logo" aria-hidden="true" />
         {t.cards.downloadCurseforgeShort}
       </a>
     )}
   </div>
 </article>
+
+<style>
+  .m3-modpack {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0.75rem;
+    padding: 0.875rem;
+    border-radius: 1.5rem;
+    background-color: var(--m3-item-surface);
+    transition: background-color 180ms var(--m3-easing);
+  }
+
+  .m3-modpack:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--m3-on-surface) 4%,
+      var(--m3-item-surface)
+    );
+  }
+
+  .m3-modpack-avatar {
+    grid-column: 1;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1rem;
+    background-color: var(--m3-surface-container-high);
+    object-fit: cover;
+  }
+
+  .m3-modpack-body {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .m3-modpack-name {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    color: var(--m3-on-surface);
+    overflow-wrap: anywhere;
+  }
+
+  .m3-modpack-desc {
+    margin-top: 0.125rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--m3-on-surface-variant);
+  }
+
+  .m3-modpack-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-top: 0.625rem;
+  }
+
+  .m3-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    padding: 0 0.625rem;
+    border: 1px solid var(--m3-outline-variant);
+    border-radius: 0.5rem;
+    color: var(--m3-on-surface-variant);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+  }
+
+  .m3-chip strong {
+    margin-left: 0.25rem;
+    color: var(--m3-on-surface);
+    font-weight: 600;
+  }
+
+  .m3-modpack-actions {
+    display: grid;
+    grid-column: 1 / -1;
+    gap: 0.5rem;
+  }
+
+  .m3-modpack-actions--multi {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .m3-download {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+    padding: 0 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1rem;
+    text-align: center;
+    transition:
+      background-color 180ms var(--m3-easing),
+      box-shadow 180ms var(--m3-easing);
+  }
+
+  .m3-download:hover {
+    box-shadow:
+      0 1px 3px 1px rgb(0 0 0 / 0.15),
+      0 1px 2px rgb(0 0 0 / 0.3);
+  }
+
+  .m3-download:focus-visible {
+    outline: 3px solid var(--m3-primary);
+    outline-offset: 2px;
+  }
+
+  .m3-download--modrinth {
+    background-color: #1bd96a;
+    color: #102217;
+  }
+
+  .m3-download--modrinth:hover {
+    background-color: #16c45d;
+  }
+
+  .m3-download--curseforge {
+    background-color: #f16436;
+    color: #ffffff;
+  }
+
+  .m3-download--curseforge:hover {
+    background-color: #db5128;
+  }
+
+  @media (min-width: 640px) {
+    .m3-modpack {
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      gap: 1rem;
+      padding: 1.125rem;
+    }
+
+    .m3-modpack-avatar {
+      width: 4.5rem;
+      height: 4.5rem;
+    }
+
+    .m3-download {
+      min-height: 2.5rem;
+      padding: 0 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .m3-modpack {
+      grid-template-columns: 5.5rem minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: 1.5rem;
+    }
+
+    .m3-modpack-avatar {
+      width: 5.5rem;
+      height: 5.5rem;
+    }
+
+    .m3-modpack-actions {
+      grid-column: 3;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+</style>
 
   <script>
     document.querySelectorAll<HTMLImageElement>("[data-fallback-src]").forEach((image) => {

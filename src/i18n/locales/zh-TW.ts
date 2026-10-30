@@ -91,6 +91,7 @@ const messages = {
     foundWebsites: "找到 {count} 個網站",
     noWebsites: '找不到符合「{query}」的網站',
     totalWebsites: "共 {count} 個網站",
+    clearSearch: "清除搜尋",
   },
   filters: {
     label: "依分類篩選網站",

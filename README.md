@@ -93,8 +93,9 @@ entries without a translation fall back to the label in the Markdown file.
 ### Theme
 
 The navbar toggle switches between light and dark mode, persists the choice in
-`localStorage`, and falls back to the operating system preference. The flags generator uses a
-separate Material 3 token set so it can evolve independently of the rest of the site.
+`localStorage`, and falls back to the operating system preference. The flags generator and the
+recommended modpacks page each carry their own Material 3 token set, so they can evolve
+independently of the rest of the site.
 
 ## Flags generator
 

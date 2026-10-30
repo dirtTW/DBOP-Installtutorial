@@ -37,6 +37,36 @@ html.dark body {
   color: #e2e2e9;
 }
 
+/* Material 3 (Material You) tokens for the recommended modpacks page */
+#modpacks {
+  --m3-primary: #005ac1;
+  --m3-surface-container-lowest: #ffffff;
+  --m3-surface-container-low: #f3f3fa;
+  --m3-surface-container: #ededf4;
+  --m3-surface-container-high: #e8e7ef;
+  --m3-surface-container-highest: #e2e2e9;
+  --m3-on-surface: #1a1b21;
+  --m3-on-surface-variant: #44474f;
+  --m3-outline-variant: #c4c6d0;
+  --m3-panel-surface: var(--m3-surface-container);
+  --m3-item-surface: var(--m3-surface-container-lowest);
+  --m3-easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+html.dark #modpacks {
+  --m3-primary: #adc6ff;
+  --m3-surface-container-lowest: #0c0e13;
+  --m3-surface-container-low: #191c20;
+  --m3-surface-container: #1d2024;
+  --m3-surface-container-high: #282a2f;
+  --m3-surface-container-highest: #33353a;
+  --m3-on-surface: #e2e2e9;
+  --m3-on-surface-variant: #c4c6d0;
+  --m3-outline-variant: #44474f;
+  --m3-panel-surface: var(--m3-surface-container);
+  --m3-item-surface: var(--m3-surface-container-high);
+}
+
 #generator input[type="checkbox"] {
   appearance: none;
   display: grid;

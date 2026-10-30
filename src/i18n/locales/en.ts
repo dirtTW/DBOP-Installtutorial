@@ -91,6 +91,7 @@ const messages = {
     foundWebsites: "{count} website(s) found",
     noWebsites: 'No websites found for "{query}"',
     totalWebsites: "{count} website(s) total",
+    clearSearch: "Clear search",
   },
   filters: {
     label: "Filter websites by category",
