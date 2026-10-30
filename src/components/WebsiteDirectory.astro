@@ -46,69 +46,51 @@ const categories = websiteCategories.filter((category) =>
 ---
 
 <section class="mx-auto max-w-screen-xl px-5 pb-20 sm:px-8 lg:px-10">
-  <div class="md3-panel p-3 sm:p-5">
-    <div class="md3-search" role="search">
-      <svg
-        class="md3-search-icon"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <circle cx="11" cy="11" r="7"></circle>
-        <path d="m20 20-3.4-3.4"></path>
-      </svg>
-      <label for={searchId} class="sr-only">{searchLabel}</label>
-      <input
+  <div class="surface-panel p-3 sm:p-5">
+    <div role="search">
+      <md-outlined-text-field
         id={searchId}
         type="search"
+        class="search-field"
+        aria-label={searchLabel}
         placeholder={searchPlaceholder}
         aria-controls={listId}
         autocomplete="off"
         spellcheck="false"
+        has-leading-icon
+        has-trailing-icon
         data-website-search
-        class="md3-search-input"
-      />
-      <button
-        type="button"
-        class="md3-search-clear"
-        data-website-clear
-        aria-label={clearLabel}
-        hidden
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
+        <span slot="leading-icon" class="material-symbols-outlined" aria-hidden="true">search</span>
+        <md-icon-button
+          slot="trailing-icon"
+          type="button"
+          data-website-clear
+          aria-label={clearLabel}
+          class="[--md-icon-button-icon-color:var(--md-sys-color-on-surface-variant)]"
+          hidden
         >
-          <path d="m6 6 12 12M18 6 6 18"></path>
-        </svg>
-      </button>
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </md-icon-button>
+      </md-outlined-text-field>
     </div>
     <div class="mt-3" role="group" aria-label={filterLabel} data-website-filters>
       <div class="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
-        <button type="button" class="md3-chip shrink-0" data-website-category="all" aria-pressed="true">
+        <md-filter-chip data-website-category="all" selected class="shrink-0">
           {allLabel}
-        </button>
+        </md-filter-chip>
         {categories.map((category) => (
-          <button
-            type="button"
-            class="md3-chip shrink-0"
+          <md-filter-chip
             data-website-category={category}
-            aria-pressed="false"
+            class="shrink-0"
           >
             {categoryLabels[category]}
-          </button>
+          </md-filter-chip>
         ))}
       </div>
     </div>
     <p
-      class="md3-search-status"
+      class="mt-3 px-4 text-xs font-medium leading-4 text-[var(--md-sys-color-on-surface-variant)]"
       role="status"
       aria-live="polite"
       data-website-search-status
@@ -124,17 +106,20 @@ const categories = websiteCategories.filter((category) =>
 </section>
 
 <script>
-  const searchInput = document.querySelector<HTMLInputElement>(
-    "[data-website-search]",
-  );
-  const clearButton = document.querySelector<HTMLButtonElement>(
-    "[data-website-clear]",
-  );
+  import "@material/web/textfield/outlined-text-field.js";
+  import "@material/web/iconbutton/icon-button.js";
+  import "@material/web/chips/filter-chip.js";
+
+  type TextField = HTMLElement & { value: string; focus(): void };
+  type FilterChip = HTMLElement & { selected: boolean };
+
+  const searchInput = document.querySelector<TextField>("[data-website-search]");
+  const clearButton = document.querySelector<HTMLElement>("[data-website-clear]");
   const resultStatus = document.querySelector<HTMLElement>(
     "[data-website-search-status]",
   );
   const filterButtons = Array.from(
-    document.querySelectorAll<HTMLButtonElement>("[data-website-category]"),
+    document.querySelectorAll<FilterChip>("[data-website-category]"),
   );
   const listId = searchInput?.getAttribute("aria-controls");
   const cards = listId
@@ -192,7 +177,7 @@ const categories = websiteCategories.filter((category) =>
       button.addEventListener("click", () => {
         activeCategory = button.dataset.websiteCategory ?? "all";
         for (const otherButton of filterButtons) {
-          otherButton.setAttribute("aria-pressed", String(otherButton === button));
+          otherButton.selected = otherButton === button;
         }
         filterCards();
       });
@@ -206,8 +191,9 @@ const categories = websiteCategories.filter((category) =>
 
     clearButton?.addEventListener("click", clearSearch);
     searchInput.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && searchInput.value) {
-        event.preventDefault();
+      const keyboardEvent = event as KeyboardEvent;
+      if (keyboardEvent.key === "Escape" && searchInput.value) {
+        keyboardEvent.preventDefault();
         clearSearch();
       }
     });

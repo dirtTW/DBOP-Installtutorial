@@ -22,11 +22,13 @@ const links = [
 const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"]);
 ---
 
-<nav class="md3-appbar fixed top-0 z-50 w-full px-4">
+<nav
+  class="fixed top-0 z-50 w-full border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] px-4 backdrop-blur-[14px]"
+>
   <div class="relative mx-auto flex min-h-[4.5rem] max-w-screen-xl items-center justify-between gap-3">
     <a
       href={localizedPath(locale, "")}
-      class="flex min-w-0 items-center gap-3 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--m3-primary)]"
+      class="flex min-w-0 items-center gap-3 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--md-sys-color-primary)]"
     >
       <Image
         src={logo}
@@ -37,75 +39,42 @@ const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"])
         loading="eager"
         class="h-9 w-9 rounded-full"
       />
-      <span class="truncate text-base font-medium tracking-tight text-[var(--m3-on-surface)] sm:text-lg">
+      <span class="truncate text-base font-medium tracking-tight text-[var(--md-sys-color-on-surface)] sm:text-lg">
         dirtTW 土靈
       </span>
     </a>
 
     <div class="flex shrink-0 items-center gap-1 xl:order-2">
-      <button
+      <md-icon-button
         type="button"
+        toggle
         data-theme-toggle
         aria-label={t.theme}
         data-light-label={t.lightTheme}
         data-dark-label={t.darkTheme}
-        aria-pressed="false"
-        class="md3-icon-button"
+        class="[--md-icon-button-icon-color:var(--md-sys-color-on-surface-variant)]"
       >
-        <svg
-          class="h-5 w-5 dark:hidden"
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="4"></circle>
-          <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
-        </svg>
-        <svg
-          class="hidden h-5 w-5 dark:block"
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"></path>
-        </svg>
-        <span class="sr-only">{t.theme}</span>
-      </button>
+        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+        <span slot="selected" class="material-symbols-outlined" aria-hidden="true">dark_mode</span>
+      </md-icon-button>
 
       <details class="relative">
         <summary
           aria-label={t.language}
-          class="md3-nav-link cursor-pointer list-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[var(--m3-primary)]"
+          class="inline-flex min-h-10 cursor-pointer list-none items-center gap-2 rounded-full px-4 text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] transition-colors hover:bg-[var(--md-sys-color-surface-container-high)] hover:text-[var(--md-sys-color-on-surface)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--md-sys-color-primary)]"
         >
           <span>{t.languageName}</span>
-          <svg
-            aria-hidden="true"
-            class="h-4 w-4"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5.22 7.22a.75.75 0 0 1 1.06 0L10 10.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.28a.75.75 0 0 1 0-1.06Z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
+          <span class="material-symbols-outlined text-xl" aria-hidden="true">expand_more</span>
         </summary>
-        <div class="md3-menu absolute right-0 z-30 mt-2 min-w-40">
+        <div
+          class="absolute right-0 z-30 mt-2 min-w-40 rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-1 shadow-lg"
+        >
           {locales.map((supportedLocale) => (
             <a
               href={localizedPath(supportedLocale, route)}
               lang={supportedLocale}
               aria-current={supportedLocale === locale ? "true" : undefined}
-              class="md3-menu-item"
+              class="block rounded-full px-4 py-2.5 text-sm text-[var(--md-sys-color-on-surface)] transition-colors hover:bg-[var(--md-sys-color-surface-container-highest)] aria-[current=true]:bg-[var(--md-sys-color-secondary-container)] aria-[current=true]:font-semibold aria-[current=true]:text-[var(--md-sys-color-on-secondary-container)]"
             >
               {getMessages(supportedLocale).languageName}
             </a>
@@ -113,34 +82,20 @@ const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"])
         </div>
       </details>
 
-      <button
+      <md-icon-button
         type="button"
         data-nav-toggle
         aria-controls="navbar-menu"
         aria-expanded="false"
         aria-label={t.toggleNavigation}
-        class="md3-icon-button xl:hidden"
+        class="xl:hidden [--md-icon-button-icon-color:var(--md-sys-color-on-surface-variant)]"
       >
-        <svg
-          class="h-5 w-5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 17 14"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 1h15M1 7h15M1 13h15"
-          ></path>
-        </svg>
-      </button>
+        <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+      </md-icon-button>
     </div>
     <div
       id="navbar-menu"
-      class="md3-menu absolute right-0 top-full z-20 mt-3 hidden w-[min(21rem,calc(100vw-2rem))] p-2.5 xl:order-1 xl:static xl:mt-0 xl:block xl:w-auto xl:shrink-0"
+      class="absolute right-0 top-full z-20 mt-3 hidden w-[min(21rem,calc(100vw-2rem))] rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-2.5 shadow-lg xl:order-1 xl:static xl:mt-0 xl:block xl:w-auto xl:shrink-0"
     >
       <ul class="flex flex-col gap-1.5 font-medium xl:flex-row xl:items-center xl:gap-0.5">
       {links.map(({ href, label }) => (
@@ -149,12 +104,12 @@ const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"])
             href={localizedPath(locale, href)}
             data-astro-prefetch={prefetchLinks.has(href) ? "hover" : undefined}
             aria-current={href === route ? "page" : undefined}
-            class="md3-nav-link group"
+            class="group inline-flex min-h-10 items-center justify-between gap-3 rounded-full px-4 text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] transition-colors hover:bg-[var(--md-sys-color-surface-container-highest)] hover:text-[var(--md-sys-color-on-surface)] aria-[current=page]:bg-[var(--md-sys-color-secondary-container)] aria-[current=page]:text-[var(--md-sys-color-on-secondary-container)] xl:px-3.5 xl:text-[13px]"
           >
             {label}
             <span
               aria-hidden="true"
-              class="ml-3 h-1.5 w-1.5 rounded-full bg-[var(--m3-primary)] transition-opacity xl:hidden"
+              class="ml-3 h-1.5 w-1.5 rounded-full bg-[var(--md-sys-color-primary)] transition-opacity xl:hidden"
               class:list={[href === route ? "opacity-100" : "opacity-0 group-hover:opacity-60"]}
             ></span>
           </a>
@@ -165,22 +120,17 @@ const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"])
   </div>
 </nav>
 
-<style>
-  #navbar-menu {
-    padding: 0.625rem;
-  }
+<script>
+  import "@material/web/iconbutton/icon-button.js";
+</script>
 
+<style>
   @media (min-width: 1280px) {
     #navbar-menu {
       border-radius: 0;
       background-color: transparent;
       box-shadow: none;
       padding: 0;
-    }
-
-    #navbar-menu .md3-nav-link {
-      padding: 0 0.875rem;
-      font-size: 0.8125rem;
     }
   }
 </style>

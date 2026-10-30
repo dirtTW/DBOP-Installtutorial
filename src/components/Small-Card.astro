@@ -12,31 +12,31 @@ const label = getSiteLabel(locale ?? Astro.currentLocale, link, altText);
 ---
 
 <a
-  class="site-card md3-card group flex min-h-20 items-center gap-4 p-4 text-left"
+  class="site-card surface-card group flex min-h-20 items-center gap-4 p-4 text-left"
   href={link}
   target="_blank"
   rel="noopener noreferrer"
   data-categories={categories.join(" ")}
 >
-  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--m3-surface-container-high)] text-[var(--m3-primary)]" aria-hidden="true">
-    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7m-1-6-9 9"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--md-sys-color-surface-container-high)] text-[var(--md-sys-color-primary)]" aria-hidden="true">
+    <span class="material-symbols-outlined text-xl">language</span>
   </span>
-  <span class="min-w-0 flex-1 text-sm font-semibold leading-5 text-[var(--m3-on-surface)]">{label}</span>
-  <span aria-hidden="true" class="text-[var(--m3-on-surface-variant)] transition-colors group-hover:text-[var(--m3-primary)]">↗</span>
+  <span class="min-w-0 flex-1 text-sm font-semibold leading-5 text-[var(--md-sys-color-on-surface)]">{label}</span>
+  <span class="material-symbols-outlined text-xl text-[var(--md-sys-color-on-surface-variant)] transition-colors group-hover:text-[var(--md-sys-color-primary)]" aria-hidden="true">open_in_new</span>
 </a>
 
 <style>
   .site-card {
     transition:
-      background-color 180ms var(--m3-easing),
-      box-shadow 180ms var(--m3-easing);
+      background-color 180ms cubic-bezier(0.2, 0, 0, 1),
+      box-shadow 180ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   .site-card:hover {
     background-color: color-mix(
       in srgb,
-      var(--m3-on-surface) 5%,
-      var(--m3-surface-container-low)
+      var(--md-sys-color-on-surface) 5%,
+      var(--md-sys-color-surface-container-low)
     );
     box-shadow:
       0 1px 3px 1px rgb(0 0 0 / 0.12),
