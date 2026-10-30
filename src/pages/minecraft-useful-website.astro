@@ -1,17 +1,8 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SmallCardSel from "../layouts/MCusefullink.astro";
-import Navbar from "../components/Navbar.astro";
-import Footer from "../components/Footer.astro";
-import "../styles/global.css";
-import { getLocale, getMessages } from "../i18n";
+import RedirectPage from "../components/RedirectPage.astro";
+import { localizedPath } from "../i18n";
 
-const locale = getLocale(Astro.currentLocale);
-const t = getMessages(locale);
+const destination = localizedPath("en", "useful-website");
 ---
 
-<Layout title={t.nav.minecraftSites} locale={locale}>
-  <Navbar locale={locale} />
-  <SmallCardSel locale={locale} />
-  <Footer locale={locale} />
-</Layout>
+<RedirectPage destination={destination} lang="en" label="Continue to useful websites" />
