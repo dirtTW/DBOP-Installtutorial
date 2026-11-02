@@ -25,7 +25,7 @@
     "typescript": "^5.9.2"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.52.4",
+    "@rollup/rollup-linux-x64-gnu": "^4.66.0",
     "@tailwindcss/oxide-linux-x64-gnu": "^4.3.3"
   },
   "devDependencies": {
