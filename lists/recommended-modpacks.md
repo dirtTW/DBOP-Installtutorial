@@ -18,8 +18,8 @@ link:
 - https://modrinth.com/modpack/dbop
 - https://modrinth.com/modpack/dup
 - https://modrinth.com/modpack/fabulously-optimized
-- https://modrinth.com/modpack/tnvbp
-- https://modrinth.com/modpack/tnvbp-lite
+- https://modrinth.com/modpack/tnf-vanilla
+- https://modrinth.com/modpack/windbreaker
 - https://modrinth.com/modpack/sop
 - https://www.curseforge.com/minecraft/modpacks/all-of-fabric-6
 - https://www.curseforge.com/minecraft/modpacks/all-of-fabric-7

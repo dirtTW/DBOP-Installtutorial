@@ -68,8 +68,8 @@ const messages = {
     dupDescription:
       "DUP 是一個實用模組包，包含藍圖、小地圖以及整理背包等模組。",
     fabulouslyOptimized: "使用這個簡單的模組包來提升畫面與效能。",
-    tnvbp: "TechNoob 製作的 Minecraft 效能優化模組包。",
-    tnvbpLite: "TNVBP 的輕量化版本。",
+    tnfVanilla: "TopNotchFoxy 製作的輕量原版 Minecraft 效能優化模組包。",
+    windbreaker: "以 Sodium 為基礎、極輕量的高效能模組包，由 TopNotchFoxy 製作。",
     simplyOptimized: "深入研究、專注於純粹效能的優化模組包。",
     aof6:
       "All of Fabric 系列第六作，包含任務、新戰鬥系統與各種可供探索的建築。",

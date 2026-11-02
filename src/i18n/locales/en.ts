@@ -67,8 +67,8 @@ const messages = {
       "A utility modpack with building blueprints, a minimap, inventory sorting, and more.",
     fabulouslyOptimized:
       "Improve your graphics and performance with this simple modpack.",
-    tnvbp: "A Minecraft performance optimization modpack by TechNoob.",
-    tnvbpLite: "The lightweight version of TNVBP.",
+    tnfVanilla: "A lightweight vanilla-focused Minecraft performance pack by TopNotchFoxy.",
+    windbreaker: "An extremely lightweight Sodium-based performance modpack by TopNotchFoxy.",
     simplyOptimized:
       "A thoroughly researched modpack focused on pure performance.",
     aof6:
