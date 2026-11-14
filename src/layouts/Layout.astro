@@ -5,8 +5,11 @@ import favicon from "../favicon.svg";
 export interface Props {
   title: string;
   locale?: string;
+  /** DOM id of the page's <main>, used by the skip link and the
+      view-transition render block. */
+  mainId?: string;
 }
-const { title, locale: localeProp } = Astro.props;
+const { title, locale: localeProp, mainId = "main-content" } = Astro.props;
 const locale = getLocale(localeProp);
 const t = getMessages(locale);
 ---
@@ -19,93 +22,98 @@ const t = getMessages(locale);
       name="description"
       content={t.description}
     />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!-- Declares the schemes the site supports. `light dark` follows the OS;
+         the inline script below may pin it from localStorage before first
+         paint, and global.css maps the value onto `color-scheme`. -->
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      try {
+        const stored = localStorage.getItem("theme");
+        if (stored === "light" || stored === "dark") {
+          document.querySelector('meta[name="color-scheme"]').content = stored;
+        }
+      } catch {}
+    </script>
+    <meta name="theme-color" content="#f9f9ff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="sitemap" href="/sitemap-0.xml" />
     <link rel="icon" type="image/svg+xml" href={favicon.src} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..600,0..1,-50..200&family=Roboto:wght@400;500;700&display=block"
-    />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <meta name="theme-color" content="#f9f9ff" />
-    <meta name="viewport" content="width=device-width" />
-    <script is:inline>
-      const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.classList.toggle(
-        "dark",
-        savedTheme ? savedTheme === "dark" : prefersDark,
-      );
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Cross-document view transitions may not start until the incoming
+         page's main content has been parsed, so the cross-fade never reveals
+         a blank page. Ignored by browsers without view transitions. -->
+    <link rel="expect" href={`#${mainId}`} blocking="render" />
   </head>
-  <body class="min-h-screen bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)]">
+  <body class="flex min-h-screen flex-col bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)]">
+    <a class="skip-link" href={`#${mainId}`}>{t.skipToContent}</a>
     <slot />
     <script>
-      const navToggle = document.querySelector<HTMLElement>("[data-nav-toggle]");
-      const navMenu = document.querySelector<HTMLElement>("#navbar-menu");
-      const languageMenu = document.querySelector<HTMLDetailsElement>("nav details");
-
-      if (navToggle && navMenu) {
-        const closeMenu = () => {
-          navMenu.classList.add("hidden");
-          navToggle.setAttribute("aria-expanded", "false");
-        };
-
-        navToggle.addEventListener("click", () => {
-          const isOpen = navToggle.getAttribute("aria-expanded") === "true";
-          if (!isOpen) languageMenu?.removeAttribute("open");
-          navMenu.classList.toggle("hidden", isOpen);
-          navToggle.setAttribute("aria-expanded", String(!isOpen));
-        });
-
-        languageMenu?.addEventListener("toggle", () => {
-          if (languageMenu.open) closeMenu();
-        });
-
-        navMenu.querySelectorAll("a").forEach((link) => {
-          link.addEventListener("click", closeMenu);
-        });
-
-        document.addEventListener("click", (event) => {
-          if (
-            event.target instanceof Node &&
-            !navToggle.contains(event.target) &&
-            !navMenu.contains(event.target)
-          ) {
-            closeMenu();
-          }
-        });
-
-        document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape") closeMenu();
-        });
-      }
+      const schemeMeta = document.querySelector<HTMLMetaElement>(
+        'meta[name="color-scheme"]',
+      );
+      const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const systemScheme = () => (darkQuery.matches ? "dark" : "light");
+      const storedScheme = () => {
+        try {
+          const value = localStorage.getItem("theme");
+          return value === "light" || value === "dark" ? value : null;
+        } catch {
+          return null;
+        }
+      };
+      const renderedScheme = () => storedScheme() ?? systemScheme();
 
       let themeTransitionTimeout: number | undefined;
-      document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((button) => {
-        const updateThemeLabel = (isDark: boolean) => {
+
+      const syncThemeControls = () => {
+        const isDark = renderedScheme() === "dark";
+        document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((button) => {
           button.toggleAttribute("selected", isDark);
           button.setAttribute(
             "aria-label",
             isDark ? button.dataset.lightLabel ?? "" : button.dataset.darkLabel ?? "",
           );
-        };
-        updateThemeLabel(document.documentElement.classList.contains("dark"));
+        });
+      };
+
+      const applyScheme = (scheme: string | null) => {
+        if (schemeMeta) schemeMeta.content = scheme ?? "light dark";
+        syncThemeControls();
+      };
+
+      document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((button) => {
         button.addEventListener("click", () => {
-          const root = document.documentElement;
-          root.classList.add("theme-transition");
-          const isDark = root.classList.toggle("dark");
-          localStorage.setItem("theme", isDark ? "dark" : "light");
-          updateThemeLabel(isDark);
+          const target = renderedScheme() === "dark" ? "light" : "dark";
+          document.documentElement.classList.add("theme-transition");
+          try {
+            // Choosing the scheme the OS already uses is how the user gets
+            // back to "follow the system", so drop the override instead.
+            if (target === systemScheme()) localStorage.removeItem("theme");
+            else localStorage.setItem("theme", target);
+          } catch {
+            /* storage blocked: the scheme still applies for this page view */
+          }
+          applyScheme(storedScheme());
           window.clearTimeout(themeTransitionTimeout);
           themeTransitionTimeout = window.setTimeout(() => {
-            root.classList.remove("theme-transition");
+            document.documentElement.classList.remove("theme-transition");
           }, 260);
         });
       });
+
+      // The OS preference can change at any time (including on a schedule).
+      darkQuery.addEventListener("change", () => applyScheme(storedScheme()));
+
+      // Keep other tabs in sync with an override made here.
+      window.addEventListener("storage", (event) => {
+        if (event.key === "theme") applyScheme(storedScheme());
+      });
+
+      syncThemeControls();
     </script>
   </body>
 </html>

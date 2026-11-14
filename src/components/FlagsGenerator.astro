@@ -53,10 +53,11 @@ const presetOptions: PresetOption[] = [
 ];
 ---
 
-<Layout title={t.flags.title} locale={locale}>
+<Layout title={t.flags.title} locale={locale} mainId="generator">
   <Navbar locale={locale} />
   <main
     id="generator"
+    tabindex="-1"
     class="pb-12"
     data-filename-error={t.flags.filenameError}
     data-restart-warning={t.flags.javaRestartWarning}
@@ -78,7 +79,7 @@ const presetOptions: PresetOption[] = [
             id="server-file"
             class="w-full"
             value="server.jar"
-            pattern="[A-Za-z0-9][A-Za-z0-9._-]*\.jar"
+            pattern="[A-Za-z0-9][A-Za-z0-9._\-]*\.jar"
             autocomplete="off"
             spellcheck="false"
             aria-describedby="filename-help"
@@ -503,7 +504,7 @@ const presetOptions: PresetOption[] = [
     if (!fileInput || !memoryInput || !guiSwitch || !restartSwitch) return null;
 
     const filename = fileInput.value.trim();
-    if (!/^[A-Za-z0-9][A-Za-z0-9._-]*\.jar$/i.test(filename)) {
+    if (!/^[A-Za-z0-9][A-Za-z0-9._\-]*\.jar$/i.test(filename)) {
       if (status) {
         status.textContent = generator?.dataset.filenameError ?? "";
       }

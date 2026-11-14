@@ -73,10 +73,10 @@ const features = [
     </div>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {features.map((feature) => (
-        <article class="surface-card feature-card group relative p-5 sm:p-6">
+        <article class="surface-card feature-card reveal-on-scroll group relative p-5 sm:p-6">
           <div class="mb-5 flex items-center justify-between">
             {typeof feature.image === "string" ? (
-              <img class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width="48" height="48" loading="lazy" />
+              <img class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
             ) : (
               <Image class="h-12 w-12 rounded-2xl object-cover" src={feature.image} alt="" width={48} height={48} format="webp" />
             )}

@@ -101,7 +101,13 @@ const categories = websiteCategories.filter((category) =>
     ></p>
   </div>
   <div id={listId} class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-    {websites.map((website) => <SmallCard locale={locale} {...website} />)}
+    {websites.map((website, index) => (
+      <SmallCard
+        locale={locale}
+        {...website}
+        class={index >= 6 ? "defer-render" : undefined}
+      />
+    ))}
   </div>
 </section>
 
@@ -147,7 +153,9 @@ const categories = websiteCategories.filter((category) =>
         const matchesCategory =
           activeCategory === "all" || cardCategories.includes(activeCategory);
         const isMatch = matchesCategory && searchableText.includes(query);
-        card.style.display = isMatch ? "" : "none";
+        // `hidden` keeps the list semantic; it also lets the browser skip
+        // rendering the cards that stay off-screen.
+        card.hidden = !isMatch;
         if (isMatch) visibleCount++;
       }
 

@@ -1,124 +1,147 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* The theme is no longer a `.dark` class toggled by script: it is the
+   `<meta name="color-scheme">` value mapped onto the CSS `color-scheme`
+   property, so the cascade, native UI and `light-dark()` all agree even
+   when JavaScript never runs. */
+@custom-variant dark (
+  &:where(
+    html:has(> head > meta[name="color-scheme"][content="dark"]),
+    html:has(> head > meta[name="color-scheme"][content="dark"]) *
+  )
+);
+
+/* ------------------------------------------------------------------ */
+/* Fonts (self-hosted)                                                 */
+/* Roboto is a variable font (400..700). The Material Symbols file is  */
+/* subsetted at build time to the 13 icons the site actually renders.  */
+/* ------------------------------------------------------------------ */
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../assets/fonts/roboto-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../assets/fonts/roboto-latin-ext.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: block;
+  src: url("../assets/fonts/material-symbols-outlined.woff2") format("woff2");
+}
 
 /* ------------------------------------------------------------------ */
 /* Material 3 design tokens                                            */
-/* These feed @material/web components (--md-sys-color-*) and the      */
-/* few layout surfaces that have no official component (cards, panels).*/
+/* Every color role is a light/dark pair, resolved by `color-scheme`.  */
+/* These feed @material/web (--md-sys-color-*) and the few surfaces    */
+/* without an official component (cards, panels, code blocks).         */
 /* ------------------------------------------------------------------ */
 
 :root {
-  color-scheme: light;
+  /* Follow the system preference until the user pins a scheme. */
+  color-scheme: light dark;
 
-  --md-sys-color-primary: #005ac1;
-  --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #d8e2ff;
-  --md-sys-color-on-primary-container: #001a41;
+  --md-sys-color-primary: light-dark(#005ac1, #adc6ff);
+  --md-sys-color-on-primary: light-dark(#ffffff, #002e69);
+  --md-sys-color-primary-container: light-dark(#d8e2ff, #004494);
+  --md-sys-color-on-primary-container: light-dark(#001a41, #d8e2ff);
 
-  --md-sys-color-secondary: #565e71;
-  --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: #dae2f9;
-  --md-sys-color-on-secondary-container: #131c2b;
+  --md-sys-color-secondary: light-dark(#565e71, #bec6dc);
+  --md-sys-color-on-secondary: light-dark(#ffffff, #283141);
+  --md-sys-color-secondary-container: light-dark(#dae2f9, #3e4759);
+  --md-sys-color-on-secondary-container: light-dark(#131c2b, #dae2f9);
 
-  --md-sys-color-tertiary: #3d6373;
-  --md-sys-color-on-tertiary: #ffffff;
-  --md-sys-color-tertiary-container: #c1e8fb;
-  --md-sys-color-on-tertiary-container: #001f29;
+  --md-sys-color-tertiary: light-dark(#3d6373, #a5ccdf);
+  --md-sys-color-on-tertiary: light-dark(#ffffff, #063543);
+  --md-sys-color-tertiary-container: light-dark(#c1e8fb, #234b5b);
+  --md-sys-color-on-tertiary-container: light-dark(#001f29, #c1e8fb);
 
-  --md-sys-color-error: #ba1a1a;
-  --md-sys-color-on-error: #ffffff;
-  --md-sys-color-error-container: #ffdad6;
-  --md-sys-color-on-error-container: #410002;
+  --md-sys-color-error: light-dark(#ba1a1a, #ffb4ab);
+  --md-sys-color-on-error: light-dark(#ffffff, #690005);
+  --md-sys-color-error-container: light-dark(#ffdad6, #93000a);
+  --md-sys-color-on-error-container: light-dark(#410002, #ffdad6);
 
-  --md-sys-color-background: #f9f9ff;
-  --md-sys-color-on-background: #1a1b21;
-  --md-sys-color-surface: #f9f9ff;
-  --md-sys-color-on-surface: #1a1b21;
-  --md-sys-color-surface-variant: #e0e2ec;
-  --md-sys-color-on-surface-variant: #44474f;
-  --md-sys-color-surface-tint: #005ac1;
+  --md-sys-color-background: light-dark(#f9f9ff, #111318);
+  --md-sys-color-on-background: light-dark(#1a1b21, #e2e2e9);
+  --md-sys-color-surface: light-dark(#f9f9ff, #111318);
+  --md-sys-color-on-surface: light-dark(#1a1b21, #e2e2e9);
+  --md-sys-color-surface-variant: light-dark(#e0e2ec, #44474f);
+  --md-sys-color-on-surface-variant: light-dark(#44474f, #c4c6d0);
+  --md-sys-color-surface-tint: light-dark(#005ac1, #adc6ff);
 
-  --md-sys-color-surface-dim: #d9d9e0;
-  --md-sys-color-surface-bright: #f9f9ff;
-  --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #f3f3fa;
-  --md-sys-color-surface-container: #ededf4;
-  --md-sys-color-surface-container-high: #e8e7ef;
-  --md-sys-color-surface-container-highest: #e2e2e9;
+  --md-sys-color-surface-dim: light-dark(#d9d9e0, #111318);
+  --md-sys-color-surface-bright: light-dark(#f9f9ff, #37393e);
+  --md-sys-color-surface-container-lowest: light-dark(#ffffff, #0c0e13);
+  --md-sys-color-surface-container-low: light-dark(#f3f3fa, #191c20);
+  --md-sys-color-surface-container: light-dark(#ededf4, #1d2024);
+  --md-sys-color-surface-container-high: light-dark(#e8e7ef, #282a2f);
+  --md-sys-color-surface-container-highest: light-dark(#e2e2e9, #33353a);
 
-  --md-sys-color-outline: #74777f;
-  --md-sys-color-outline-variant: #c4c6d0;
+  --md-sys-color-outline: light-dark(#74777f, #8e9099);
+  --md-sys-color-outline-variant: light-dark(#c4c6d0, #44474f);
   --md-sys-color-shadow: #000000;
   --md-sys-color-scrim: #000000;
 
-  --md-sys-color-inverse-surface: #2f3036;
-  --md-sys-color-inverse-on-surface: #f0f0f7;
-  --md-sys-color-inverse-primary: #adc6ff;
+  --md-sys-color-inverse-surface: light-dark(#2f3036, #e2e2e9);
+  --md-sys-color-inverse-on-surface: light-dark(#f0f0f7, #2f3036);
+  --md-sys-color-inverse-primary: light-dark(#adc6ff, #005ac1);
 
   /* Site-only surfaces (no @material/web equivalent) */
-  --surface-card: var(--md-sys-color-surface-container-low);
-  --surface-panel: var(--md-sys-color-surface-container);
-  --surface-item: var(--md-sys-color-surface-container-lowest);
-  --code-surface: #1e1f24;
-  --code-text: #f0f0f7;
+  --surface-card: light-dark(
+    var(--md-sys-color-surface-container-low),
+    var(--md-sys-color-surface-container)
+  );
+  --surface-panel: light-dark(
+    var(--md-sys-color-surface-container),
+    var(--md-sys-color-surface-container)
+  );
+  --surface-item: light-dark(
+    var(--md-sys-color-surface-container-lowest),
+    var(--md-sys-color-surface-container-high)
+  );
+  --code-surface: light-dark(#1e1f24, var(--md-sys-color-surface-container-lowest));
+  --code-text: light-dark(#f0f0f7, var(--md-sys-color-on-surface));
 
   --md-ref-typeface-plain:
-    "Roboto", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+    "Roboto", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system,
+    "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   --md-ref-typeface-brand: var(--md-ref-typeface-plain);
+
+  /* Native UI that follows the resolved scheme. */
+  --scrollbar-thumb: light-dark(#74777f, #8e9099);
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
-html.dark {
+/* The <meta> is only a presentational hint: author CSS wins, so map the
+   meta value back onto the property. Deleting the meta value (or leaving
+   it at "light dark") keeps following the system preference. */
+html:has(> head > meta[name="color-scheme"][content="dark"]) {
   color-scheme: dark;
+}
 
-  --md-sys-color-primary: #adc6ff;
-  --md-sys-color-on-primary: #002e69;
-  --md-sys-color-primary-container: #004494;
-  --md-sys-color-on-primary-container: #d8e2ff;
-
-  --md-sys-color-secondary: #bec6dc;
-  --md-sys-color-on-secondary: #283141;
-  --md-sys-color-secondary-container: #3e4759;
-  --md-sys-color-on-secondary-container: #dae2f9;
-
-  --md-sys-color-tertiary: #a5ccdf;
-  --md-sys-color-on-tertiary: #063543;
-  --md-sys-color-tertiary-container: #234b5b;
-  --md-sys-color-on-tertiary-container: #c1e8fb;
-
-  --md-sys-color-error: #ffb4ab;
-  --md-sys-color-on-error: #690005;
-  --md-sys-color-error-container: #93000a;
-  --md-sys-color-on-error-container: #ffdad6;
-
-  --md-sys-color-background: #111318;
-  --md-sys-color-on-background: #e2e2e9;
-  --md-sys-color-surface: #111318;
-  --md-sys-color-on-surface: #e2e2e9;
-  --md-sys-color-surface-variant: #44474f;
-  --md-sys-color-on-surface-variant: #c4c6d0;
-  --md-sys-color-surface-tint: #adc6ff;
-
-  --md-sys-color-surface-dim: #111318;
-  --md-sys-color-surface-bright: #37393e;
-  --md-sys-color-surface-container-lowest: #0c0e13;
-  --md-sys-color-surface-container-low: #191c20;
-  --md-sys-color-surface-container: #1d2024;
-  --md-sys-color-surface-container-high: #282a2f;
-  --md-sys-color-surface-container-highest: #33353a;
-
-  --md-sys-color-outline: #8e9099;
-  --md-sys-color-outline-variant: #44474f;
-
-  --md-sys-color-inverse-surface: #e2e2e9;
-  --md-sys-color-inverse-on-surface: #2f3036;
-  --md-sys-color-inverse-primary: #005ac1;
-
-  --surface-card: var(--md-sys-color-surface-container);
-  --surface-panel: var(--md-sys-color-surface-container);
-  --surface-item: var(--md-sys-color-surface-container-high);
-  --code-surface: var(--md-sys-color-surface-container-lowest);
-  --code-text: var(--md-sys-color-on-surface);
+html:has(> head > meta[name="color-scheme"][content="light"]) {
+  color-scheme: light;
 }
 
 /* ------------------------------------------------------------------ */
@@ -173,7 +196,27 @@ html.dark {
     background-color: var(--md-sys-color-surface);
     color: var(--md-sys-color-on-surface);
     font-family: var(--md-ref-typeface-plain);
+    /* Keeps the fallback face visually the same size as Roboto while the
+       font swaps in, so nothing reflows mid-navigation. */
+    font-size-adjust: from-font;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Headlines balance; long-form prose avoids orphans and rivers. Never
+     applied to `*` - both have a real style-recalculation cost. */
+  h1,
+  h2,
+  h3,
+  h4,
+  legend {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  blockquote,
+  dd {
+    text-wrap: pretty;
   }
 
   ::selection {
@@ -182,6 +225,19 @@ html.dark {
   }
 
   .material-symbols-outlined {
+    font-family: "Material Symbols Outlined";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
     font-variation-settings:
       "FILL" 0,
       "wght" 400,
@@ -189,6 +245,27 @@ html.dark {
       "opsz" 24;
     flex: none;
     user-select: none;
+  }
+
+  /* Keyboard users can jump past the navigation on every page. */
+  .skip-link {
+    position: fixed;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+    z-index: 100;
+    padding: 0.625rem 1rem;
+    border-radius: 9999px;
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    translate: 0 -200%;
+  }
+
+  .skip-link:focus-visible {
+    translate: 0;
+    outline: 2px solid var(--md-sys-color-on-primary);
+    outline-offset: 2px;
   }
 }
 
@@ -236,12 +313,122 @@ html.dark {
   md-icon-button:not(:defined) [slot="selected"] {
     display: none;
   }
+
+  /* A plain <button> that looks like md-icon-button. Real buttons are used
+     where the control must be a popover invoker (md-icon-button renders its
+     own shadow button, which cannot carry `popovertarget`). */
+  .icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: 9999px;
+    color: var(--md-sys-color-on-surface-variant);
+    transition:
+      background-color 180ms cubic-bezier(0.2, 0, 0, 1),
+      color 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .icon-button:hover {
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .icon-button[aria-expanded="true"] {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  .icon-button:focus-visible,
+  .text-button:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+  }
+
+  .text-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-block-size: 2.5rem;
+    padding-inline: 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface-variant);
+    transition:
+      background-color 180ms cubic-bezier(0.2, 0, 0, 1),
+      color 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .text-button:hover {
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .text-button[aria-expanded="true"] {
+    background-color: var(--md-sys-color-surface-container-highest);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  /* Popover menus: surface, elevation and entry animation in one place.
+     Positioning is set per component. */
+  .popover-surface {
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: 1rem;
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface);
+    box-shadow:
+      0 1px 3px 1px rgb(0 0 0 / 0.12),
+      0 1px 2px rgb(0 0 0 / 0.24);
+    padding: 0.25rem;
+  }
+
+  /* `hidden` until @starting-style picks it up; only opacity/translate. */
+  .popover-surface:popover-open {
+    animation: m3-popover-in 160ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+
+  @starting-style {
+    .popover-surface:popover-open {
+      opacity: 0;
+      translate: 0 -0.375rem;
+    }
+  }
+
+  /* Below-the-fold cards skip layout and paint until they are scrolled
+     near the viewport. The intrinsic size keeps the scrollbar honest. */
+  .defer-render {
+    content-visibility: auto;
+    contain-intrinsic-size: auto none auto 5.5rem;
+  }
 }
 
 /* ------------------------------------------------------------------ */
 /* Motion                                                              */
 /* ------------------------------------------------------------------ */
 
+@keyframes m3-surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes m3-popover-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.375rem;
+  }
+}
+
+/* Theme changes animate because the color values themselves change when
+   `color-scheme` flips; the class is only alive for the duration. */
 html.theme-transition,
 html.theme-transition body,
 html.theme-transition body * {
@@ -257,21 +444,64 @@ html.theme-transition body * {
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
 }
 
-@keyframes m3-surface-enter {
-  from {
-    opacity: 0;
-    transform: translateY(-0.25rem) scale(0.98);
+/* Cross-document view transitions: a subtle cross-fade between static
+   pages, with the app bar and footer morphing in place. Browsers without
+   support simply navigate normally. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  ::view-transition-old(root) {
+    animation: vt-fade-out 140ms cubic-bezier(0.4, 0, 1, 1) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-fade-in 220ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+
+  ::view-transition-group(site-header),
+  ::view-transition-group(site-footer) {
+    animation-duration: 220ms;
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  @keyframes vt-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes vt-fade-in {
+    from {
+      opacity: 0;
+    }
   }
 }
 
-nav #navbar-menu:not(.hidden),
-nav details[open] > div {
-  animation: m3-surface-enter 180ms cubic-bezier(0.2, 0, 0, 1) both;
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* Scroll-driven entry reveal. Purely decorative, so unsupported browsers
+   get the untransformed content instead of a polyfill. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes m3-reveal {
+      from {
+        opacity: 0;
+        translate: 0 1.25rem;
+      }
+    }
+
+    .reveal-on-scroll {
+      animation: m3-reveal auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -291,7 +521,7 @@ nav details[open] > div {
 
 .cf-logo {
   display: inline-block;
-  background-image: url("/src/img/cf-logo.svg");
+  background-image: url("../img/cf-logo.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -302,7 +532,7 @@ nav details[open] > div {
 
 .md-logo {
   display: inline-block;
-  background-image: url("/src/img/modrinth-logo.svg");
+  background-image: url("../img/modrinth-logo.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

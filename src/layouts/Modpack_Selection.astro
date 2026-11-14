@@ -198,7 +198,7 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
 });
 ---
 
-<main id="modpacks">
+<main id="main-content" tabindex="-1">
   <PageIntro
     eyebrow={t.pages.modpacksEyebrow}
     title={t.nav.modpacks}
@@ -280,7 +280,7 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
       for (const card of cards) {
         const isMatch =
           card.textContent?.toLowerCase().includes(query) ?? false;
-        card.style.display = isMatch ? "" : "none";
+        card.hidden = !isMatch;
         if (isMatch) visibleCount++;
       }
 

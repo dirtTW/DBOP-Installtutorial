@@ -6,13 +6,18 @@ interface Props {
   altText: string;
   locale?: string;
   categories?: string[];
+  /** Extra classes from the parent (used to defer off-screen cards). */
+  class?: string;
 }
-const { altText, link, locale, categories = [] } = Astro.props;
+const { altText, link, locale, categories = [], class: className } = Astro.props;
 const label = getSiteLabel(locale ?? Astro.currentLocale, link, altText);
 ---
 
 <a
-  class="site-card surface-card group flex min-h-20 items-center gap-4 p-4 text-left"
+  class:list={[
+    "site-card surface-card group flex min-h-20 items-center gap-4 p-4 text-left",
+    className,
+  ]}
   href={link}
   target="_blank"
   rel="noopener noreferrer"

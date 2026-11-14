@@ -25,7 +25,7 @@ from the sitemap.
 - **Astro 7** with file-based routing and static output
 - **Tailwind CSS 4** through the Vite plugin
 - **@material/web 2** (Google's Material 3 web components) for interactive controls
-- **Material Symbols Outlined** + Roboto from Google Fonts
+- **Material Symbols Outlined** + Roboto, self-hosted and subset in `src/assets/fonts/`
 - **TypeScript** (checked during `npm run build` via `astro check`)
 - **Vitest** for unit tests, **Playwright** for end-to-end tests
 - Deployed to **GitHub Pages** by GitHub Actions
@@ -97,12 +97,20 @@ entries without a translation fall back to the label in the Markdown file.
 The navbar toggle switches between light and dark mode, persists the choice in
 `localStorage`, and falls back to the operating system preference.
 
+The theme is a `color-scheme`, not a `.dark` class. `<meta name="color-scheme">` declares
+`light dark` (or the pinned choice) in the document head, and every color role in
+`src/styles/global.css` is a `light-dark()` pair resolved from it. `color-scheme: light dark`
+on `:root` also themes native UI (scrollbars, form controls, the canvas) and removes the
+white flash, and because the value lives in HTML the site renders correctly with JavaScript
+disabled or blocked.
+
 The whole site uses a Material 3 (Material You) design system. Color roles are defined once in
-`src/styles/global.css` under `:root` / `html.dark` as `--md-sys-color-*` tokens, which style the
+`src/styles/global.css` under `:root` as `--md-sys-color-*` tokens, which style the
 `@material/web` components directly. Buttons, icon buttons, text fields, chips, switches, sliders,
 tabs, and the dialog are official `md-*` custom elements; only the layout surfaces with no
 upstream component (cards, panels, the search-bar skin) keep a small set of local classes.
-Tailwind handles layout and typography. Icons come from Material Symbols Outlined.
+Tailwind handles layout and typography. Icons come from Material Symbols Outlined, subset at
+build time to the glyphs the site renders.
 
 ## Flags generator
 
@@ -124,6 +132,41 @@ values follow the [Paper documentation](https://docs.papermc.io/paper/aikars-fla
 implementation is original and inspired by [flags.sh](https://flags.sh/) by
 [YouHaveTrouble](https://github.com/YouHaveTrouble/flags.sh) — no flags.sh source code is
 used.
+
+## Built with Modern Web Guidance
+
+The site is built and reviewed against Chrome's
+[Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance)
+(installed locally with `npx modern-web-guidance@latest install`). Target baseline:
+**Baseline 2024/2025** — anything newer is progressive enhancement, and nothing may break
+the page when it is unsupported.
+
+| Guide | Decision |
+| --- | --- |
+| `dark-mode` | `<meta name="color-scheme">` plus `light-dark()` tokens instead of a script-toggled `.dark` class |
+| `navbar` | one `<nav>` tree: native popover under 1280 px, inline above it, no ARIA menu roles |
+| `cross-document-transitions` | `@view-transition { navigation: auto }` on the shared stylesheet |
+| `consistent-cross-document-transitions` | `<link rel="expect" href="#main-content" blocking="render">` and stable `view-transition-name`s for the header and footer |
+| `typography` | `text-wrap: balance` on headings, `text-wrap: pretty` on prose, no fixed heights on text-bearing controls |
+| `defer-rendering-heavy-content` | `content-visibility: auto` + `contain-intrinsic-size` on directory cards from the third row down |
+| `scroll-entry-exit-effects` | view-timeline reveal on cards, `animation-fill-mode: backwards`, disabled under `prefers-reduced-motion` |
+| `visually-stable-font-fallbacks` | `font-size-adjust: from-font` so the fallback matches Roboto's x-height |
+| `secure-external-subresources` | no third-party fonts or scripts; remote mod artwork is loaded with `referrerpolicy="no-referrer"` and `decoding="async"` |
+
+Why these shifts, in the guidance's own words:
+
+> **MANDATORY:** To help prevent a "flash of un-themed content" (FOUC), place a `<meta>` tag in your `<head>` to ensure the browser knows which themes you support before it even starts rendering.
+
+> Build a site navigation bar that uses one semantic navigation tree at every size, presents a native popover when the links do not fit, becomes an inline navigation when they do, and identifies the current page.
+
+> **MANDATORY:** Both the source and destination pages must include the `@view-transition` at-rule. Without this, no cross-document transition occurs.
+
+> Use `text-wrap: balance` for balanced headlines and headline-like content […] Use `text-wrap: pretty` for long-form body text (paragraphs, blockquotes, etc.)
+
+> **DO** target large, self-contained layout blocks that are strictly **below the initial fold** (e.g., card items in an infinite feed, trailing comments, or bottom-heavy layout sections).
+
+Nothing here needs a server: GitHub Pages serves only static files, so the theme, navigation,
+and motion are all CSS or build-time output, and there are no response headers to set.
 
 ## Special thanks
 

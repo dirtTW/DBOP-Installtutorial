@@ -4,6 +4,8 @@ const messages = {
   languageName: "繁體中文",
   language: "語言",
   toggleNavigation: "切換導覽列",
+  skipToContent: "跳至主要內容",
+  navLabel: "主要導覽",
   theme: "切換色彩主題",
   lightTheme: "切換為淺色模式",
   darkTheme: "切換為深色模式",

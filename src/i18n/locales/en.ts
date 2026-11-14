@@ -2,6 +2,8 @@ const messages = {
   languageName: "English",
   language: "Language",
   toggleNavigation: "Toggle navigation",
+  skipToContent: "Skip to content",
+  navLabel: "Primary",
   theme: "Toggle color theme",
   lightTheme: "Switch to light mode",
   darkTheme: "Switch to dark mode",

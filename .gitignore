@@ -23,3 +23,7 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# local agent tooling (never published)
+AGENTS.md
+.agents/

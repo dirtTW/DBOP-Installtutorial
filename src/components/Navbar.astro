@@ -22,8 +22,11 @@ const links = [
 const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"]);
 ---
 
-<nav
-  class="fixed top-0 z-50 w-full border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] px-4 backdrop-blur-[14px]"
+<!-- One semantic navigation tree at every size. Narrow: a native popover
+     opened by the menu button. Wide: the same list laid out inline. -->
+<header
+  id="site-header"
+  class="site-header fixed top-0 z-50 w-full border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] px-4 backdrop-blur-[14px]"
 >
   <div class="relative mx-auto flex min-h-[4.5rem] max-w-screen-xl items-center justify-between gap-3">
     <a
@@ -58,79 +61,283 @@ const prefetchLinks = new Set(["dbop-install-tutorial", "recommended-modpacks"])
         <span slot="selected" class="material-symbols-outlined" aria-hidden="true">dark_mode</span>
       </md-icon-button>
 
-      <details class="relative">
-        <summary
-          aria-label={t.language}
-          class="inline-flex min-h-10 cursor-pointer list-none items-center gap-2 rounded-full px-4 text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] transition-colors hover:bg-[var(--md-sys-color-surface-container-high)] hover:text-[var(--md-sys-color-on-surface)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--md-sys-color-primary)]"
-        >
-          <span>{t.languageName}</span>
-          <span class="material-symbols-outlined text-xl" aria-hidden="true">expand_more</span>
-        </summary>
-        <div
-          class="absolute right-0 z-30 mt-2 min-w-40 rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-1 shadow-lg"
-        >
-          {locales.map((supportedLocale) => (
-            <a
-              href={localizedPath(supportedLocale, route)}
-              lang={supportedLocale}
-              aria-current={supportedLocale === locale ? "true" : undefined}
-              class="block rounded-full px-4 py-2.5 text-sm text-[var(--md-sys-color-on-surface)] transition-colors hover:bg-[var(--md-sys-color-surface-container-highest)] aria-[current=true]:bg-[var(--md-sys-color-secondary-container)] aria-[current=true]:font-semibold aria-[current=true]:text-[var(--md-sys-color-on-secondary-container)]"
-            >
-              {getMessages(supportedLocale).languageName}
-            </a>
-          ))}
-        </div>
-      </details>
-
-      <md-icon-button
+      <!-- A real <button> so it can be the popover invoker; the native
+           popover brings light dismiss, Escape and focus restore. -->
+      <button
         type="button"
-        data-nav-toggle
+        class="text-button"
+        id="language-toggle"
+        popovertarget="language-menu"
+        aria-controls="language-menu"
+        aria-expanded="false"
+        aria-label={t.language}
+      >
+        <span>{t.languageName}</span>
+        <span class="material-symbols-outlined text-xl" aria-hidden="true">expand_more</span>
+      </button>
+
+      <button
+        type="button"
+        class="icon-button xl:hidden"
+        id="nav-toggle"
+        popovertarget="navbar-menu"
         aria-controls="navbar-menu"
         aria-expanded="false"
         aria-label={t.toggleNavigation}
-        class="xl:hidden [--md-icon-button-icon-color:var(--md-sys-color-on-surface-variant)]"
       >
         <span class="material-symbols-outlined" aria-hidden="true">menu</span>
-      </md-icon-button>
+      </button>
     </div>
-    <div
-      id="navbar-menu"
-      class="absolute right-0 top-full z-20 mt-3 hidden w-[min(21rem,calc(100vw-2rem))] rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-2.5 shadow-lg xl:order-1 xl:static xl:mt-0 xl:block xl:w-auto xl:shrink-0"
-    >
-      <ul class="flex flex-col gap-1.5 font-medium xl:flex-row xl:items-center xl:gap-0.5">
-      {links.map(({ href, label }) => (
-        <li>
-          <a
-            href={localizedPath(locale, href)}
-            data-astro-prefetch={prefetchLinks.has(href) ? "hover" : undefined}
-            aria-current={href === route ? "page" : undefined}
-            class="group inline-flex min-h-10 items-center justify-between gap-3 rounded-full px-4 text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] transition-colors hover:bg-[var(--md-sys-color-surface-container-highest)] hover:text-[var(--md-sys-color-on-surface)] aria-[current=page]:bg-[var(--md-sys-color-secondary-container)] aria-[current=page]:text-[var(--md-sys-color-on-secondary-container)] xl:px-3.5 xl:text-[13px]"
-          >
-            {label}
-            <span
-              aria-hidden="true"
-              class="ml-3 h-1.5 w-1.5 rounded-full bg-[var(--md-sys-color-primary)] transition-opacity xl:hidden"
-              class:list={[href === route ? "opacity-100" : "opacity-0 group-hover:opacity-60"]}
-            ></span>
-          </a>
-        </li>
-      ))}
+
+    <nav aria-label={t.navLabel} class="xl:order-1">
+      <ul
+        id="navbar-menu"
+        class="popover-surface navbar-menu"
+        popover="auto"
+      >
+        {links.map(({ href, label }) => (
+          <li>
+            <a
+              href={localizedPath(locale, href)}
+              data-astro-prefetch={prefetchLinks.has(href) ? "hover" : undefined}
+              aria-current={href === route ? "page" : undefined}
+              class="navbar-link"
+            >
+              {label}
+              <span
+                aria-hidden="true"
+                class="navbar-dot"
+                class:list={[href === route ? "is-current" : ""]}
+              ></span>
+            </a>
+          </li>
+        ))}
       </ul>
-    </div>
+    </nav>
   </div>
-</nav>
+</header>
+
+<ul id="language-menu" class="popover-surface language-menu" popover="auto">
+  {locales.map((supportedLocale) => (
+    <li>
+      <a
+        href={localizedPath(supportedLocale, route)}
+        lang={supportedLocale}
+        hreflang={supportedLocale}
+        aria-current={supportedLocale === locale ? "true" : undefined}
+        class="language-link"
+      >
+        {getMessages(supportedLocale).languageName}
+      </a>
+    </li>
+  ))}
+</ul>
 
 <script>
   import "@material/web/iconbutton/icon-button.js";
+
+  const navMenu = document.getElementById("navbar-menu");
+  const navToggle = document.getElementById("nav-toggle");
+  const wideLayout = window.matchMedia("(min-width: 1280px)");
+
+  // A popover can only be used in the collapsed layout: remove the attribute
+  // when the inline row applies so the list participates in the header flow,
+  // and put it back when the viewport narrows again.
+  const syncPopoverAttribute = () => {
+    if (!navMenu) return;
+    if (wideLayout.matches) navMenu.removeAttribute("popover");
+    else navMenu.setAttribute("popover", "auto");
+    navToggle?.setAttribute(
+      "aria-expanded",
+      String(navMenu.matches(":popover-open")),
+    );
+  };
+
+  syncPopoverAttribute();
+  wideLayout.addEventListener("change", syncPopoverAttribute);
+
+  // aria-expanded mirrors the native state: closing via light dismiss,
+  // Escape, or a resize needs no extra listeners.
+  for (const trigger of document.querySelectorAll<HTMLElement>("[popovertarget]")) {
+    const target = document.getElementById(
+      trigger.getAttribute("popovertarget") ?? "",
+    );
+    target?.addEventListener("toggle", (event) => {
+      trigger.setAttribute(
+        "aria-expanded",
+        String((event as ToggleEvent).newState === "open"),
+      );
+    });
+  }
 </script>
 
 <style>
+  .site-header {
+    view-transition-name: site-header;
+  }
+
+  #nav-toggle {
+    anchor-name: --nav-toggle;
+  }
+
+  #language-toggle {
+    anchor-name: --language-toggle;
+  }
+
+  /* Collapsed layout: the list is a popover anchored under its trigger, with
+     a fixed offset fallback for browsers without anchor positioning. */
+  .navbar-menu {
+    position: fixed;
+    inset: auto;
+    inset-block-start: 4.5rem;
+    inset-inline-end: 1rem;
+    inline-size: min(21rem, calc(100dvw - 2rem));
+    max-block-size: calc(100dvh - 6rem);
+    overflow: auto;
+    margin: 0;
+    padding: 0.625rem;
+    gap: 0.375rem;
+  }
+
+  /* A closed popover must keep the UA `display: none`; only the open state
+     gets a layout of its own. */
+  .navbar-menu:popover-open {
+    display: grid;
+  }
+
+  @supports (position-area: block-end) {
+    .navbar-menu {
+      position-anchor: --nav-toggle;
+      inset-block-start: auto;
+      inset-inline-end: auto;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block, flip-inline;
+      margin-block-start: 0.75rem;
+    }
+  }
+
+  .language-menu {
+    position: fixed;
+    inset: auto;
+    inset-block-start: 4.5rem;
+    inset-inline-end: 1rem;
+    min-inline-size: 10rem;
+    margin: 0;
+    gap: 0.125rem;
+  }
+
+  .language-menu:popover-open {
+    display: grid;
+  }
+
+  @supports (position-area: block-end) {
+    .language-menu {
+      position-anchor: --language-toggle;
+      inset-block-start: auto;
+      inset-inline-end: auto;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block, flip-inline;
+      margin-block-start: 0.5rem;
+    }
+  }
+
+  .navbar-link {
+    display: flex;
+    min-block-size: 2.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-radius: 9999px;
+    padding-inline: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface-variant);
+    transition:
+      background-color 180ms cubic-bezier(0.2, 0, 0, 1),
+      color 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .navbar-link:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .navbar-link:focus-visible,
+  .language-link:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+  }
+
+  .navbar-link[aria-current="page"] {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  .navbar-dot {
+    inline-size: 0.375rem;
+    block-size: 0.375rem;
+    border-radius: 9999px;
+    background-color: var(--md-sys-color-primary);
+    opacity: 0;
+    transition: opacity 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .navbar-link:hover .navbar-dot {
+    opacity: 0.6;
+  }
+
+  .navbar-dot.is-current {
+    opacity: 1;
+  }
+
+  .language-link {
+    display: block;
+    border-radius: 9999px;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    color: var(--md-sys-color-on-surface);
+    transition: background-color 180ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .language-link:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
+
+  .language-link[aria-current="true"] {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    font-weight: 600;
+  }
+
+  /* Wide layout: same list, inline in the header. */
   @media (min-width: 1280px) {
-    #navbar-menu {
-      border-radius: 0;
-      background-color: transparent;
-      box-shadow: none;
+    .navbar-menu {
+      position: static;
+      inset: auto;
+      inline-size: auto;
+      max-block-size: none;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      gap: 0.125rem;
+      margin: 0;
       padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .navbar-menu::backdrop {
+      display: none;
+    }
+
+    .navbar-link {
+      padding-inline: 0.875rem;
+      font-size: 13px;
+    }
+
+    .navbar-dot {
+      display: none;
     }
   }
 </style>

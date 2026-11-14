@@ -61,13 +61,15 @@ const isCurseforgeLinkValid = !!curseforgelink;
 const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid);
 ---
 
-<article class="m3-modpack">
+<article class="m3-modpack reveal-on-scroll">
   <img
     class="m3-modpack-avatar"
     src={imagePath}
     data-fallback-src={fallbackImage.src}
     alt={`${displayName} ${locale === "en" ? "image" : "圖片"}`}
     loading="lazy"
+    decoding="async"
+    referrerpolicy="no-referrer"
   />
   <div class="m3-modpack-body">
     <h2 class="m3-modpack-name">{displayName}</h2>

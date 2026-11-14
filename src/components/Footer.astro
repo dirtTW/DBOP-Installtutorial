@@ -5,7 +5,8 @@ const t = getMessages(getLocale(Astro.props.locale));
 ---
 
 <footer
-  class="mt-auto border-t border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-low)] px-5 py-8 sm:px-8"
+  id="site-footer"
+  class="site-footer mt-auto border-t border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-low)] px-5 py-8 sm:px-8"
 >
   <div class="mx-auto flex max-w-screen-xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
     <span class="text-sm leading-5 text-[var(--md-sys-color-on-surface-variant)]">
@@ -50,3 +51,9 @@ const t = getMessages(getLocale(Astro.props.locale));
 <script>
   import "@material/web/button/text-button.js";
 </script>
+
+<style>
+  .site-footer {
+    view-transition-name: site-footer;
+  }
+</style>
