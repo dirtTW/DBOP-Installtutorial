@@ -242,8 +242,12 @@ const recommendations = recommendationLinks.map(({ url: link, imageUrl }) => {
         data-total-template={t.search.totalModpacks}
       ></p>
       <div id="modpack-list" class="mt-3 grid gap-3">
-        {recommendations.map((recommendation) => (
-          <Card locale={locale} {...recommendation} />
+        {recommendations.map((recommendation, index) => (
+          <Card
+            locale={locale}
+            {...recommendation}
+            class={index >= 6 ? "defer-render" : undefined}
+          />
         ))}
       </div>
     </div>

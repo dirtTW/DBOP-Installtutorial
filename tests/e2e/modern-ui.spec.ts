@@ -189,15 +189,17 @@ test.describe("page chrome", () => {
     expect(css).toContain("navigation: auto");
   });
 
-  test("defers rendering of below-the-fold directory cards", async ({ page }) => {
+  test("defers rendering of below-the-fold cards", async ({ page }) => {
     await page.goto("useful-website/");
 
+    // Assert on the class, not a child index: Astro hoists a <script> into
+    // the list container, so `:nth-child()` does not line up with the cards.
     await expect
       .poll(() =>
         page.evaluate(
           () =>
             getComputedStyle(
-              document.querySelector("#useful-website-list > a:nth-child(7)")!,
+              document.querySelector("#useful-website-list > a.defer-render")!,
             ).contentVisibility,
         ),
       )
@@ -207,7 +209,28 @@ test.describe("page chrome", () => {
       await page.evaluate(
         () =>
           getComputedStyle(
-            document.querySelector("#useful-website-list > a:nth-child(1)")!,
+            document.querySelector("#useful-website-list > a:not(.defer-render)")!,
+          ).contentVisibility,
+      ),
+    ).toBe("visible");
+
+    // The modpack list uses the same rule.
+    await page.goto("recommended-modpacks/");
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            getComputedStyle(
+              document.querySelector("#modpack-list > article.defer-render")!,
+            ).contentVisibility,
+        ),
+      )
+      .toBe("auto");
+    expect(
+      await page.evaluate(
+        () =>
+          getComputedStyle(
+            document.querySelector("#modpack-list > article:not(.defer-render)")!,
           ).contentVisibility,
       ),
     ).toBe("visible");

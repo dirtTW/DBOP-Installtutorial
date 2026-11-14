@@ -12,6 +12,8 @@ interface Props {
   imageUrl?: string;
   fallbackVersion?: string;
   fetchMetadata?: boolean;
+  /** Extra classes from the parent (used to defer off-screen cards). */
+  class?: string;
 }
 
 const {
@@ -23,6 +25,7 @@ const {
   imageUrl,
   fallbackVersion,
   fetchMetadata = false,
+  class: className,
 } = Astro.props;
 const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
 const t = getMessages(locale);
@@ -61,7 +64,7 @@ const isCurseforgeLinkValid = !!curseforgelink;
 const downloadCount = Number(isModrinthLinkValid) + Number(isCurseforgeLinkValid);
 ---
 
-<article class="m3-modpack reveal-on-scroll">
+<article class:list={["m3-modpack reveal-on-scroll", className]}>
   <img
     class="m3-modpack-avatar"
     src={imagePath}
