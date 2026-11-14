@@ -23,7 +23,7 @@
     "astro": "^7.4.12",
     "jszip": "^3.10.1",
     "tailwindcss": "^4.3.5",
-    "typescript": "^5.9.2"
+    "typescript": "^7.0.2"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.52.4",
