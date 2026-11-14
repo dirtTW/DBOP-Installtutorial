@@ -314,6 +314,55 @@ html:has(> head > meta[name="color-scheme"][content="light"]) {
     display: none;
   }
 
+  /* Reserve the host's box before the definition arrives. Without this the
+     button starts as inline content and the header reflows once the custom
+     element chunk loads, which shows up as layout shift on slow CPUs. */
+  md-icon-button:not(:defined) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+  }
+
+  /* Same idea for link buttons: undefined ones are bare text, so their row
+     rewraps when the component upgrades and pushes the page down. */
+  md-filled-button:not(:defined),
+  md-filled-tonal-button:not(:defined),
+  md-elevated-button:not(:defined),
+  md-outlined-button:not(:defined),
+  md-text-button:not(:defined) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-block-size: 2.5rem;
+    padding-block: 0;
+    padding-inline: 1.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  md-filled-button:not(:defined) {
+    min-block-size: var(--md-filled-button-container-height, 2.5rem);
+  }
+
+  /* Chips have the same upgrade reflow: 24px of bare text becomes a 32px
+     pill and moves everything below it. */
+  md-assist-chip:not(:defined),
+  md-filter-chip:not(:defined),
+  md-suggestion-chip:not(:defined) {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2rem;
+    padding-block: 0;
+    padding-inline: 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
   /* A plain <button> that looks like md-icon-button. Real buttons are used
      where the control must be a popover invoker (md-icon-button renders its
      own shadow button, which cannot carry `popovertarget`). */
