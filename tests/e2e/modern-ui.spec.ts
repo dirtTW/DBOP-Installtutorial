@@ -172,6 +172,31 @@ test.describe("page chrome", () => {
     ).toBe(true);
   });
 
+  test("renders every icon from the self-hosted subset", async ({ page }) => {
+    // The Material Symbols file is subset to the icons the templates use. A
+    // missing icon does not 404: the ligature simply never substitutes and the
+    // visitor reads the icon's name ("lock", "public"). An icon glyph advances
+    // by roughly the font size, while a spelled-out name is several times wider.
+    for (const path of ["./", "world-converter/", "flags-generator/", "modpacks/"]) {
+      await page.goto(path);
+      await page.evaluate(() => document.fonts.ready);
+
+      const spelledOut = await page.evaluate(() =>
+        Array.from(document.querySelectorAll(".material-symbols-outlined"))
+          .map((element) => {
+            const name = (element.textContent ?? "").trim();
+            const size = Number.parseFloat(getComputedStyle(element).fontSize);
+            const width = element.getBoundingClientRect().width;
+            return { name, size, width };
+          })
+          .filter(({ name, size, width }) => name !== "" && width > size * 1.3)
+          .map(({ name }) => name),
+      );
+
+      expect(spelledOut, path).toEqual([]);
+    }
+  });
+
   test("opts into cross-document view transitions", async ({ page }) => {
     await page.goto("./");
     const css = await page.evaluate(() =>

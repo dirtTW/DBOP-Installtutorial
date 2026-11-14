@@ -28,6 +28,15 @@ concurrency:
 env:
   BUILD_PATH: "." # default value when not using subfolders
   # BUILD_PATH: subfolder
+  # Emscripten SDK version the converter is built with. Pinned to what je2be-web
+  # itself pins in its Dockerfile: newer Emscripten ships a libc++ that rejects the
+  # transitive includes leveldb and other bundled dependencies rely on.
+  EMSDK_VERSION: 3.1.26
+  # The core and the web harness the converter is assembled from. The core is the
+  # fork that carries the 26.x support; push that branch before relying on this.
+  CONVERTER_CORE_REPOSITORY: dirtTW/je2be-core
+  CONVERTER_CORE_REF: main
+  CONVERTER_HARNESS_REPOSITORY: kbinani/je2be-web
 
 jobs:
   build:
@@ -65,6 +74,70 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
         working-directory: ${{ env.BUILD_PATH }}
+
+      # --- The world converter's WebAssembly core -------------------------------
+      # je2be-web builds the core; the fork that understands Minecraft 26.x is
+      # dropped in as its submodule. Same commands as build-wasm.cmd, which is what
+      # this is developed against.
+      - name: Restore Emscripten SDK
+        id: emsdk-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/emsdk
+          key: emsdk-${{ env.EMSDK_VERSION }}
+
+      - name: Install Emscripten
+        if: steps.emsdk-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install "${{ env.EMSDK_VERSION }}"
+          "$RUNNER_TEMP/emsdk/emsdk" activate "${{ env.EMSDK_VERSION }}"
+
+      - name: Checkout converter core
+        uses: actions/checkout@v7.0.1
+        with:
+          repository: ${{ env.CONVERTER_CORE_REPOSITORY }}
+          ref: ${{ env.CONVERTER_CORE_REF }}
+          path: wasm/je2be-core
+
+      - name: Checkout converter harness
+        uses: actions/checkout@v7.0.1
+        with:
+          repository: ${{ env.CONVERTER_HARNESS_REPOSITORY }}
+          path: wasm/je2be-web
+
+      - name: Build the converter
+        run: |
+          set -euo pipefail
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+
+          # Same LTO sysroot prebuild as je2be-web's Dockerfile. Emscripten would
+          # otherwise compile these while linking, which works but is slower.
+          SYSROOT_LTO="$RUNNER_TEMP/emsdk/upstream/emscripten/cache/sysroot/lib/wasm32-emscripten/lto"
+          if [ ! -d "$SYSROOT_LTO" ]; then
+            pushd "$RUNNER_TEMP/emsdk/upstream/emscripten"
+            python embuilder.py build --lto libGL-mt libal libhtml5 libstubs-debug \
+              libnoexit libc-mt-debug libdlmalloc-mt libcompiler_rt-mt libc++-mt \
+              libc++abi-debug-mt libsockets-mt crtbegin
+            popd
+          fi
+
+          rm -rf wasm/je2be-web/deps/je2be-core
+          cp -a wasm/je2be-core wasm/je2be-web/deps/je2be-core
+          rm -rf wasm/je2be-web/deps/je2be-core/.git
+          mkdir -p wasm/je2be-web/build/cxx
+          cd wasm/je2be-web/build/cxx
+          emcmake cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+            -DCMAKE_LIBRARY_PATH="$SYSROOT_LTO"
+          cmake --build . --parallel "$(nproc)" --target core --config Release
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p public/converter
+          ls -l wasm/je2be-web/build/cxx/core.js wasm/je2be-web/build/cxx/core.worker.js
+          cp wasm/je2be-web/build/cxx/core.js wasm/je2be-web/build/cxx/core.worker.js public/converter/
+
+      # -------------------------------------------------------------------------
+
       - name: Build with Astro
         run: |
           ${{ steps.detect-package-manager.outputs.runner }} astro build \

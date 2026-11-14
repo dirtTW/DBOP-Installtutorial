@@ -15,6 +15,7 @@ const messages = {
     modpacks: "Recommended modpacks",
     usefulSites: "Useful websites",
     flags: "Server launch flags",
+    converter: "World converter",
   },
   footer: {
     rights: "All Rights Reserved.",
@@ -275,6 +276,54 @@ const messages = {
     presetAttributionStart: "Flag presets are adapted from the ",
     presetAttributionLink: "Flectone Tools server flags generator",
     presetAttributionEnd: " and the documentation linked by each preset.",
+  },
+  converter: {
+    eyebrow: "Minecraft world converter",
+    title: "Convert a world between Java and Bedrock",
+    description:
+      "Turn a Java Edition world into Bedrock Edition, or the other way around. The conversion runs entirely inside your browser, so your world is never uploaded anywhere.",
+    direction: "Conversion direction",
+    javaToBedrock: "Java to Bedrock",
+    bedrockToJava: "Bedrock to Java",
+    consoleToJava: "Xbox 360 to Java",
+    consoleToBedrock: "Xbox 360 to Bedrock",
+    javaToBedrockHint: "A Java world folder, or a .zip of one.",
+    bedrockToJavaHint: "A Bedrock world folder, or a .zip / .mcworld of one.",
+    consoleHint: "An extracted Xbox 360 save folder.",
+    chooseFile: "Choose a world archive",
+    chooseFolder: "Choose a world folder",
+    selected: (name: string) => `Selected: ${name}`,
+    clear: "Clear",
+    convert: "Convert",
+    working: "Converting…",
+    statusIdle: "Choose a world to begin.",
+    statusUnzip: "Reading the archive…",
+    statusCopy: "Copying the world…",
+    statusConvert: "Converting chunks…",
+    statusPostprocess: "Processing entities…",
+    statusCompaction: "Finishing up…",
+    statusExtract: "Extracting the console save…",
+    statusConverted: (count: string) => `${count} chunks converted.`,
+    finished: (filename: string) => `${filename} is ready to download.`,
+    download: "Download converted world",
+    downloadHint:
+      "Unzip the download and put the world folder where the game looks for worlds: saves/ for Java Edition, minecraftWorlds/ for Bedrock Edition.",
+    failed: "The conversion failed.",
+    prepareFailed: "The converter could not be started.",
+    localNote:
+      "The converter runs inside your own browser, on your own computer. Nothing is uploaded anywhere, and after the first visit the page works offline.",
+    unsupported:
+      "This browser cannot run the converter: it needs WebAssembly with shared memory. A recent desktop Chrome, Edge, Firefox or Safari will work. If you have only just opened this page, reloading it once may be enough.",
+    attributionStart: "Conversion is performed by ",
+    attributionLink: "je2be-core",
+    attributionBy:
+      " by kbinani, compiled to WebAssembly. This page only drives it.",
+    attributionHomeStart: "The original converter is ",
+    attributionHomeLink: "je2be",
+    attributionHomeEnd:
+      ", kbinani's own site, which runs the same core in your browser.",
+    licenceNote:
+      "je2be-core is licensed under the AGPL-3.0-or-later, so the converter served here is that program.",
   },
 } as const;
 

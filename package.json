@@ -21,6 +21,7 @@
     "@material/web": "^2.5.0",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.12",
+    "jszip": "^3.10.1",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.9.2"
   },

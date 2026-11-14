@@ -1,6 +1,10 @@
 # build output
 dist/
 
+# The world converter's WebAssembly core, produced by build-wasm.cmd locally and by
+# .github/workflows/astro.yml in CI. It is large and generated, so it is not tracked.
+public/converter/
+
 # test output
 test-results/
 playwright-report/

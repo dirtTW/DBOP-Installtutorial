@@ -14,7 +14,8 @@
 /* ------------------------------------------------------------------ */
 /* Fonts (self-hosted)                                                 */
 /* Roboto is a variable font (400..700). The Material Symbols file is  */
-/* subsetted at build time to the 13 icons the site actually renders.  */
+/* subsetted at build time to the 17 icons the site actually renders   */
+/* (tools/build-icon-font.py rebuilds it).                             */
 /* ------------------------------------------------------------------ */
 
 @font-face {

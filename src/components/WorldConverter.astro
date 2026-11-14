@@ -1,0 +1,475 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import PageIntro from "./PageIntro.astro";
+import "../styles/global.css";
+import { getLocale, getMessages } from "../i18n";
+
+interface Props {
+  locale?: string;
+}
+
+const locale = getLocale(Astro.props.locale ?? Astro.currentLocale);
+const t = getMessages(locale);
+
+// Astro leaves BASE_URL without a trailing slash, so it cannot be concatenated
+// with a path as-is ("/DBOP-Installtutorial" + "converter/core.js").
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
+const directions = [
+  {
+    id: "j2b",
+    label: t.converter.javaToBedrock,
+    hint: t.converter.javaToBedrockHint,
+    archive: true,
+    folder: true,
+  },
+  {
+    id: "b2j",
+    label: t.converter.bedrockToJava,
+    hint: t.converter.bedrockToJavaHint,
+    archive: true,
+    folder: true,
+  },
+  {
+    id: "x2j",
+    label: t.converter.consoleToJava,
+    hint: t.converter.consoleHint,
+    archive: false,
+    folder: true,
+  },
+  {
+    id: "x2b",
+    label: t.converter.consoleToBedrock,
+    hint: t.converter.consoleHint,
+    archive: false,
+    folder: true,
+  },
+];
+---
+
+<Layout title={t.converter.title} locale={locale} mainId="converter">
+  <Navbar locale={locale} />
+  <main
+    id="converter"
+    tabindex="-1"
+    class="pb-12"
+    data-status-idle={t.converter.statusIdle}
+    data-status-unzip={t.converter.statusUnzip}
+    data-status-copy={t.converter.statusCopy}
+    data-status-convert={t.converter.statusConvert}
+    data-status-postprocess={t.converter.statusPostprocess}
+    data-status-compaction={t.converter.statusCompaction}
+    data-status-extract={t.converter.statusExtract}
+    data-status-converted={t.converter.statusConverted("__count__")}
+    data-status-finished={t.converter.finished("__filename__")}
+    data-working={t.converter.working}
+    data-convert={t.converter.convert}
+    data-download={t.converter.download}
+    data-selected={t.converter.selected("__name__")}
+    data-failed={t.converter.failed}
+    data-prepare-failed={t.converter.prepareFailed}
+    data-unsupported={t.converter.unsupported}
+  >
+    <PageIntro
+      eyebrow={t.converter.eyebrow}
+      title={t.converter.title}
+      description={t.converter.description}
+    />
+
+    <section class="mx-auto max-w-4xl px-5 sm:px-8 lg:px-0">
+      <div class="surface-card grid gap-5 p-4 sm:gap-6 sm:p-6">
+        <div>
+          <h2 class="text-sm font-medium leading-5 text-[var(--md-sys-color-on-surface)]">
+            {t.converter.direction}
+          </h2>
+          <ul class="mt-3 flex flex-wrap gap-2" aria-label={t.converter.direction}>
+            {directions.map((direction, index) => (
+              <li>
+                <md-filter-chip
+                  class="direction-option [--md-filter-chip-container-height:2.5rem]"
+                  selected={index === 0}
+                  data-direction={direction.id}
+                  data-hint={direction.hint}
+                  data-archive={String(direction.archive)}
+                  data-folder={String(direction.folder)}
+                >
+                  {direction.label}
+                </md-filter-chip>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rounded-2xl bg-[var(--md-sys-color-surface-container-high)] p-4">
+          <p
+            id="direction-hint"
+            class="text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]"
+          >
+            {directions[0].hint}
+          </p>
+
+          <div class="mt-4 flex flex-wrap gap-2">
+            <md-outlined-button
+              id="choose-archive"
+              type="button"
+              class="[--md-outlined-button-container-height:2.75rem]"
+            >
+              {t.converter.chooseFile}
+            </md-outlined-button>
+            <md-outlined-button
+              id="choose-folder"
+              type="button"
+              class="[--md-outlined-button-container-height:2.75rem]"
+            >
+              {t.converter.chooseFolder}
+            </md-outlined-button>
+            <md-text-button id="clear-selection" type="button" hidden>
+              {t.converter.clear}
+            </md-text-button>
+          </div>
+
+          <!-- The line that reports what the conversion is doing. It is a status
+               region so a screen reader announces each step instead of leaving
+               the visitor to notice the text changing. -->
+          <p
+            id="selection"
+            role="status"
+            aria-live="polite"
+            class="mt-3 break-words text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]"
+          >
+            {t.converter.statusIdle}
+          </p>
+
+          <div class="mt-4 flex flex-wrap items-center gap-3">
+            <md-filled-button
+              id="start"
+              type="button"
+              disabled
+              class="[--md-filled-button-container-height:2.75rem]"
+            >
+              {t.converter.convert}
+            </md-filled-button>
+            <md-linear-progress
+              id="progress"
+              class="min-w-40 flex-1"
+              aria-label={t.converter.working}
+              hidden
+            ></md-linear-progress>
+          </div>
+
+          <div id="result" class="mt-4" hidden>
+            <md-filled-button
+              id="download"
+              type="button"
+              class="[--md-filled-button-container-height:2.75rem]"
+            >
+              {t.converter.download}
+            </md-filled-button>
+            <p class="mt-3 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]">
+              {t.converter.downloadHint}
+            </p>
+          </div>
+        </div>
+
+        <ul
+          class="grid gap-2 text-xs leading-4 text-[var(--md-sys-color-on-surface-variant)]"
+        >
+          <li class="flex gap-2">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">lock</span>
+            <span>{t.converter.localNote}</span>
+          </li>
+          <li class="flex gap-2">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">info</span>
+            <span>
+              {t.converter.attributionStart}
+              <a
+                class="font-medium text-[var(--md-sys-color-primary)] hover:underline"
+                href="https://github.com/kbinani/je2be-core"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.converter.attributionLink}
+              </a>
+              {t.converter.attributionBy}
+            </span>
+          </li>
+          <li class="flex gap-2">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">public</span>
+            <span>
+              {t.converter.attributionHomeStart}
+              <a
+                class="font-medium text-[var(--md-sys-color-primary)] hover:underline"
+                href="https://je2be.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.converter.attributionHomeLink}
+              </a>
+              {t.converter.attributionHomeEnd}
+            </span>
+          </li>
+          <li class="flex gap-2">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">gavel</span>
+            <span>{t.converter.licenceNote}</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <input
+      id="archive-input"
+      type="file"
+      accept=".zip,.mcworld,application/zip"
+      class="hidden"
+    />
+    <!-- `webkitdirectory` is what makes the picker offer a folder rather than a
+         file; it is not in the DOM typings, so the script sets it. -->
+    <input id="folder-input" type="file" multiple class="hidden" />
+  </main>
+  <Footer locale={locale} />
+  <!-- GitHub Pages cannot send COOP/COEP response headers, and the threaded
+       WebAssembly build needs them for SharedArrayBuffer. This service worker
+       adds the headers; it reloads the page once when it takes effect. -->
+  <script is:inline src={`${base}coi-serviceworker.js`}></script>
+</Layout>
+
+<script>
+  import "@material/web/button/filled-button.js";
+  import "@material/web/button/outlined-button.js";
+  import "@material/web/button/text-button.js";
+  import "@material/web/chips/filter-chip.js";
+  import "@material/web/progress/linear-progress.js";
+  import ConverterWorker from "../lib/converter.worker.ts?worker";
+  import type { ConvertMode, DoneMessage, FailedMessage } from "../lib/converter.worker";
+
+  type ChipElement = HTMLElement & { selected: boolean };
+  type ButtonElement = HTMLElement & { disabled?: boolean };
+  type ProgressElement = HTMLElement & { value: number; indeterminate: boolean };
+
+  const root = document.querySelector<HTMLElement>("#converter");
+  const directionChips = document.querySelectorAll<ChipElement>(".direction-option");
+  const directionHint = document.querySelector<HTMLElement>("#direction-hint");
+  const chooseArchive = document.querySelector<ButtonElement>("#choose-archive");
+  const chooseFolder = document.querySelector<ButtonElement>("#choose-folder");
+  const clearSelection = document.querySelector<ButtonElement>("#clear-selection");
+  const archiveInput = document.querySelector<HTMLInputElement>("#archive-input");
+  const folderInput = document.querySelector<HTMLInputElement>("#folder-input");
+  const selectionLabel = document.querySelector<HTMLElement>("#selection");
+  const startButton = document.querySelector<ButtonElement>("#start");
+  const progress = document.querySelector<ProgressElement>("#progress");
+  const result = document.querySelector<HTMLElement>("#result");
+  const downloadButton = document.querySelector<HTMLElement>("#download");
+
+  if (!root) throw new Error("the converter markup is missing");
+
+  // Not in the DOM typings, and only settable from script.
+  folderInput?.setAttribute("webkitdirectory", "");
+  folderInput?.setAttribute("directory", "");
+
+  const text = (key: string) => root.dataset[key] ?? "";
+  const fill = (template: string, from: string, to: string) =>
+    template.replace(from, to);
+
+  const statusFor = (step: string): string => {
+    switch (step) {
+      case "unzip":
+        return text("statusUnzip");
+      case "copy":
+        return text("statusCopy");
+      case "convert":
+        return text("statusConvert");
+      case "postprocess":
+        return text("statusPostprocess");
+      case "compaction":
+        return text("statusCompaction");
+      case "extract":
+        return text("statusExtract");
+      default:
+        return text("statusConvert");
+    }
+  };
+
+  let mode: ConvertMode = "j2b";
+  let selected: File | FileList | undefined;
+  let worker: Worker | undefined;
+  let downloadUrl: string | undefined;
+  let downloadName = "";
+
+  const directionSpec = () => {
+    const chip = Array.from(directionChips).find((c) => c.selected);
+    return {
+      archive: chip?.dataset.archive !== "false",
+      folder: chip?.dataset.folder !== "false",
+      hint: chip?.dataset.hint ?? "",
+    };
+  };
+
+  const setStatus = (value: string) => {
+    if (selectionLabel) selectionLabel.textContent = value;
+  };
+
+  const refreshControls = () => {
+    const spec = directionSpec();
+    if (chooseArchive) chooseArchive.hidden = !spec.archive;
+    if (chooseFolder) chooseFolder.hidden = !spec.folder;
+    if (directionHint) directionHint.textContent = spec.hint;
+    if (clearSelection) clearSelection.hidden = !selected;
+    if (startButton) startButton.toggleAttribute("disabled", !selected);
+  };
+
+  const select = (value: File | FileList | undefined, name: string) => {
+    selected = value;
+    if (value) {
+      setStatus(fill(text("selected"), "__name__", name));
+      if (result) result.hidden = true;
+    } else {
+      setStatus(text("statusIdle"));
+    }
+    refreshControls();
+  };
+
+  directionChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const id = chip.dataset.direction as ConvertMode | undefined;
+      if (!id) return;
+      mode = id;
+      directionChips.forEach((other) => {
+        other.selected = other === chip;
+      });
+      select(undefined, "");
+      refreshControls();
+    });
+  });
+
+  chooseArchive?.addEventListener("click", () => archiveInput?.click());
+  chooseFolder?.addEventListener("click", () => folderInput?.click());
+  clearSelection?.addEventListener("click", () => {
+    if (archiveInput) archiveInput.value = "";
+    if (folderInput) folderInput.value = "";
+    select(undefined, "");
+  });
+
+  archiveInput?.addEventListener("change", () => {
+    const file = archiveInput.files?.[0];
+    select(file, file?.name ?? "");
+  });
+  folderInput?.addEventListener("change", () => {
+    const files = folderInput.files;
+    if (!files || files.length === 0) {
+      select(undefined, "");
+      return;
+    }
+    const first = files[0];
+    const folder = first.webkitRelativePath.split("/")[0] || first.name;
+    select(files, folder);
+  });
+
+  downloadButton?.addEventListener("click", () => {
+    if (!downloadUrl) return;
+    const anchor = document.createElement("a");
+    anchor.href = downloadUrl;
+    anchor.download = downloadName;
+    anchor.click();
+  });
+
+  function fail(message: string) {
+    if (progress) progress.hidden = true;
+    setStatus(`${text("failed")} ${message}`.trim());
+    if (startButton) startButton.toggleAttribute("disabled", !selected);
+    if (result) result.hidden = true;
+  }
+
+  startButton?.addEventListener("click", () => {
+    if (!selected) return;
+    if (typeof SharedArrayBuffer === "undefined") {
+      fail(text("unsupported"));
+      return;
+    }
+
+    const id = crypto.randomUUID();
+    if (progress) {
+      progress.hidden = false;
+      progress.indeterminate = true;
+      progress.value = 0;
+    }
+    if (result) result.hidden = true;
+    setStatus(text("working"));
+    startButton?.toggleAttribute("disabled", true);
+
+    if (!worker) {
+      try {
+        worker = new ConverterWorker();
+      } catch {
+        fail(text("prepareFailed"));
+        return;
+      }
+      worker.addEventListener("message", (event: MessageEvent) => {
+        const message = event.data as
+          | DoneMessage
+          | FailedMessage
+          | { type: string; step: string; progress: number; count: number };
+
+        if (message.type === "progress") {
+          const progressMessage = message as { step: string; progress: number; count: number };
+          if (progress) {
+            progress.indeterminate = false;
+            progress.value = progressMessage.progress;
+          }
+          const converted =
+            progressMessage.step === "convert" && progressMessage.count > 0
+              ? fill(
+                  text("statusConverted"),
+                  "__count__",
+                  progressMessage.count.toLocaleString(),
+                )
+              : statusFor(progressMessage.step);
+          setStatus(converted);
+          return;
+        }
+
+        if (message.type === "done") {
+          const done = message as DoneMessage;
+          if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+          downloadUrl = URL.createObjectURL(new Blob([done.archive]));
+          downloadName = done.filename;
+          if (progress) {
+            progress.indeterminate = false;
+            progress.value = 1;
+          }
+          setStatus(fill(text("statusFinished"), "__filename__", done.filename));
+          if (result) result.hidden = false;
+          if (startButton) startButton.textContent = text("convert");
+          startButton?.toggleAttribute("disabled", !selected);
+          return;
+        }
+
+        if (message.type === "failed") {
+          if (startButton) startButton.textContent = text("convert");
+          fail((message as FailedMessage).error);
+        }
+      });
+      // A worker that cannot even load its script (a missing or blocked converter
+      // payload, for instance) reports through the error event rather than a
+      // message, so it needs handling too.
+      worker.addEventListener("error", (event: ErrorEvent) => {
+        if (startButton) startButton.textContent = text("convert");
+        fail(event.message || text("prepareFailed"));
+      });
+    }
+
+    startButton.textContent = text("working");
+    // Same normalisation as the frontmatter: BASE_URL has no trailing slash.
+    const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+    worker.postMessage({
+      type: "start",
+      id,
+      mode,
+      file: selected,
+      coreJsUrl: new URL(`${base}converter/core.js`, window.location.href).href,
+    });
+  });
+
+  refreshControls();
+</script>

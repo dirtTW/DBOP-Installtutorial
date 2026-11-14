@@ -15,6 +15,7 @@ recommendations, a directory of useful websites, and a Minecraft server launch-f
 | `/recommended-modpacks` | Modpack recommendations, with Modrinth metadata and optional CurseForge art |
 | `/useful-website` | Searchable, category-filtered directory of Minecraft and general software links |
 | `/flags-generator` | Minecraft server launch-script generator (Paper, Purpur, Velocity, …) |
+| `/world-converter` | Converts a Minecraft world between Java and Bedrock Edition, in the browser |
 | `/zh-TW/...` | Traditional Chinese version of every page above |
 
 The legacy `/minecraft-useful-website` page redirects to `/useful-website` and is excluded
@@ -56,12 +57,15 @@ rather than `http://localhost:4321/`.
 
 ```
 lists/                     Content: website directory + modpack entries (Markdown)
-src/components/            Navbar, footer, cards, and the flags generator
+src/components/            Navbar, footer, cards, the flags generator and the world converter
 src/i18n/                  Translation loader and the per-locale dictionaries
 src/layouts/               Page shells (landing page, guides, directory, modpacks)
 src/lib/website-links.ts   Parses the website lists and category tags
+src/lib/converter.worker.ts  Runs the WebAssembly world converter in a worker
 src/pages/                 Routes, including the [locale] catch-all
 src/styles/global.css      Tailwind entry point and shared component styles
+public/coi-serviceworker.js  Adds the COOP/COEP headers GitHub Pages cannot send
+public/converter/          Built converter payload (generated, not committed)
 tests/unit/                Vitest tests
 tests/e2e/                 Playwright tests
 ```
@@ -110,7 +114,11 @@ The whole site uses a Material 3 (Material You) design system. Color roles are d
 tabs, and the dialog are official `md-*` custom elements; only the layout surfaces with no
 upstream component (cards, panels, the search-bar skin) keep a small set of local classes.
 Tailwind handles layout and typography. Icons come from Material Symbols Outlined, subset at
-build time to the glyphs the site renders.
+build time to the glyphs the site renders. The subset is `src/assets/fonts/material-symbols-outlined.woff2`;
+`python tools/build-icon-font.py <full variable font>` rebuilds it from the icon names it finds
+in `src/`, and `--check` reports whether the committed file still covers them. Adding an icon
+without rebuilding is a silent failure: the ligature does not substitute and the visitor reads
+the icon's name instead, which the "renders every icon from the self-hosted subset" test catches.
 
 ## Flags generator
 
@@ -132,6 +140,66 @@ values follow the [Paper documentation](https://docs.papermc.io/paper/aikars-fla
 implementation is original and inspired by [flags.sh](https://flags.sh/) by
 [YouHaveTrouble](https://github.com/YouHaveTrouble/flags.sh) — no flags.sh source code is
 used.
+
+## World converter
+
+`/world-converter` converts a world between Minecraft **Java Edition** and **Bedrock
+Edition** (and from Xbox 360 saves), entirely inside the browser: the world is never
+uploaded, and after the first visit the page works offline.
+
+The converting is done by [je2be-core](https://github.com/kbinani/je2be-core), kbinani's
+data converter, compiled to WebAssembly. This repository only drives it. The page credits him
+and links to [je2be.app](https://je2be.app/), his own converter, which runs the same core.
+
+### How it is built
+
+The page fetches two generated files from `public/converter/`, which are **not** committed:
+
+| File | What it is |
+| --- | --- |
+| `core.js` | The Emscripten build of je2be-core, with the wasm payload embedded |
+| `core.worker.js` | Emscripten's pthread worker, loaded by `core.js` at run time |
+
+`core.js` finds `core.worker.js` with Emscripten's `locateFile`, which resolves relative
+to the script's own directory. The driver is a bundle under `_astro/`, not a sibling of the
+payload, so `src/lib/converter.worker.ts` sets `self.Module.locateFile` to the payload
+directory before importing `core.js`. Without that, every conversion fails immediately —
+the pthread pool asks for `_astro/core.worker.js`, gets a 404, and the rejection surfaces as
+a bare `Event`. Keep the two files together when moving the payload.
+
+`build-wasm.cmd` in the workspace root produces both locally. In CI,
+`.github/workflows/astro.yml` checks out
+[kbinani/je2be-web](https://github.com/kbinani/je2be-web), drops the core fork into its
+`deps/je2be-core` submodule, and runs the same `emcmake` build before the Astro build; the
+`CONVERTER_CORE_REPOSITORY` and `CONVERTER_CORE_REF` variables at the top of that workflow
+choose the core. If the payload is missing the page still renders and the converter reports
+that it could not be started.
+
+### Browser requirements
+
+je2be-core is a threaded WebAssembly build, so it needs `SharedArrayBuffer`, which a page
+only gets when it is *cross-origin isolated*. GitHub Pages cannot send the `COOP`/`COEP`
+response headers isolation needs, so `public/coi-serviceworker.js` (vendored from
+[coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker), MIT) installs a service
+worker that adds them and reloads the page once when it first takes effect. Where
+`SharedArrayBuffer` is unavailable the page says so instead of failing.
+
+### Supported versions
+
+The bundled core **reads Java Edition worlds up to 26.3**, including the world directory
+layout 26.1 introduced (dimensions under `dimensions/minecraft/<name>`, data under
+`data/minecraft/`, maps under `maps/`) and the block palette keys 26.3 renamed to `id` and
+`properties`.
+
+It writes **Bedrock Edition 1.21.120**, and **Java Edition 1.21.10**. The Java output stays
+at 1.21.10 on purpose: the writer still produces the pre-26.1 layout, so stamping a world
+with a newer `DataVersion` would make a 26.x client look for region files under
+`dimensions/minecraft/overworld`, find none, and show an empty world. Every newer Java
+version opens a 1.21.10 world and upgrades it on load, so this only costs the upgrade step.
+
+Blocks and items the core has no mapping for convert by name. A Java block added after the
+core's Bedrock tables (the 26.x blocks among them) therefore has no Bedrock counterpart to
+map onto, and will not render in Bedrock.
 
 ## Built with Modern Web Guidance
 
@@ -166,7 +234,24 @@ Why these shifts, in the guidance's own words:
 > **DO** target large, self-contained layout blocks that are strictly **below the initial fold** (e.g., card items in an infinite feed, trailing comments, or bottom-heavy layout sections).
 
 Nothing here needs a server: GitHub Pages serves only static files, so the theme, navigation,
-and motion are all CSS or build-time output, and there are no response headers to set.
+and motion are all CSS or build-time output. The one place that wants a response header is
+the world converter, which needs `Cross-Origin-Embedder-Policy` and
+`Cross-Origin-Opener-Policy` for `SharedArrayBuffer`; since Pages cannot send them, the page
+detects the capability instead of depending on it, and a service worker adds the headers
+where the browser allows it.
+
+Three choices on the converter page follow from the same guidance. They are worth stating
+because it is the only page that does work rather than produce text:
+
+- **The payload is fetched lazily.** The converter is several megabytes of WebAssembly and
+  is only pulled in by its worker on the first conversion, so a visit that just reads the
+  guide downloads none of it.
+- **Capability is detected rather than assumed.** Where `SharedArrayBuffer` is unavailable
+  the page says which piece is missing instead of throwing, and with JavaScript disabled
+  the guide, the navigation and the attribution still render.
+- **Nothing is loaded from a third party.** The cross-origin-isolation service worker is
+  vendored in `public/coi-serviceworker.js` rather than fetched from a CDN, the same rule
+  the rest of the site already follows for fonts and scripts.
 
 ## Special thanks
 
@@ -175,7 +260,11 @@ Built with [Astro](https://astro.build) (MIT), [Tailwind CSS](https://tailwindcs
 [Material Symbols](https://fonts.google.com/icons) (Apache-2.0, Google), and TypeScript
 (Apache-2.0). Data and downloads come from [Modrinth](https://modrinth.com),
 [CurseForge](https://www.curseforge.com), [Adoptium](https://adoptium.net), and
-[Prism Launcher](https://prismlauncher.org) (GPL-3.0).
+[Prism Launcher](https://prismlauncher.org) (GPL-3.0). The world converter is
+[kbinani](https://github.com/kbinani)'s [je2be-core](https://github.com/kbinani/je2be-core)
+and [je2be-web](https://github.com/kbinani/je2be-web) (AGPL-3.0-or-later), with
+[coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker) (MIT) providing the
+cross-origin isolation GitHub Pages cannot.
 
 The flags generator is inspired by [flags.sh](https://flags.sh) (MIT) and uses values from
 [Flectone](https://flectone.net/en/tools/server-flags-generator) and
@@ -190,10 +279,38 @@ Minecraft is a trademark of Mojang Studios and Microsoft. This is an unofficial 
 ## Tests
 
 ```bash
-npm test             # Vitest: list parsing, category filters, search
+npm test             # Vitest: list parsing, category filters, search, locale parity
 npm run build        # Playwright e2e serves this preview build
-npm run test:e2e     # Playwright: directory filters and flags generator behaviour
+npm run test:e2e     # Playwright: directory filters, flags generator, converter page
 ```
+
+`npm test` also compares the English and Chinese dictionaries key by key, so a message added
+to one locale but not the other fails the build rather than rendering blank.
+
+The converter page tests run in three layers. The layout and capability checks need nothing
+extra. The missing-payload check runs when `public/converter/core.js` is absent, which is the
+case on a plain checkout. The end-to-end conversion runs only when both
+`public/converter/core.js` exists and `CONVERTER_SAMPLE_WORLD` points at a zipped Java
+Edition world, because the world is megabytes of test data that does not belong in the
+repository; CI builds the payload, so it exercises everything except that last step.
+
+```bash
+npm run build
+CONVERTER_SAMPLE_WORLD=/path/to/world.zip npm run test:e2e
+```
+
+When the converter itself misbehaves, two scripts in `tools/` cut the loop shorter than a
+nine-minute test timeout:
+
+```bash
+node tools/debug-converter.mjs http://localhost:4321/DBOP-Installtutorial/ world.zip 40000
+node tools/check-embedded-wasm.mjs public/converter/core.js
+```
+
+The first prints the page's, the worker's and the network's console output while it runs a
+conversion; the second extracts the wasm that `-sSINGLE_FILE=1` embeds in `core.js` and
+compiles it with Node, which separates "the module is broken" from "the page wired it up
+wrong".
 
 Playwright uses the installed Google Chrome by default. To use Playwright's bundled browser
 instead, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`.
@@ -206,4 +323,12 @@ or via a `rebuild` `repository_dispatch` event.
 
 ## License
 
-No license file is included in this repository.
+No license file is included in this repository for the site's own content.
+
+The world converter served on `/world-converter` is a build of
+[je2be-core](https://github.com/kbinani/je2be-core) and
+[je2be-web](https://github.com/kbinani/je2be-web), both of which are licensed
+**AGPL-3.0-or-later**. Its corresponding source is the upstream project together with the
+core fork named by `CONVERTER_CORE_REPOSITORY` in `.github/workflows/astro.yml`, built as
+described under "World converter" above. `public/coi-serviceworker.js` is MIT, from
+[coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker).
