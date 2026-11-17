@@ -23,10 +23,15 @@ if (typeof window === 'undefined') {
 
     self.addEventListener("fetch", function (event) {
         const r = event.request;
-        // Local change: only the converter page needs cross-origin isolation.
-        // Patching every response with COEP blocks third-party images elsewhere
-        // on the site once this worker controls it.
-        if (r.mode !== "navigate" || !/\/world-converter(\/|$)/.test(new URL(r.url).pathname)) {
+        const url = new URL(r.url);
+        const converterPage = r.mode === "navigate" && /\/world-converter(\/|$)/.test(url.pathname);
+        // The Vite worker bundle and the Emscripten pthread worker are same-origin
+        // subresources. Under COEP they still need a CORP header, so patch these
+        // explicitly instead of every response on the site.
+        const converterAsset =
+            /\/_astro\/converter\.worker-[^/]+\.js$/.test(url.pathname) ||
+            /\/converter\/core(?:\.worker)?\.js$/.test(url.pathname);
+        if (!converterPage && !converterAsset) {
             return;
         }
         if (r.cache === "only-if-cached" && r.mode !== "same-origin") {
