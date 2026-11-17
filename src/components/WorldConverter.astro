@@ -36,15 +36,15 @@ const directions = [
     id: "x2j",
     label: t.converter.consoleToJava,
     hint: t.converter.consoleHint,
-    archive: false,
-    folder: true,
+    archive: true,
+    folder: false,
   },
   {
     id: "x2b",
     label: t.converter.consoleToBedrock,
     hint: t.converter.consoleHint,
-    archive: false,
-    folder: true,
+    archive: true,
+    folder: false,
   },
 ];
 ---
@@ -211,6 +211,21 @@ const directions = [
             </span>
           </li>
           <li class="flex gap-2">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">public</span>
+            <span>
+              {t.converter.chunkerStart}
+              <a
+                class="font-medium text-[var(--md-sys-color-primary)] hover:underline"
+                href="https://github.com/HiveGamesOSS/Chunker"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.converter.chunkerLink}
+              </a>
+              {t.converter.chunkerEnd}
+            </span>
+          </li>
+          <li class="flex gap-2">
             <span class="material-symbols-outlined text-base" aria-hidden="true">gavel</span>
             <span>{t.converter.licenceNote}</span>
           </li>
@@ -315,6 +330,10 @@ const directions = [
     if (chooseArchive) chooseArchive.hidden = !spec.archive;
     if (chooseFolder) chooseFolder.hidden = !spec.folder;
     if (directionHint) directionHint.textContent = spec.hint;
+    if (archiveInput) {
+      archiveInput.accept =
+        mode === "x2j" || mode === "x2b" ? ".bin" : ".zip,.mcworld,application/zip";
+    }
     if (clearSelection) clearSelection.hidden = !selected;
     if (startButton) startButton.toggleAttribute("disabled", !selected);
   };
@@ -338,6 +357,9 @@ const directions = [
       directionChips.forEach((other) => {
         other.selected = other === chip;
       });
+      // Re-picking the same file fires no change event, so clear the pickers.
+      if (archiveInput) archiveInput.value = "";
+      if (folderInput) folderInput.value = "";
       select(undefined, "");
       refreshControls();
     });
@@ -454,6 +476,9 @@ const directions = [
       // payload, for instance) reports through the error event rather than a
       // message, so it needs handling too.
       worker.addEventListener("error", (event: ErrorEvent) => {
+        // A terminated worker cannot answer a later post; start a fresh one.
+        worker?.terminate();
+        worker = undefined;
         if (startButton) startButton.textContent = text("convert");
         fail(event.message || text("prepareFailed"));
       });

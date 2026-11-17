@@ -289,8 +289,8 @@ const messages = {
     consoleToBedrock: "Xbox 360 to Bedrock",
     javaToBedrockHint: "A Java world folder, or a .zip of one.",
     bedrockToJavaHint: "A Bedrock world folder, or a .zip / .mcworld of one.",
-    consoleHint: "An extracted Xbox 360 save folder.",
-    chooseFile: "Choose a world archive",
+    consoleHint: "An Xbox 360 .bin save file.",
+    chooseFile: "Choose a world file",
     chooseFolder: "Choose a world folder",
     selected: (name: string) => `Selected: ${name}`,
     clear: "Clear",
@@ -311,7 +311,7 @@ const messages = {
     failed: "The conversion failed.",
     prepareFailed: "The converter could not be started.",
     localNote:
-      "The converter runs inside your own browser, on your own computer. Nothing is uploaded anywhere, and after the first visit the page works offline.",
+      "The converter runs inside your own browser, on your own computer. Nothing is uploaded anywhere.",
     unsupported:
       "This browser cannot run the converter: it needs WebAssembly with shared memory. A recent desktop Chrome, Edge, Firefox or Safari will work. If you have only just opened this page, reloading it once may be enough.",
     attributionStart: "Conversion is performed by ",
@@ -322,6 +322,9 @@ const messages = {
     attributionHomeLink: "je2be",
     attributionHomeEnd:
       ", kbinani's own site, which runs the same core in your browser.",
+    chunkerStart: "A separate desktop alternative is ",
+    chunkerLink: "Chunker",
+    chunkerEnd: " by Hive Games, MIT licensed.",
     licenceNote:
       "je2be-core is licensed under the AGPL-3.0-or-later, so the converter served here is that program.",
   },

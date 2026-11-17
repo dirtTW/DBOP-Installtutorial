@@ -145,11 +145,14 @@ used.
 
 `/world-converter` converts a world between Minecraft **Java Edition** and **Bedrock
 Edition** (and from Xbox 360 saves), entirely inside the browser: the world is never
-uploaded, and after the first visit the page works offline.
+uploaded.
 
-The converting is done by [je2be-core](https://github.com/kbinani/je2be-core), kbinani's
-data converter, compiled to WebAssembly. This repository only drives it. The page credits him
-and links to [je2be.app](https://je2be.app/), his own converter, which runs the same core.
+The converting is done by [dirtTW's je2be-core fork](https://github.com/dirtTW/je2be-core),
+built from [kbinani](https://github.com/kbinani)'s data converter and compiled to WebAssembly.
+This repository only drives it. The page credits kbinani and links to
+[je2be.app](https://je2be.app/), his own converter, which runs the same core. The fork's own
+[README](https://github.com/dirtTW/je2be-core#readme) tracks the current converter state and
+the remaining TODO items (latest Bedrock output, block coverage, entities).
 
 ### How it is built
 
@@ -169,11 +172,12 @@ a bare `Event`. Keep the two files together when moving the payload.
 
 `build-wasm.cmd` in the workspace root produces both locally. In CI,
 `.github/workflows/astro.yml` checks out
-[kbinani/je2be-web](https://github.com/kbinani/je2be-web), drops the core fork into its
-`deps/je2be-core` submodule, and runs the same `emcmake` build before the Astro build; the
-`CONVERTER_CORE_REPOSITORY` and `CONVERTER_CORE_REF` variables at the top of that workflow
-choose the core. If the payload is missing the page still renders and the converter reports
-that it could not be started.
+[kbinani/je2be-web](https://github.com/kbinani/je2be-web), replaces its `deps/je2be-core`
+submodule with [dirtTW/je2be-core](https://github.com/dirtTW/je2be-core), and runs the same
+`emcmake` build before the Astro build; the `CONVERTER_CORE_REPOSITORY` and
+`CONVERTER_CORE_REF` variables at the top of that workflow choose the core fork. If the
+payload is missing the page still renders and the converter reports that it could not be
+started.
 
 ### Browser requirements
 
@@ -191,11 +195,11 @@ layout 26.1 introduced (dimensions under `dimensions/minecraft/<name>`, data und
 `data/minecraft/`, maps under `maps/`) and the block palette keys 26.3 renamed to `id` and
 `properties`.
 
-It writes **Bedrock Edition 1.21.120**, and **Java Edition 1.21.10**. The Java output stays
-at 1.21.10 on purpose: the writer still produces the pre-26.1 layout, so stamping a world
-with a newer `DataVersion` would make a 26.x client look for region files under
-`dimensions/minecraft/overworld`, find none, and show an empty world. Every newer Java
-version opens a 1.21.10 world and upgrades it on load, so this only costs the upgrade step.
+It writes **Java Edition 26.3** (`DataVersion = 5023`) using the 26.1 directory layout and
+the 26.3 `id`/`properties` block palette, with player data in `players/data/` and maps under
+`data/minecraft/maps/`. It currently writes **Bedrock Edition 1.21.120**; newer Bedrock
+clients upgrade that world on load. The fork README lists the remaining Bedrock 26.60/26.63
+output work and the new-block coverage work.
 
 Blocks and items the core has no mapping for convert by name. A Java block added after the
 core's Bedrock tables (the 26.x blocks among them) therefore has no Bedrock counterpart to
@@ -260,11 +264,14 @@ Built with [Astro](https://astro.build) (MIT), [Tailwind CSS](https://tailwindcs
 [Material Symbols](https://fonts.google.com/icons) (Apache-2.0, Google), and TypeScript
 (Apache-2.0). Data and downloads come from [Modrinth](https://modrinth.com),
 [CurseForge](https://www.curseforge.com), [Adoptium](https://adoptium.net), and
-[Prism Launcher](https://prismlauncher.org) (GPL-3.0). The world converter is
-[kbinani](https://github.com/kbinani)'s [je2be-core](https://github.com/kbinani/je2be-core)
-and [je2be-web](https://github.com/kbinani/je2be-web) (AGPL-3.0-or-later), with
-[coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker) (MIT) providing the
-cross-origin isolation GitHub Pages cannot.
+[Prism Launcher](https://prismlauncher.org) (GPL-3.0). The world converter is built from
+[dirtTW's je2be-core fork](https://github.com/dirtTW/je2be-core), itself based on
+[kbinani](https://github.com/kbinani)'s [je2be-core](https://github.com/kbinani/je2be-core),
+together with [kbinani/je2be-web](https://github.com/kbinani/je2be-web)
+(AGPL-3.0-or-later). [coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker) (MIT)
+provides the cross-origin isolation GitHub Pages cannot. The separate desktop converter
+[Chunker](https://github.com/HiveGamesOSS/Chunker) is by Hive Games (MIT); it is credited on the
+converter page but is not bundled with this site.
 
 The flags generator is inspired by [flags.sh](https://flags.sh) (MIT) and uses values from
 [Flectone](https://flectone.net/en/tools/server-flags-generator) and
@@ -326,9 +333,9 @@ or via a `rebuild` `repository_dispatch` event.
 No license file is included in this repository for the site's own content.
 
 The world converter served on `/world-converter` is a build of
-[je2be-core](https://github.com/kbinani/je2be-core) and
-[je2be-web](https://github.com/kbinani/je2be-web), both of which are licensed
-**AGPL-3.0-or-later**. Its corresponding source is the upstream project together with the
-core fork named by `CONVERTER_CORE_REPOSITORY` in `.github/workflows/astro.yml`, built as
-described under "World converter" above. `public/coi-serviceworker.js` is MIT, from
+[dirtTW/je2be-core](https://github.com/dirtTW/je2be-core) and
+[kbinani/je2be-web](https://github.com/kbinani/je2be-web), both licensed
+**AGPL-3.0-or-later**. Its corresponding source is the fork named by
+`CONVERTER_CORE_REPOSITORY` in `.github/workflows/astro.yml`, built as described under
+"World converter" above. `public/coi-serviceworker.js` is MIT, from
 [coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker).

@@ -23,6 +23,12 @@ if (typeof window === 'undefined') {
 
     self.addEventListener("fetch", function (event) {
         const r = event.request;
+        // Local change: only the converter page needs cross-origin isolation.
+        // Patching every response with COEP blocks third-party images elsewhere
+        // on the site once this worker controls it.
+        if (r.mode !== "navigate" || !/\/world-converter(\/|$)/.test(new URL(r.url).pathname)) {
+            return;
+        }
         if (r.cache === "only-if-cached" && r.mode !== "same-origin") {
             return;
         }

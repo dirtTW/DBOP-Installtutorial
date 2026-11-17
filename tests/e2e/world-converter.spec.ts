@@ -46,18 +46,37 @@ test.describe("world converter", () => {
     await expect(home).toHaveAttribute("target", "_blank");
     await expect(home).toHaveAttribute("rel", /noopener/);
     await expect(home).toHaveAttribute("rel", /noreferrer/);
+
+    const chunker = page.getByRole("link", { name: "Chunker", exact: true });
+    await expect(chunker).toHaveAttribute(
+      "href",
+      "https://github.com/HiveGamesOSS/Chunker",
+    );
+    await expect(chunker).toHaveAttribute("rel", /noopener/);
+    await expect(main).toContainText("Hive Games");
   });
 
-  test("only offers a folder for console saves", async ({ page }) => {
+  test("offers a .bin save file for console saves", async ({ page }) => {
     await expect(page.locator("#choose-archive")).toBeVisible();
 
     await page.getByRole("button", { name: "Xbox 360 to Java" }).click();
 
-    await expect(page.locator("#choose-archive")).toBeHidden();
-    await expect(page.locator("#choose-folder")).toBeVisible();
-    await expect(page.locator("#direction-hint")).toContainText(
-      "extracted Xbox 360 save folder",
-    );
+    await expect(page.locator("#choose-archive")).toBeVisible();
+    await expect(page.locator("#choose-folder")).toBeHidden();
+    await expect(page.locator("#archive-input")).toHaveAttribute("accept", ".bin");
+    await expect(page.locator("#direction-hint")).toContainText(".bin");
+  });
+
+  test("accepts an Xbox 360 .bin save", async ({ page }) => {
+    await page.getByRole("button", { name: "Xbox 360 to Java" }).click();
+    await page.locator("#archive-input").setInputFiles({
+      name: "Save20231016154131.bin",
+      mimeType: "application/octet-stream",
+      buffer: Buffer.from("save"),
+    });
+
+    await expect(page.locator(status)).toContainText("Save20231016154131.bin");
+    await expect(page.getByRole("button", { name: "Convert" })).toBeEnabled();
   });
 
   test("shows the chosen world name and enables the conversion", async ({
@@ -90,6 +109,22 @@ test.describe("world converter", () => {
     expect(src).not.toBeNull();
     const response = await page.request.get(new URL(src!, page.url()).href);
     expect(response.status()).toBe(200);
+  });
+
+  test("keeps isolation on the converter page only", async ({ page }) => {
+    await page.goto("world-converter/");
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    if (!(await page.evaluate(() => self.crossOriginIsolated))) {
+      await page.reload();
+    }
+    await expect
+      .poll(() => page.evaluate(() => self.crossOriginIsolated), { timeout: 30_000 })
+      .toBe(true);
+
+    await page.goto("recommended-modpacks/");
+    await expect
+      .poll(() => page.evaluate(() => self.crossOriginIsolated))
+      .toBe(false);
   });
 
   test("serves the pthread worker next to the core it belongs to", async ({

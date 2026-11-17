@@ -282,8 +282,8 @@ const messages = {
     consoleToBedrock: "Xbox 360 轉基岩版",
     javaToBedrockHint: "Java 版世界資料夾，或它的 .zip 壓縮檔。",
     bedrockToJavaHint: "基岩版世界資料夾，或它的 .zip / .mcworld 壓縮檔。",
-    consoleHint: "已解壓縮的 Xbox 360 存檔資料夾。",
-    chooseFile: "選擇世界壓縮檔",
+    consoleHint: "Xbox 360 的 .bin 存檔檔案。",
+    chooseFile: "選擇世界檔案",
     chooseFolder: "選擇世界資料夾",
     selected: (name: string) => `已選擇：${name}`,
     clear: "清除",
@@ -304,7 +304,7 @@ const messages = {
     failed: "轉換失敗。",
     prepareFailed: "無法啟動轉換器。",
     localNote:
-      "轉換器完全在你的瀏覽器中、也就是你自己的電腦上執行，不會上傳任何檔案；第一次載入之後，離線也能繼續使用。",
+      "轉換器完全在你的瀏覽器中、也就是你自己的電腦上執行，不會上傳任何檔案。",
     unsupported:
       "這個瀏覽器無法執行轉換器：需要支援共享記憶體的 WebAssembly。請使用較新版本的桌上型 Chrome、Edge、Firefox 或 Safari。如果你是剛剛才開啟這個頁面，重新載入一次或許就能執行。",
     attributionStart: "轉換由 ",
@@ -313,6 +313,9 @@ const messages = {
     attributionHomeStart: "原始轉換工具是 ",
     attributionHomeLink: "je2be",
     attributionHomeEnd: "，也就是 kbinani 的網站，同樣在你的瀏覽器裡執行同一個核心。",
+    chunkerStart: "另一個桌面版替代方案是 ",
+    chunkerLink: "Chunker",
+    chunkerEnd: "，由 Hive Games 開發，MIT 授權。",
     licenceNote:
       "je2be-core 以 AGPL-3.0-or-later 授權，因此本頁提供的轉換器即為該程式。",
   },

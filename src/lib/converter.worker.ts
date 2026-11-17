@@ -66,6 +66,10 @@ function loadRuntime(coreJsUrl: string): Promise<void> {
       } else {
         Module.onRuntimeInitialized = () => resolve();
       }
+    }).catch((error) => {
+      // A failed load (offline, transient 404) must not poison every retry.
+      sRuntime = undefined;
+      throw error;
     });
   }
   return sRuntime;
@@ -198,9 +202,7 @@ async function extractArchive(file: File, into: string, marker: string, id: stri
   });
   if (candidates.length === 0) {
     throw new Error(
-      marker === "level.dat"
-        ? "No level.dat was found, so this does not look like a Minecraft world."
-        : "No GAMEDATTA was found, so this does not look like a console save.",
+      "No level.dat was found, so this does not look like a Minecraft world.",
     );
   }
   if (candidates.length > 1) {
@@ -247,12 +249,13 @@ async function packDirectory(dir: string): Promise<ArrayBuffer> {
 
 const MODES: Record<
   ConvertMode,
-  { marker: string; entry: string; extension: string }
+  { marker?: string; entry: string; extension: string; singleFile?: boolean }
 > = {
   j2b: { marker: "level.dat", entry: "_JavaToBedrock", extension: "mcworld" },
   b2j: { marker: "level.dat", entry: "_BedrockToJava", extension: "zip" },
-  x2j: { marker: "GAMEDATTA", entry: "_Xbox360ToJava", extension: "zip" },
-  x2b: { marker: "GAMEDATTA", entry: "_Xbox360ToBedrock", extension: "mcworld" },
+  // Xbox saves are one STFS .bin file; the core reads the file, not a folder.
+  x2j: { entry: "_Xbox360ToJava", extension: "zip", singleFile: true },
+  x2b: { entry: "_Xbox360ToBedrock", extension: "mcworld", singleFile: true },
 };
 
 async function convert(message: StartMessage): Promise<void> {
@@ -268,14 +271,18 @@ async function convert(message: StartMessage): Promise<void> {
   mkdirp(inputPath);
   mkdirp(outputPath);
 
+  let coreInput = inputPath;
   if (file instanceof FileList) {
     await copyDirectory(file, inputPath, id);
+  } else if (spec.singleFile) {
+    coreInput = `${inputPath}/${file.name}`;
+    writeFile(coreInput, await readFileAsBytes(file));
   } else {
-    await extractArchive(file, inputPath, spec.marker, id);
+    await extractArchive(file, inputPath, spec.marker ?? "level.dat", id);
   }
 
   Module._Init();
-  const inputPtr = allocateUTF8(inputPath);
+  const inputPtr = allocateUTF8(coreInput);
   const outputPtr = allocateUTF8(outputPath);
   const idPtr = allocateUTF8(id);
   let errorPtr = 0;
@@ -306,7 +313,7 @@ async function convert(message: StartMessage): Promise<void> {
   const archive = await packDirectory(outputPath);
   removeTree(`/je2be/${id}`);
 
-  const base = (file instanceof File ? file.name : id).replace(/\.(zip|mcworld)$/i, "");
+  const base = (file instanceof File ? file.name : id).replace(/\.(zip|mcworld|bin)$/i, "");
   const done: DoneMessage = {
     type: "done",
     id,
