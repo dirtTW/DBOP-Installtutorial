@@ -202,6 +202,11 @@ the 26.3 `id`/`properties` block palette, with player data in `players/data/` an
 flower-pot variants go through the existing helpers. Older Bedrock clients cannot open a
 1.26.63 world.
 
+The fork also converts 26.3 chunks whose light pass is still `initialize_light`, normalizes
+legacy Java entity ids from pre-1.13 worlds, and writes Bedrock's `levelname.txt`. This keeps
+trial-chamber block entities, old-map minecarts/falling blocks, world names, and blank sign
+sides intact.
+
 Blocks and items the core has no mapping for convert by name. A Java block added after the
 core's Bedrock tables (the 26.x blocks among them) therefore has no Bedrock counterpart to
 map onto, and will not render in Bedrock.
@@ -268,7 +273,8 @@ Built with [Astro](https://astro.build) (MIT), [Tailwind CSS](https://tailwindcs
 [Prism Launcher](https://prismlauncher.org) (GPL-3.0). The world converter is built from
 [dirtTW's je2be-core fork](https://github.com/dirtTW/je2be-core), itself based on
 [kbinani](https://github.com/kbinani)'s [je2be-core](https://github.com/kbinani/je2be-core),
-together with [kbinani/je2be-web](https://github.com/kbinani/je2be-web)
+with the [dirtTW/libminecraft-file](https://github.com/dirtTW/libminecraft-file) dependency
+fork, together with [kbinani/je2be-web](https://github.com/kbinani/je2be-web)
 (AGPL-3.0-or-later). [coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker) (MIT)
 provides the cross-origin isolation GitHub Pages cannot. The separate desktop converter
 [Chunker](https://github.com/HiveGamesOSS/Chunker) is by Hive Games (MIT); it is credited on the
