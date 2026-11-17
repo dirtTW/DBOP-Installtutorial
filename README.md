@@ -197,9 +197,10 @@ layout 26.1 introduced (dimensions under `dimensions/minecraft/<name>`, data und
 
 It writes **Java Edition 26.3** (`DataVersion = 5023`) using the 26.1 directory layout and
 the 26.3 `id`/`properties` block palette, with player data in `players/data/` and maps under
-`data/minecraft/maps/`. It currently writes **Bedrock Edition 1.21.120**; newer Bedrock
-clients upgrade that world on load. The fork README lists the remaining Bedrock 26.60/26.63
-output work and the new-block coverage work.
+`data/minecraft/maps/`. It writes **Bedrock Edition 1.26.63** (`NetworkVersion = 2225`,
+`StorageVersion = 10`), including the 120 new Java 26.3 block mappings; Bedrock sign and
+flower-pot variants go through the existing helpers. Older Bedrock clients cannot open a
+1.26.63 world.
 
 Blocks and items the core has no mapping for convert by name. A Java block added after the
 core's Bedrock tables (the 26.x blocks among them) therefore has no Bedrock counterpart to
