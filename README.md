@@ -203,7 +203,8 @@ flower-pot variants go through the existing helpers. Older Bedrock clients canno
 1.26.63 world.
 
 The fork also converts 26.3 chunks whose light pass is still `initialize_light`, normalizes
-legacy Java entity ids from pre-1.13 worlds, and writes Bedrock's `levelname.txt`. This keeps
+legacy Java entity ids from pre-1.13 worlds, writes Bedrock's `levelname.txt`, and maps the
+new 26.3 explorer-map item ids and item-frame map data. This keeps
 trial-chamber block entities, old-map minecarts/falling blocks, world names, and blank sign
 sides intact.
 
