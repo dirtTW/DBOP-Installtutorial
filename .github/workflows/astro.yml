@@ -92,7 +92,7 @@ jobs:
 
       - name: Restore converter build
         id: converter-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: public/converter
           key: converter-${{ env.EMSDK_VERSION }}-${{ steps.converter-rev.outputs.key }}
@@ -100,7 +100,7 @@ jobs:
       - name: Restore Emscripten SDK
         id: emsdk-cache
         if: steps.converter-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/emsdk
           key: emsdk-${{ env.EMSDK_VERSION }}
