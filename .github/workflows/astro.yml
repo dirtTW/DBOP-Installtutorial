@@ -79,15 +79,34 @@ jobs:
       # je2be-web builds the core; the fork that understands Minecraft 26.x is
       # dropped in as its submodule. Same commands as build-wasm.cmd, which is what
       # this is developed against.
+      #
+      # Cache the built payload by the exact core and harness revisions. A site-only
+      # change (docs, pages) then skips the 20+ minute WASM build entirely.
+      - name: Resolve converter revisions
+        id: converter-rev
+        run: |
+          set -euo pipefail
+          core=$(git ls-remote "https://github.com/${{ env.CONVERTER_CORE_REPOSITORY }}" "refs/heads/${{ env.CONVERTER_CORE_REF }}" | cut -f1)
+          harness=$(git ls-remote "https://github.com/${{ env.CONVERTER_HARNESS_REPOSITORY }}" HEAD | cut -f1)
+          echo "key=$core-$harness" >> "$GITHUB_OUTPUT"
+
+      - name: Restore converter build
+        id: converter-cache
+        uses: actions/cache@v4
+        with:
+          path: public/converter
+          key: converter-${{ env.EMSDK_VERSION }}-${{ steps.converter-rev.outputs.key }}
+
       - name: Restore Emscripten SDK
         id: emsdk-cache
+        if: steps.converter-cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/emsdk
           key: emsdk-${{ env.EMSDK_VERSION }}
 
       - name: Install Emscripten
-        if: steps.emsdk-cache.outputs.cache-hit != 'true'
+        if: steps.converter-cache.outputs.cache-hit != 'true' && steps.emsdk-cache.outputs.cache-hit != 'true'
         run: |
           set -euo pipefail
           git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
@@ -95,6 +114,7 @@ jobs:
           "$RUNNER_TEMP/emsdk/emsdk" activate "${{ env.EMSDK_VERSION }}"
 
       - name: Cache Emscripten compiler output
+        if: steps.converter-cache.outputs.cache-hit != 'true'
         uses: hendrikmuhs/ccache-action@v1.2.16
         with:
           variant: ccache
@@ -102,6 +122,7 @@ jobs:
           max-size: 2G
 
       - name: Checkout converter core
+        if: steps.converter-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v7.0.1
         with:
           repository: ${{ env.CONVERTER_CORE_REPOSITORY }}
@@ -109,12 +130,14 @@ jobs:
           path: wasm/je2be-core
 
       - name: Checkout converter harness
+        if: steps.converter-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v7.0.1
         with:
           repository: ${{ env.CONVERTER_HARNESS_REPOSITORY }}
           path: wasm/je2be-web
 
       - name: Build the converter
+        if: steps.converter-cache.outputs.cache-hit != 'true'
         env:
           EM_COMPILER_WRAPPER: ccache
         run: |
