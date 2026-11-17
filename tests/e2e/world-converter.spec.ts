@@ -22,6 +22,12 @@ test.describe("world converter", () => {
     await expect(
       page.getByRole("button", { name: "Java to Bedrock" }),
     ).toHaveAttribute("aria-pressed", "true");
+    for (const name of ["Bedrock to Java", "Xbox 360 to Java", "Xbox 360 to Bedrock"]) {
+      await expect(page.getByRole("button", { name })).toHaveAttribute(
+        "aria-pressed",
+        "false",
+      );
+    }
     await expect(page.getByRole("button", { name: "Convert" })).toBeDisabled();
     await expect(page.locator(status)).toContainText("Choose a world to begin.");
   });

@@ -89,7 +89,7 @@ const directions = [
               <li>
                 <md-filter-chip
                   class="direction-option [--md-filter-chip-container-height:2.5rem]"
-                  selected={index === 0}
+                  selected={index === 0 ? true : undefined}
                   data-direction={direction.id}
                   data-hint={direction.hint}
                   data-archive={String(direction.archive)}
